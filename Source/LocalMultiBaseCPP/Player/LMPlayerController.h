@@ -30,7 +30,7 @@ public:
 	void SetPlayer2P(class ALMPawnPlayer* const NewPlayer2P );
 
 protected:
-	virtual void SetupInputComponent() override;
+	virtual void SetupInputComponent() override;	
 
 private:
 	void OnInputMove2P(const FInputActionValue& Value);
