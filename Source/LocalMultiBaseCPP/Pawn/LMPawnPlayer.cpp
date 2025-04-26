@@ -80,8 +80,9 @@ void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 void ALMPawnPlayer::HandlePlayerSpecificPossession()
 {
 	if (PlayerIndex == 1)
-	{
-		ALMPlayerController* LMPlayerController = Cast<ALMPlayerController>(GetWorld()->GetFirstLocalPlayerFromController());
+	{		
+		ALMPlayerController* LMPlayerController = Cast<ALMPlayerController>(GetWorld()->GetFirstLocalPlayerFromController()->GetPlayerController(GetWorld()));
+		
 		if (LMPlayerController)
 		{
 			LMPlayerController->SetPlayer2P(this);

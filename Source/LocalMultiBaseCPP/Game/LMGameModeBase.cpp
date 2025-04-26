@@ -27,8 +27,8 @@ void ALMGameModeBase::BeginPlay()
 	PlayerStart1P = FindPlayerStart(World, TargetTag1P);
 	PlayerStart2P = FindPlayerStart(World, TargetTag2P);
 
-	SpawnLocalPlayer(SpawnedPlayerIndex++, PlayerStart1P, World);	
-	SpawnLocalPlayer(SpawnedPlayerIndex++, PlayerStart2P, World);
+	SpawnLocalPlayer(0, PlayerStart1P, World);	
+	SpawnLocalPlayer(1, PlayerStart2P, World);
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)
@@ -68,8 +68,8 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerSt
 		FString Error;
 		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
 		ensure(NewLocalPlayer);
-		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);		
-		SpawnAndPossessPawn(World, PlayerController2P, PlayerStart, PlayerIndex);
+		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);				
+		SpawnAndPossessPawn(World, PlayerController2P, PlayerStart, PlayerIndex);		
 	}
 
 }

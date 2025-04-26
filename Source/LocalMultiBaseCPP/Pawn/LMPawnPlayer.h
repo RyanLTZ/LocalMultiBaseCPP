@@ -41,5 +41,5 @@ protected:
 private:
 	void BindInputActions(class UEnhancedInputComponent* EnhacedInputComponent);
 	void OnInputMove(const FInputActionValue& Value);
-	void HandlePlayerSpecificPossession();
+	void HandlePlayerSpecificPossession();	
 };
