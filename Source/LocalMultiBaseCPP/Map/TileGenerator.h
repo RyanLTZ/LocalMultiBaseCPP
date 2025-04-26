@@ -30,8 +30,18 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Map");
 	TSubclassOf<class ATileBase> TileBaseClass;
 
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileCountWidth = 0;
+
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileCountLength = 0;
+
+	UPROPERTY(EditAnywhere, Category = "InputParams");
+	int32 TileWidth = 100.f;
+
+	UPROPERTY(EditAnywhere, Category = "InputParams");
+	int32 TileLength = 100.f;
+
 	FVector CurrentActorLocation;
 
 public:
@@ -39,9 +49,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Map")
 	void GenerateMap(int32 CountWidthDir,  int32 CountLengthDir);
-	
-	void SetTilePosition(const TArray<ATileBase*> InputArray);
-	FVector GetTilePosition(const int32 ArrIndex, const int32 TotalCountInWidth, const int32 TotalCountInLength);
 	
 	
 };

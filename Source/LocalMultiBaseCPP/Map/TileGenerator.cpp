@@ -17,54 +17,35 @@ ATileGenerator::ATileGenerator()
 void ATileGenerator::BeginPlay()
 {
 	Super::BeginPlay();	
-	GenerateMap(50, 100);
+	TileCountWidth = 10; 
+	TileCountLength = 10; 
+
+	GenerateMap(TileCountWidth, TileCountLength);
 }
 
 void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 {	
 	UE_LOG(LogTemp, Warning, TEXT("Current Location : %f, %f, %f"), CurrentActorLocation.X, CurrentActorLocation.Y, CurrentActorLocation.Z);
-	int32 TotalCount = CountWidthDir * CountLengthDir;
-	//ArrayTileBaseRow.SetNum(CountWidthDir);
-	ArrayOfTileRow.SetNum(CountWidthDir);
-	int32 TilePosOffsetX = 100.f;
-	int32 TilePosOffsetY = 100.f;
-		
+	int32 TotalCount = CountWidthDir * CountLengthDir;	
+	ArrayOfTileRow.SetNum(CountLengthDir);
+	float InitPosX = (0 - CountWidthDir * TileWidth) * 0.5f;
+	float InitPosY = (0 - CountLengthDir * TileLength) * 0.5f;
 	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
 	{
 		TArray<ATileBase*> TempArray;
 		TempArray.SetNum(CountLengthDir);
 		for (int j = 0; j < TempArray.Num(); j++)
-		{
-			FVector NewPosition = FVector(j * TilePosOffsetX, i * TilePosOffsetY,  CurrentActorLocation.Z) + CurrentActorLocation;
+		{			
+			FVector NewPosition = FVector(i * TileWidth + InitPosX, j * TileLength + InitPosY,  CurrentActorLocation.Z) + CurrentActorLocation;
 			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
-			TempArray[j] = GenTile;
+			TempArray[j] = GenTile;			
 		}
 		
 		ArrayOfTileRow[i] = TempArray;
 	}	
 }
 
-void ATileGenerator::SetTilePosition(const TArray<ATileBase*> InputArray)
-{
-}
 
-FVector ATileGenerator::GetTilePosition(const int32 ArrIndex, const int32 TotalCountInWidth, const int32 TotalCountInLength)
-{
-	float TileLength = 50.f;
-	float TileWidth = 50.f;
-	//FVector NewLocation = FVector(ArrIndex * TileWidth, ArrIndex * TileLength, CurrentActorLocation.Z) + CurrentActorLocation;
-	int32 RowIndex = ArrIndex / TotalCountInWidth;
-	int32 ColumnnIndex = ArrIndex / TotalCountInLength; // +ArrIndex % TotalCountInLength;
-	int32 IndexInRow = ArrIndex % TotalCountInWidth;
-	int32 IndexInColumn = ArrIndex % TotalCountInLength;
-	FVector NewLocation = FVector(IndexInRow * TileWidth * ColumnnIndex, IndexInColumn * TileLength * RowIndex, CurrentActorLocation.Z) + CurrentActorLocation;
-
-	return NewLocation;
-	//TotalWidthCount = 10 
-	//0~9 : y 0, z 0
-	//10 ~ 19 : x + 1, y + 1
-	
-}
 
 void ATileGenerator::ClearTileList()
 {
