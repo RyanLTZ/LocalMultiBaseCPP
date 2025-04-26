@@ -26,7 +26,7 @@ void ATileGenerator::BeginPlay()
 void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 {	
 	UE_LOG(LogTemp, Warning, TEXT("Current Location : %f, %f, %f"), CurrentActorLocation.X, CurrentActorLocation.Y, CurrentActorLocation.Z);
-	int32 TotalCount = CountWidthDir * CountLengthDir;	
+	
 	ArrayOfTileRow.SetNum(CountLengthDir);
 	float InitPosX = (0 - CountWidthDir * TileWidth) * 0.5f;
 	float InitPosY = (0 - CountLengthDir * TileLength) * 0.5f;
