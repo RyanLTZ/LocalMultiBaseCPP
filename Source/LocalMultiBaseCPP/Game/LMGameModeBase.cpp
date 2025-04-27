@@ -8,6 +8,7 @@
 #include "GameFrameWork/PlayerStart.h"
 #include "Player/LMPlayerController.h"
 #include "Map/TileGenerator.h"
+#include "Map/TileBase.h"
 
 ALMGameModeBase::ALMGameModeBase()
 {
@@ -23,12 +24,32 @@ void ALMGameModeBase::BeginPlay()
 	UWorld* World = GetWorld();
 	const FName TargetTag1P = TEXT("PlayerStart1P");
 	const FName TargetTag2P = TEXT("PlayerStart2P");
+	const FName TargetTagTileGenerator = TEXT("BP_TileGenerator");
 	
-	PlayerStart1P = FindPlayerStart(World, TargetTag1P);
-	PlayerStart2P = FindPlayerStart(World, TargetTag2P);
+	//PlayerStart1P = FindPlayerStart(World, TargetTag1P);
+	//PlayerStart2P = FindPlayerStart(World, TargetTag2P);		
+	//SpawnLocalPlayer(0, PlayerStart1P, World);
+	//SpawnLocalPlayer(1, PlayerStart2P, World);
 
-	SpawnLocalPlayer(0, PlayerStart1P, World);	
-	SpawnLocalPlayer(1, PlayerStart2P, World);
+
+
+	if (World)
+	{
+		for (TActorIterator<ATileGenerator> It(World); It; ++It)
+		{
+			ATileGenerator* FoundStart = *It;
+			if (FoundStart)
+			{
+				TileGenerator = FoundStart;				
+
+				SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
+				SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
+			}
+		}
+	}
+
+	
+
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)
@@ -37,7 +58,7 @@ APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& Targe
 	{
 		for (TActorIterator<APlayerStart> It(World); It; ++It)
 		{
-			APlayerStart* FoundStart = *It;
+			APlayerStart* FoundStart = *It;			
 			if (FoundStart && FoundStart->PlayerStartTag.IsEqual(TargetTag))
 			{
 				return FoundStart;
@@ -74,6 +95,32 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerSt
 
 }
 
+void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, UWorld* World)
+{
+	if (StartTile == nullptr || World == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
+
+		return;
+	}
+
+	if (PlayerIndex == 0)
+	{
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, PlayerIndex);
+		SpawnAndPossessPawn(World, PlayerController, StartTile, PlayerIndex);
+	}
+	else if (PlayerIndex == 1)
+	{
+		UGameInstance* GameInstance = GetGameInstance();
+		ensure(GameInstance);
+		FString Error;
+		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
+		ensure(NewLocalPlayer);
+		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);
+		SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+	}
+}
+
 ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, APlayerStart* PlayerStart, int32 PlayerIndex)
 {
 	if (!World || !PlayerController || !PlayerStart)
@@ -82,9 +129,25 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());	
 	ensure(PlayerPawn);
 	PlayerPawn->SetPlayerIndex(PlayerIndex);
 	PlayerController->Possess(PlayerPawn);	
 	return PlayerPawn;
+}
+
+ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, ATileBase* PlayerStart, int32 PlayerIndex)
+{
+	if (!World || !PlayerController || !PlayerStart)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
+		return nullptr;
+	}
+	
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+	ensure(PlayerPawn);
+	PlayerPawn->SetPlayerIndex(PlayerIndex);
+	PlayerController->Possess(PlayerPawn);
+	return PlayerPawn;
+
 }

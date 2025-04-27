@@ -22,6 +22,7 @@ ATileBase::ATileBase()
         MeshComponent->SetStaticMesh(CubeMesh.Object);
     }
 
+    BoxExtentSize.Set(BoxComponent->GetUnscaledBoxExtent().X, BoxComponent->GetUnscaledBoxExtent().Y, BoxComponent->GetUnscaledBoxExtent().Z);
 }
 
 // Called when the game starts or when spawned

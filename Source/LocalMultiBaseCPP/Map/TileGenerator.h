@@ -37,10 +37,10 @@ private:
 	int32 TileCountLength = 0;
 
 	UPROPERTY(EditAnywhere, Category = "InputParams");
-	int32 TileWidth = 100.f;
+	int32 TileWidth = 0;
 
 	UPROPERTY(EditAnywhere, Category = "InputParams");
-	int32 TileLength = 100.f;
+	int32 TileLength = 0;
 
 	FVector CurrentActorLocation;
 
@@ -49,6 +49,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Map")
 	void GenerateMap(int32 CountWidthDir,  int32 CountLengthDir);
-	
+	ATileBase* GetFirstTile();
+	ATileBase* GetLastTile(); 
 	
 };

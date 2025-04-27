@@ -26,4 +26,14 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;	
+
+private:
+	FVector BoxExtentSize = FVector::ZeroVector;
+
+public:
+	FORCEINLINE
+	FVector GetBoxExtentSize() {
+		return BoxExtentSize;
+	}
+
 };

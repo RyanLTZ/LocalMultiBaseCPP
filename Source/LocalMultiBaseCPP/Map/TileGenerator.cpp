@@ -17,8 +17,6 @@ ATileGenerator::ATileGenerator()
 void ATileGenerator::BeginPlay()
 {
 	Super::BeginPlay();	
-	TileCountWidth = 10; 
-	TileCountLength = 10; 
 
 	GenerateMap(TileCountWidth, TileCountLength);
 }
@@ -28,21 +26,47 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	UE_LOG(LogTemp, Warning, TEXT("Current Location : %f, %f, %f"), CurrentActorLocation.X, CurrentActorLocation.Y, CurrentActorLocation.Z);
 	
 	ArrayOfTileRow.SetNum(CountLengthDir);
-	float InitPosX = (0 - CountWidthDir * TileWidth) * 0.5f;
-	float InitPosY = (0 - CountLengthDir * TileLength) * 0.5f;
+	float InitPosX = (0 - (CountWidthDir - 1) * TileWidth);
+	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
 	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
 	{
 		TArray<ATileBase*> TempArray;
-		TempArray.SetNum(CountLengthDir);
+		TempArray.SetNum(CountWidthDir);
 		for (int j = 0; j < TempArray.Num(); j++)
-		{			
-			FVector NewPosition = FVector(i * TileWidth + InitPosX, j * TileLength + InitPosY,  CurrentActorLocation.Z) + CurrentActorLocation;
+		{	
+			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;
 			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+			
 			TempArray[j] = GenTile;			
 		}
 		
 		ArrayOfTileRow[i] = TempArray;
 	}	
+}
+
+ATileBase* ATileGenerator::GetFirstTile()
+{
+	if (ArrayOfTileRow.Num() > 0 )
+	{
+		if (ArrayOfTileRow[0].Num() > 0)
+		{
+			return ArrayOfTileRow[0][0];
+		}			
+	}
+	return nullptr;
+}
+
+ATileBase* ATileGenerator::GetLastTile()
+{
+	if (ArrayOfTileRow.Num() > 0)
+	{
+		int32 LastIndexOfArrayGroup = ArrayOfTileRow.Num() - 1;
+		if (ArrayOfTileRow[LastIndexOfArrayGroup].Num() > 0)
+		{			
+			return	ArrayOfTileRow[LastIndexOfArrayGroup].Last();		
+		}
+	}
+	return nullptr;
 }
 
 
