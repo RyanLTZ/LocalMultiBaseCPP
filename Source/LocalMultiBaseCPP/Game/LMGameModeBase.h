@@ -29,7 +29,7 @@ public:
 	class APlayerStart* PlayerStart2P;
 
 	UPROPERTY(EditAnywhere, Category = "Map")
-	TSubclassOf<class ATileGenerator> LMTileGeneratorClass; 
+	TSubclassOf<class ATileGenerator> TileGeneratorClass; 
 
 
 protected:

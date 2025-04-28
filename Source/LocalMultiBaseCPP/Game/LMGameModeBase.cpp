@@ -13,15 +13,24 @@
 ALMGameModeBase::ALMGameModeBase()
 {
 	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-	//LMPawnPlayerClass = ALMPawnPlayer::StaticClass();
 	
 	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
 	if (BP_LMPawnPlayer.Succeeded())
 	{
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
 	}
+
 	PlayerControllerClass = ALMPlayerController::StaticClass();	
-	
+
+	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
+	if (BP_LMTileGenerator.Succeeded())
+	{
+		TileGeneratorClass = BP_LMTileGenerator.Class;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("TileGeneratorClass is nullptr!"));
+	}
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -43,8 +52,9 @@ void ALMGameModeBase::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("LMPawnPlayerClass is nullptr!"));
 			
 		return;
-	}
+	}	
 
+	TileGenerator = GetWorld()->SpawnActor<ATileGenerator>(TileGeneratorClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	if (World)
 	{
 		for (TActorIterator<ATileGenerator> It(World); It; ++It)
@@ -54,8 +64,12 @@ void ALMGameModeBase::BeginPlay()
 			{
 				TileGenerator = FoundStart;				
 
+				if (TileGenerator == nullptr)
+					return;
+
 				SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
 				SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
+				break;
 			}
 		}
 	}
@@ -155,11 +169,11 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
 		return nullptr;
 	}
-
-
+	
+	FVector NewLocation = PlayerStart->GetActorLocation();	
 	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
-	PlayerPawn->SetPlayerIndex(PlayerIndex);	
+	PlayerPawn->SetPlayerIndex(PlayerIndex);		
 	PlayerController->Possess(PlayerPawn);
 	return PlayerPawn;
 
