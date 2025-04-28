@@ -4,6 +4,7 @@
 #include "Map/TileGenerator.h"
 #include "TileBase.h"
 #include "Engine/GameViewportClient.h"
+#include "Obstacle.h"
 
 // Sets default values
 ATileGenerator::ATileGenerator()
@@ -42,6 +43,22 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		
 		ArrayOfTileRow[i] = TempArray;
 	}	
+
+	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleLeftBorder->SetActorLocation(FVector(0, InitPosY - TileLength * 2, 0));
+
+	ObstacleRightBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleRightBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleRightBorder->SetActorLocation(FVector(0, InitPosY + TileCountLength * TileLength * 2, 0));
+
+	ObstacleTopBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleTopBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleTopBorder->SetActorLocation(FVector(InitPosX + TileCountWidth * TileWidth * 2, 0, 0));
+
+	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
 }
 
 ATileBase* ATileGenerator::GetFirstTile()
