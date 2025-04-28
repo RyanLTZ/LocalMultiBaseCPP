@@ -13,8 +13,15 @@
 ALMGameModeBase::ALMGameModeBase()
 {
 	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-	LMPawnBaseClass = ALMPawnPlayer::StaticClass();			
-	PlayerControllerClass = ALMPlayerController::StaticClass();		
+	//LMPawnPlayerClass = ALMPawnPlayer::StaticClass();
+	
+	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
+	if (BP_LMPawnPlayer.Succeeded())
+	{
+		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
+	}
+	PlayerControllerClass = ALMPlayerController::StaticClass();	
+	
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -24,14 +31,19 @@ void ALMGameModeBase::BeginPlay()
 	UWorld* World = GetWorld();
 	const FName TargetTag1P = TEXT("PlayerStart1P");
 	const FName TargetTag2P = TEXT("PlayerStart2P");
-	const FName TargetTagTileGenerator = TEXT("BP_TileGenerator");
+	//const FName TargetTagTileGenerator = TEXT("BP_TileGenerator");
 	
 	//PlayerStart1P = FindPlayerStart(World, TargetTag1P);
 	//PlayerStart2P = FindPlayerStart(World, TargetTag2P);		
 	//SpawnLocalPlayer(0, PlayerStart1P, World);
 	//SpawnLocalPlayer(1, PlayerStart2P, World);
 
-
+	if (LMPawnPlayerClass == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("LMPawnPlayerClass is nullptr!"));
+			
+		return;
+	}
 
 	if (World)
 	{
@@ -129,7 +141,7 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());	
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
 	PlayerPawn->SetPlayerIndex(PlayerIndex);
 	PlayerController->Possess(PlayerPawn);	
@@ -143,10 +155,11 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
 		return nullptr;
 	}
-	
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+
+
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
-	PlayerPawn->SetPlayerIndex(PlayerIndex);
+	PlayerPawn->SetPlayerIndex(PlayerIndex);	
 	PlayerController->Possess(PlayerPawn);
 	return PlayerPawn;
 

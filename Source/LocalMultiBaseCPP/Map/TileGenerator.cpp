@@ -29,20 +29,6 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	ArrayOfTileRow.SetNum(CountLengthDir);
 	float InitPosX = (0 - (CountWidthDir - 1) * TileWidth);
 	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
-	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
-	{
-		TArray<ATileBase*> TempArray;
-		TempArray.SetNum(CountWidthDir);
-		for (int j = 0; j < TempArray.Num(); j++)
-		{	
-			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;
-			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
-			
-			TempArray[j] = GenTile;			
-		}
-		
-		ArrayOfTileRow[i] = TempArray;
-	}	
 
 	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
 	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
@@ -59,6 +45,33 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
 	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
 	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
+
+	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	{
+		TArray<ATileBase*> TempArray;
+		TempArray.SetNum(CountWidthDir);
+		for (int j = 0; j < TempArray.Num(); j++)
+		{	
+			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;
+			bool bObstacle = FMath::RandRange(0, 10) > 9;
+			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
+			{
+				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition, GetActorRotation());
+				TempArray[j] = GenObstacle;
+			}
+			else
+			{
+				ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+				TempArray[j] = GenTile;
+
+			}
+			
+		}
+		
+		ArrayOfTileRow[i] = TempArray;
+	}	
+
+
 }
 
 ATileBase* ATileGenerator::GetFirstTile()

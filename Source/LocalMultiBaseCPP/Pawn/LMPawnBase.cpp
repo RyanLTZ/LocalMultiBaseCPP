@@ -31,6 +31,6 @@ ALMPawnBase::ALMPawnBase()
     PawnMovement->MaxSpeed = 500.f; 
     PawnMovement->Acceleration = 2048.f;
     PawnMovement->Deceleration = 2000.f;
-    PawnMovement->TurningBoost = 8.f;
+    PawnMovement->TurningBoost = 8.f;    
 }
 

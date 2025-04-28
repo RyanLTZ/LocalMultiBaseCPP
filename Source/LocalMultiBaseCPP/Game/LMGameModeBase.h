@@ -19,7 +19,8 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Player")
-	TSubclassOf<class ALMPawnBase> LMPawnBaseClass; 
+	//TSubclassOf<class ALMPawnBase> LMPawnBaseClass; 
+	TSubclassOf<class ALMPawnPlayer> LMPawnPlayerClass;
 
 	UPROPERTY(EditAnywhere, Category = "Player")
 	class APlayerStart* PlayerStart1P; 
@@ -51,4 +52,7 @@ private:
 private:
 	int32 SpawnedPlayerIndex = 0;
 	class ATileGenerator* TileGenerator;
+
+	class ALMPawnPlayer* PawnPlayer1; 
+
 };
