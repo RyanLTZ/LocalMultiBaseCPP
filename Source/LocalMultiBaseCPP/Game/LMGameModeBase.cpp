@@ -27,10 +27,6 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		TileGeneratorClass = BP_LMTileGenerator.Class;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TileGeneratorClass is nullptr!"));
-	}
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -38,14 +34,6 @@ void ALMGameModeBase::BeginPlay()
 	Super::BeginPlay();
 
 	UWorld* World = GetWorld();
-	const FName TargetTag1P = TEXT("PlayerStart1P");
-	const FName TargetTag2P = TEXT("PlayerStart2P");
-	//const FName TargetTagTileGenerator = TEXT("BP_TileGenerator");
-	
-	//PlayerStart1P = FindPlayerStart(World, TargetTag1P);
-	//PlayerStart2P = FindPlayerStart(World, TargetTag2P);		
-	//SpawnLocalPlayer(0, PlayerStart1P, World);
-	//SpawnLocalPlayer(1, PlayerStart2P, World);
 
 	if (LMPawnPlayerClass == nullptr)
 	{
@@ -55,26 +43,11 @@ void ALMGameModeBase::BeginPlay()
 	}	
 
 	TileGenerator = GetWorld()->SpawnActor<ATileGenerator>(TileGeneratorClass, FVector::ZeroVector, FRotator::ZeroRotator);
-	if (World)
+	if (TileGenerator)
 	{
-		for (TActorIterator<ATileGenerator> It(World); It; ++It)
-		{
-			ATileGenerator* FoundStart = *It;
-			if (FoundStart)
-			{
-				TileGenerator = FoundStart;				
-
-				if (TileGenerator == nullptr)
-					return;
-
-				SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
-				SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
-				break;
-			}
-		}
-	}
-
-	
+		SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
+		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
+	}	
 
 }
 
