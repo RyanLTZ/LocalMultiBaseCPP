@@ -23,13 +23,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* MeshComponent;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Components")
+	int32 OccupiedPlayerIndex = -1;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;	
 
 private:
 	FVector BoxExtentSize = FVector::ZeroVector;
-	int32 OccupiedPlayerIndex = -1; 
+	
 
 public:
 	FORCEINLINE
@@ -43,5 +46,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
 	int32 GetOccupiedPlayerIndex() { return OccupiedPlayerIndex;  }
+
+	UFUNCTION(BlueprintCallable)
+	void UpatePlayerScore(int32 TargetPlayerIndex);
 
 };

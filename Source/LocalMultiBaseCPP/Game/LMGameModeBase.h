@@ -36,6 +36,8 @@ public:
 
 	TSubclassOf<class AGameManager> GameManagerClass;	
 
+	TSubclassOf<class UMainHUDWidget> MainHUDWidgetClass; 
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -59,8 +61,18 @@ private:
 	class ATileGenerator* TileGenerator;
 	class ALMPawnPlayer* PawnPlayer1; 
 	class AGameManager* GameManager; 	
+	class UMainHUDWidget* MainHUD;
 
+	int32 Player0Score = 0;
+	int32 Player1Score = 0; 
+	
 	UFUNCTION()
 	void OnGameFinished();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void OnAddScore(int32 PlayerIndex);
+	
+	void OnSubScore(int32 PlayerIndex);
 
 };

@@ -10,6 +10,8 @@
 #include "Map/TileGenerator.h"
 #include "Map/TileBase.h"
 #include "Game/GameManager.h"
+#include "Wigets/MainHUDWidget.h"
+#include "Blueprint/UserWidget.h"
 
 ALMGameModeBase::ALMGameModeBase()
 {
@@ -30,6 +32,7 @@ ALMGameModeBase::ALMGameModeBase()
 	}
 
 	GameManagerClass = AGameManager::StaticClass();
+	MainHUDWidgetClass = UMainHUDWidget::StaticClass();
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -58,7 +61,13 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
 		GameManager->SetRemainTime(30.f);		
 	}
-	
+
+	MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
+
+	if (MainHUD)
+	{
+		MainHUD->AddToViewport();		
+	}
 	
 }
 
@@ -172,4 +181,30 @@ void ALMGameModeBase::OnGameFinished()
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex);
 	
+}
+
+void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
+{
+	if (PlayerIndex == 0)
+	{
+		Player0Score--;
+		Player0Score = FMath::Max(0, Player0Score);	
+	}
+	else
+	{
+		Player1Score--;
+		Player1Score = FMath::Max(0, Player1Score);
+	}
+}
+
+void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
+{
+	if (PlayerIndex == 0)
+	{
+		Player0Score++;		
+	}
+	else
+	{
+		Player1Score++;		
+	}
 }
