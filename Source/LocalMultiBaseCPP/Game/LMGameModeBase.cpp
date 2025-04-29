@@ -9,6 +9,7 @@
 #include "Player/LMPlayerController.h"
 #include "Map/TileGenerator.h"
 #include "Map/TileBase.h"
+#include "Game/GameManager.h"
 
 ALMGameModeBase::ALMGameModeBase()
 {
@@ -27,6 +28,8 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		TileGeneratorClass = BP_LMTileGenerator.Class;
 	}
+
+	GameManagerClass = AGameManager::StaticClass();
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -46,8 +49,17 @@ void ALMGameModeBase::BeginPlay()
 	if (TileGenerator)
 	{
 		SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
-	}	
-
+		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
+	}		
+	
+	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);	
+	if (GameManager)
+	{
+		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
+		GameManager->SetRemainTime(30.f);		
+	}
+	
+	
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)
@@ -148,5 +160,16 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 	PlayerPawn->SetPlayerIndex(PlayerIndex);		
 	PlayerController->Possess(PlayerPawn);
 	return PlayerPawn;
+}
 
+void ALMGameModeBase::OnGameFinished()
+{
+	int32 WinPlayerIndex = TileGenerator->GetMuchMoreOccupiedPlayerIndex();	
+	if (WinPlayerIndex < 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex);
+	
 }

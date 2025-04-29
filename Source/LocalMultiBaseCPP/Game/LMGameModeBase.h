@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+
+
 UCLASS()
 class LOCALMULTIBASECPP_API ALMGameModeBase : public AGameModeBase
 {
@@ -31,6 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Map")
 	TSubclassOf<class ATileGenerator> TileGeneratorClass; 
 
+	TSubclassOf<class AGameManager> GameManagerClass;	
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,7 +42,6 @@ protected:
 private:
 	//Tag를 이용하여 PlayerStart를 찾는 함수
 	APlayerStart* FindPlayerStart(UWorld* World, const FName& TargetTag);	
-
 
 	//로컬 플레이어를 스폰하는 함수
 	void SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World);
@@ -49,10 +52,15 @@ private:
 
 	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, class ATileBase* PlayerStart, int32 PlayerIndex);
 
+	
+
 private:
 	int32 SpawnedPlayerIndex = 0;
 	class ATileGenerator* TileGenerator;
-
 	class ALMPawnPlayer* PawnPlayer1; 
+	class AGameManager* GameManager; 	
+
+	UFUNCTION()
+	void OnGameFinished();
 
 };

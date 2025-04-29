@@ -40,7 +40,7 @@ void ALMPlayerController::OnInputMove2P(const FInputActionValue& Value)
 	if (Player2P)
 	{		
 		FVector2D MoveVector = Value.Get<FVector2D>();
-		UE_LOG(LogTemp, Warning, TEXT("Player2 Input From Controller : %f, %f"), MoveVector.X, MoveVector.Y);
+		//UE_LOG(LogTemp, Warning, TEXT("Player2 Input From Controller : %f, %f"), MoveVector.X, MoveVector.Y);
 		FVector ForwardDirection = Player2P->GetActorForwardVector() * MoveVector.Y;
 		FVector RightDirection = Player2P->GetActorRightVector() * MoveVector.X;
 		FVector MoveDirection = ForwardDirection + RightDirection;
