@@ -46,7 +46,6 @@ void ALMGameModeBase::BeginPlay()
 	if (TileGenerator)
 	{
 		SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
-		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
 	}	
 
 }

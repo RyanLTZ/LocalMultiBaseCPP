@@ -51,3 +51,35 @@ void ALMPlayerController::OnInputMove2P(const FInputActionValue& Value)
 		}
 	}
 }
+
+
+// 0429 + Network
+
+void ALMPlayerController::BP_JoinWithSearchResult(const FBlueprintSessionResult& SearchResult)
+{
+	// 온라인 서브시스템 인터페이스 가져오기
+	IOnlineSubsystem* OSS = IOnlineSubsystem::Get();
+	IOnlineSessionPtr SessInt = OSS ? OSS->GetSessionInterface() : nullptr;
+	if (!SessInt.IsValid())
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("세션 인터페이스를 얻지 못했습니다"));
+		return;
+	}
+
+	// SearchResult 에서 실제 세션 이름을 꺼냅니다
+	FName RealSessionName = TEXT("MyLANSession");
+
+	// Resolve
+	FString ConnectURL;
+	SessInt->GetResolvedConnectString(RealSessionName, ConnectURL);
+
+	// 로그 찍어보기
+	UE_LOG(LogTemp, Warning, TEXT("Resolved Connect URL: '%s'"), *ConnectURL);
+
+	// URL 이 비어있지 않을 때만 Travel 호출
+	if (!ConnectURL.IsEmpty())
+	{
+		ClientTravel(*ConnectURL, TRAVEL_Absolute);
+	}
+
+}
