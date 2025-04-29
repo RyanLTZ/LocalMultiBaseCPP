@@ -99,20 +99,41 @@ ATileBase* ATileGenerator::GetLastTile()
 	return nullptr;
 }
 
+int32 ATileGenerator::GetMuchMoreOccupiedPlayerIndex()
+{
+	int32 Player0Count = 0, Player1Count = 0;
+	
+	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	{
+		for (int32 j = 0; j < ArrayOfTileRow[i].Num(); j++)
+		{
+			if (ArrayOfTileRow[i][j]->GetOccupiedPlayerIndex() == 0)
+			{
+				Player0Count++;
+			}
+			else if (ArrayOfTileRow[i][j]->GetOccupiedPlayerIndex() == 1)
+			{
+				Player1Count++;
+			}
+		}
+	}
+
+	return Player0Count > Player1Count ? 0 : Player0Count == Player1Count ? -1 : 1;
+}
+
 
 
 void ATileGenerator::ClearTileList()
 {
-	//for (int32 i = 0; i < ArrayTileBase.Num(); i++)
-	//{		
-	//	if (ArrayTileBase[i])
-	//	{
-	//		ArrayTileBase[i]->Destroy();
-	//	}
-	//		
-	//}
+	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	{
+		for (int32 j = 0; j < ArrayOfTileRow[i].Num(); j++)
+		{
+			ArrayOfTileRow[i][j]->Destroy();
+		}	
+	}
 
-	//ArrayTileBase.Reset(0);
+	ArrayOfTileRow.Reset(0);
 }
 
 

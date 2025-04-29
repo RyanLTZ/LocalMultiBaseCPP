@@ -58,4 +58,5 @@ public:
 	ATileBase* GetFirstTile();
 	ATileBase* GetLastTile(); 
 	
+	int32 GetMuchMoreOccupiedPlayerIndex();	
 };

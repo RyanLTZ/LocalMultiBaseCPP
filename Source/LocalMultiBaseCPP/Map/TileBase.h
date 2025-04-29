@@ -29,11 +29,19 @@ protected:
 
 private:
 	FVector BoxExtentSize = FVector::ZeroVector;
+	int32 OccupiedPlayerIndex = -1; 
 
 public:
 	FORCEINLINE
-	FVector GetBoxExtentSize() {
-		return BoxExtentSize;
-	}
+	FVector GetBoxExtentSize() { return BoxExtentSize;	}
+	
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	void SetOccupiedPlayerIndex(int32 PlayerIndex) { OccupiedPlayerIndex = PlayerIndex; }
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	int32 GetOccupiedPlayerIndex() { return OccupiedPlayerIndex;  }
 
 };
