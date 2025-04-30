@@ -23,7 +23,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	int32 OccupiedPlayerIndex = -1;
 
 protected:

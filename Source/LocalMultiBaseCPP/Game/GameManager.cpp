@@ -19,19 +19,32 @@ void AGameManager::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void AGameManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	FUNCDeleOnGameFinish.Unbind();
+	FUNCDeleOnTimeChange.Unbind();	
+}
 
 // Called every frame
 void AGameManager::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);	
 
 	if (RemainTime > 0)
 	{
+		TempElapsedTimeForTick += DeltaTime;
 		RemainTime -= DeltaTime;
+		if (TempElapsedTimeForTick >= UpdateTick)
+		{
+			TempElapsedTimeForTick = 0.f;
+			FUNCDeleOnTimeChange.ExecuteIfBound(RemainTime);
+		}
 	}		
 	else
 	{
-		RemainTime = 0;
+		RemainTime = 0;		
 		//PrimaryActorTick.bCanEverTick = false; 
 		SetActorTickEnabled(false);
 		FinishGame();

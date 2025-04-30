@@ -21,7 +21,12 @@ private:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* Player2Score;	
 
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* RemainTime; 
+
+
 public:
 	void UpdateSocre(int32 PlayerIndex, int32 Score);
+	void UpdateTimer(float Time);
 	
 };

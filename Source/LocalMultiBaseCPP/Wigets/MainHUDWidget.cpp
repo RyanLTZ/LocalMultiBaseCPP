@@ -18,3 +18,10 @@ void UMainHUDWidget::UpdateSocre(int32 PlayerIndex, int32 Score)
 		Player2Score->SetText(FText::AsNumber(Score));
 	}
 }
+
+void UMainHUDWidget::UpdateTimer(float Time)
+{	
+	FString FormattedString = FString::Printf(TEXT("%.1f"), Time);
+	FText DisplayText = FText::FromString(FormattedString);
+	RemainTime->SetText(DisplayText);
+}

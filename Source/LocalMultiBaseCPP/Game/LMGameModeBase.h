@@ -69,6 +69,10 @@ private:
 	UFUNCTION()
 	void OnGameFinished();
 
+	UFUNCTION()
+	void OnTimeChange(float Time);
+
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void OnAddScore(int32 PlayerIndex);

@@ -32,7 +32,12 @@ ALMGameModeBase::ALMGameModeBase()
 	}
 
 	GameManagerClass = AGameManager::StaticClass();
-	MainHUDWidgetClass = UMainHUDWidget::StaticClass();
+
+	static ConstructorHelpers::FClassFinder<UMainHUDWidget> BP_MainHUD(TEXT("'/Game/Widget/BP_MainHudWidget.BP_MainHudWidget_C'"));
+	if (BP_MainHUD.Succeeded())
+	{
+		MainHUDWidgetClass = BP_MainHUD.Class;
+	}	
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -55,18 +60,24 @@ void ALMGameModeBase::BeginPlay()
 		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
 	}		
 	
-	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);	
-	if (GameManager)
-	{
-		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
-		GameManager->SetRemainTime(30.f);		
-	}
 
-	MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
+	if (MainHUDWidgetClass)
+	{
+		MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
+	}
+	
 
 	if (MainHUD)
 	{
-		MainHUD->AddToViewport();		
+		MainHUD->AddToViewport();				
+	}
+
+	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (GameManager)
+	{
+		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
+		GameManager->FUNCDeleOnTimeChange.BindUFunction(this, FName("OnTimeChange"));
+		GameManager->SetRemainTime(30.f);
 	}
 	
 }
@@ -195,6 +206,14 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 		Player1Score--;
 		Player1Score = FMath::Max(0, Player1Score);
 	}
+
+	MainHUD->UpdateSocre(0, Player0Score);
+	MainHUD->UpdateSocre(1, Player1Score);
+}
+
+void ALMGameModeBase::OnTimeChange(float Time)
+{
+	MainHUD->UpdateTimer(Time);
 }
 
 void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
@@ -207,4 +226,7 @@ void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
 	{
 		Player1Score++;		
 	}
+
+	MainHUD->UpdateSocre(0, Player0Score);
+	MainHUD->UpdateSocre(1, Player1Score);
 }

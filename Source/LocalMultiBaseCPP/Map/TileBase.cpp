@@ -39,9 +39,12 @@ void ATileBase::UpatePlayerScore(int32 TargetPlayerIndex)
     {
         AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
         ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
-        if (GameMode)
+        if (CurrentMode && GameMode)
         {            
-            GameMode->OnSubScore(OccupiedPlayerIndex);
+            if (OccupiedPlayerIndex != -1)
+            {
+                GameMode->OnSubScore(OccupiedPlayerIndex);
+            }            
             GameMode->OnAddScore(TargetPlayerIndex);
             OccupiedPlayerIndex = TargetPlayerIndex;
         }
