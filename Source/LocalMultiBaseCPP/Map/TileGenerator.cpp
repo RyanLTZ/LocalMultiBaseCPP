@@ -4,6 +4,7 @@
 #include "Map/TileGenerator.h"
 #include "TileBase.h"
 #include "Engine/GameViewportClient.h"
+#include "Obstacle.h"
 
 // Sets default values
 ATileGenerator::ATileGenerator()
@@ -28,6 +29,23 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	ArrayOfTileRow.SetNum(CountLengthDir);
 	float InitPosX = (0 - (CountWidthDir - 1) * TileWidth);
 	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
+
+	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleLeftBorder->SetActorLocation(FVector(0, InitPosY - TileLength * 2, 0));
+
+	ObstacleRightBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleRightBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleRightBorder->SetActorLocation(FVector(0, InitPosY + TileCountLength * TileLength * 2, 0));
+
+	ObstacleTopBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleTopBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleTopBorder->SetActorLocation(FVector(InitPosX + TileCountWidth * TileWidth * 2, 0, 0));
+
+	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
+	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
+
 	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
 	{
 		TArray<ATileBase*> TempArray;
@@ -35,13 +53,25 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		for (int j = 0; j < TempArray.Num(); j++)
 		{	
 			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;
-			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+			bool bObstacle = FMath::RandRange(0, 10) > 9;
+			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
+			{
+				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition, GetActorRotation());
+				TempArray[j] = GenObstacle;
+			}
+			else
+			{
+				ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+				TempArray[j] = GenTile;
+
+			}
 			
-			TempArray[j] = GenTile;			
 		}
 		
 		ArrayOfTileRow[i] = TempArray;
 	}	
+
+
 }
 
 ATileBase* ATileGenerator::GetFirstTile()
@@ -69,20 +99,41 @@ ATileBase* ATileGenerator::GetLastTile()
 	return nullptr;
 }
 
+int32 ATileGenerator::GetMuchMoreOccupiedPlayerIndex()
+{
+	int32 Player0Count = 0, Player1Count = 0;
+	
+	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	{
+		for (int32 j = 0; j < ArrayOfTileRow[i].Num(); j++)
+		{
+			if (ArrayOfTileRow[i][j]->GetOccupiedPlayerIndex() == 0)
+			{
+				Player0Count++;
+			}
+			else if (ArrayOfTileRow[i][j]->GetOccupiedPlayerIndex() == 1)
+			{
+				Player1Count++;
+			}
+		}
+	}
+
+	return Player0Count > Player1Count ? 0 : Player0Count == Player1Count ? -1 : 1;
+}
+
 
 
 void ATileGenerator::ClearTileList()
 {
-	//for (int32 i = 0; i < ArrayTileBase.Num(); i++)
-	//{		
-	//	if (ArrayTileBase[i])
-	//	{
-	//		ArrayTileBase[i]->Destroy();
-	//	}
-	//		
-	//}
+	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	{
+		for (int32 j = 0; j < ArrayOfTileRow[i].Num(); j++)
+		{
+			ArrayOfTileRow[i][j]->Destroy();
+		}	
+	}
 
-	//ArrayTileBase.Reset(0);
+	ArrayOfTileRow.Reset(0);
 }
 
 

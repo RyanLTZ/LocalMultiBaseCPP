@@ -4,6 +4,7 @@
 #include "Map/TileBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
+#include "Game/LMGameModeBase.h"
 
 // Sets default values
 ATileBase::ATileBase()
@@ -30,5 +31,24 @@ void ATileBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ATileBase::UpatePlayerScore(int32 TargetPlayerIndex)
+{
+    if (TargetPlayerIndex != OccupiedPlayerIndex)
+    {
+        AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+        ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+        if (CurrentMode && GameMode)
+        {            
+            if (OccupiedPlayerIndex != -1)
+            {
+                GameMode->OnSubScore(OccupiedPlayerIndex);
+            }            
+            GameMode->OnAddScore(TargetPlayerIndex);
+            OccupiedPlayerIndex = TargetPlayerIndex;
+        }
+
+    }
 }
 

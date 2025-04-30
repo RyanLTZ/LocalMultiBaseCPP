@@ -23,17 +23,31 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* MeshComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	int32 OccupiedPlayerIndex = -1;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;	
 
 private:
 	FVector BoxExtentSize = FVector::ZeroVector;
+	
 
 public:
 	FORCEINLINE
-	FVector GetBoxExtentSize() {
-		return BoxExtentSize;
-	}
+	FVector GetBoxExtentSize() { return BoxExtentSize;	}
+	
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	void SetOccupiedPlayerIndex(int32 PlayerIndex) { OccupiedPlayerIndex = PlayerIndex; }
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	int32 GetOccupiedPlayerIndex() { return OccupiedPlayerIndex;  }
+
+	UFUNCTION(BlueprintCallable)
+	void UpatePlayerScore(int32 TargetPlayerIndex);
 
 };

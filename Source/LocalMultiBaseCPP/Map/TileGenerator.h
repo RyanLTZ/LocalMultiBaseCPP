@@ -23,12 +23,13 @@ protected:
 private:	
 	TArray<class ATileBase*> ArrayTileBaseRow;
 	TArray<TArray<class ATileBase*>> ArrayOfTileRow;
-	//TArray<class ATileBase*> ArrayTileBase;
-	
-	
+	//TArray<class ATileBase*> ArrayTileBase;	
 
 	UPROPERTY(EditAnywhere, Category = "Map");
 	TSubclassOf<class ATileBase> TileBaseClass;
+
+	UPROPERTY(EditAnywhere, Category = "Map");
+	TSubclassOf<class AObstacle> ObstacleClass;
 
 	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileCountWidth = 0;
@@ -44,6 +45,11 @@ private:
 
 	FVector CurrentActorLocation;
 
+	class AObstacle* ObstacleTopBorder;
+	class AObstacle* ObstacleBottomBorder;
+	class AObstacle* ObstacleRightBorder;
+	class AObstacle* ObstacleLeftBorder;
+
 public:
 	void ClearTileList();
 
@@ -52,4 +58,5 @@ public:
 	ATileBase* GetFirstTile();
 	ATileBase* GetLastTile(); 
 	
+	int32 GetMuchMoreOccupiedPlayerIndex();	
 };

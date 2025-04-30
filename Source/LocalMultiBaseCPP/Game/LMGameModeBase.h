@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+
+
 UCLASS()
 class LOCALMULTIBASECPP_API ALMGameModeBase : public AGameModeBase
 {
@@ -19,7 +22,8 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Player")
-	TSubclassOf<class ALMPawnBase> LMPawnBaseClass; 
+	//TSubclassOf<class ALMPawnBase> LMPawnBaseClass; 
+	TSubclassOf<class ALMPawnPlayer> LMPawnPlayerClass;
 
 	UPROPERTY(EditAnywhere, Category = "Player")
 	class APlayerStart* PlayerStart1P; 
@@ -28,8 +32,11 @@ public:
 	class APlayerStart* PlayerStart2P;
 
 	UPROPERTY(EditAnywhere, Category = "Map")
-	TSubclassOf<class ATileGenerator> LMTileGeneratorClass; 
+	TSubclassOf<class ATileGenerator> TileGeneratorClass; 
 
+	TSubclassOf<class AGameManager> GameManagerClass;	
+
+	TSubclassOf<class UMainHUDWidget> MainHUDWidgetClass; 
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,7 +44,6 @@ protected:
 private:
 	//Tag를 이용하여 PlayerStart를 찾는 함수
 	APlayerStart* FindPlayerStart(UWorld* World, const FName& TargetTag);	
-
 
 	//로컬 플레이어를 스폰하는 함수
 	void SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World);
@@ -48,7 +54,29 @@ private:
 
 	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, class ATileBase* PlayerStart, int32 PlayerIndex);
 
+	
+
 private:
 	int32 SpawnedPlayerIndex = 0;
 	class ATileGenerator* TileGenerator;
+	class ALMPawnPlayer* PawnPlayer1; 
+	class AGameManager* GameManager; 	
+	class UMainHUDWidget* MainHUD;
+
+	int32 Player0Score = 0;
+	int32 Player1Score = 0; 
+	
+	UFUNCTION()
+	void OnGameFinished();
+
+	UFUNCTION()
+	void OnTimeChange(float Time);
+
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void OnAddScore(int32 PlayerIndex);
+	
+	void OnSubScore(int32 PlayerIndex);
+
 };

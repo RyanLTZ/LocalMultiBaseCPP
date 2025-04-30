@@ -19,8 +19,7 @@ ALMPawnBase::ALMPawnBase()
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     MeshComponent->SetupAttachment(BoxComponent);
     
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));
-    //static ConstructorHelpers::FObjectFinder<USkeletalMesh> CubeMesh(TEXT("'/Game/CR/LQ/Modular_001_Bergs09/Mesh/SKM_Bergs09_1.SKM_Bergs09_1'"));    
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
     if (CubeMesh.Succeeded())
     {
         MeshComponent->SetStaticMesh(CubeMesh.Object);
@@ -31,6 +30,6 @@ ALMPawnBase::ALMPawnBase()
     PawnMovement->MaxSpeed = 500.f; 
     PawnMovement->Acceleration = 2048.f;
     PawnMovement->Deceleration = 2000.f;
-    PawnMovement->TurningBoost = 8.f;
+    PawnMovement->TurningBoost = 8.f;    
 }
 

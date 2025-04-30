@@ -9,12 +9,35 @@
 #include "Player/LMPlayerController.h"
 #include "Map/TileGenerator.h"
 #include "Map/TileBase.h"
+#include "Game/GameManager.h"
+#include "Wigets/MainHUDWidget.h"
+#include "Blueprint/UserWidget.h"
 
 ALMGameModeBase::ALMGameModeBase()
 {
 	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-	LMPawnBaseClass = ALMPawnPlayer::StaticClass();			
-	PlayerControllerClass = ALMPlayerController::StaticClass();		
+	
+	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
+	if (BP_LMPawnPlayer.Succeeded())
+	{
+		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
+	}
+
+	PlayerControllerClass = ALMPlayerController::StaticClass();	
+
+	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
+	if (BP_LMTileGenerator.Succeeded())
+	{
+		TileGeneratorClass = BP_LMTileGenerator.Class;
+	}
+
+	GameManagerClass = AGameManager::StaticClass();
+
+	static ConstructorHelpers::FClassFinder<UMainHUDWidget> BP_MainHUD(TEXT("'/Game/Widget/BP_MainHudWidget.BP_MainHudWidget_C'"));
+	if (BP_MainHUD.Succeeded())
+	{
+		MainHUDWidgetClass = BP_MainHUD.Class;
+	}	
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -22,34 +45,41 @@ void ALMGameModeBase::BeginPlay()
 	Super::BeginPlay();
 
 	UWorld* World = GetWorld();
-	const FName TargetTag1P = TEXT("PlayerStart1P");
-	const FName TargetTag2P = TEXT("PlayerStart2P");
-	const FName TargetTagTileGenerator = TEXT("BP_TileGenerator");
-	
-	//PlayerStart1P = FindPlayerStart(World, TargetTag1P);
-	//PlayerStart2P = FindPlayerStart(World, TargetTag2P);		
-	//SpawnLocalPlayer(0, PlayerStart1P, World);
-	//SpawnLocalPlayer(1, PlayerStart2P, World);
 
-
-
-	if (World)
+	if (LMPawnPlayerClass == nullptr)
 	{
-		for (TActorIterator<ATileGenerator> It(World); It; ++It)
-		{
-			ATileGenerator* FoundStart = *It;
-			if (FoundStart)
-			{
-				TileGenerator = FoundStart;				
+		UE_LOG(LogTemp, Warning, TEXT("LMPawnPlayerClass is nullptr!"));
+			
+		return;
+	}	
 
-				SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
-				SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
-			}
-		}
+	TileGenerator = GetWorld()->SpawnActor<ATileGenerator>(TileGeneratorClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (TileGenerator)
+	{
+		SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
+		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
+	}		
+	
+
+	if (MainHUDWidgetClass)
+	{
+		MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
+	}
+	
+
+	if (MainHUD)
+	{
+		MainHUD->AddToViewport();				
 	}
 
+	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (GameManager)
+	{
+		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
+		GameManager->FUNCDeleOnTimeChange.BindUFunction(this, FName("OnTimeChange"));
+		GameManager->SetRemainTime(30.f);
+	}
 	
-
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)
@@ -129,7 +159,7 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());	
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
 	PlayerPawn->SetPlayerIndex(PlayerIndex);
 	PlayerController->Possess(PlayerPawn);	
@@ -144,10 +174,59 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 	
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnBaseClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+	FVector NewLocation = PlayerStart->GetActorLocation() + FVector(0, 0, 50);
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, NewLocation, PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
-	PlayerPawn->SetPlayerIndex(PlayerIndex);
+	PlayerPawn->SetPlayerIndex(PlayerIndex);		
 	PlayerController->Possess(PlayerPawn);
 	return PlayerPawn;
+}
 
+void ALMGameModeBase::OnGameFinished()
+{
+	int32 WinPlayerIndex = TileGenerator->GetMuchMoreOccupiedPlayerIndex();	
+	if (WinPlayerIndex < 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex + 1);
+	
+}
+
+void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
+{
+	if (PlayerIndex == 0)
+	{
+		Player0Score--;
+		Player0Score = FMath::Max(0, Player0Score);	
+	}
+	else
+	{
+		Player1Score--;
+		Player1Score = FMath::Max(0, Player1Score);
+	}
+
+	MainHUD->UpdateSocre(0, Player0Score);
+	MainHUD->UpdateSocre(1, Player1Score);
+}
+
+void ALMGameModeBase::OnTimeChange(float Time)
+{
+	MainHUD->UpdateTimer(Time);
+}
+
+void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
+{
+	if (PlayerIndex == 0)
+	{
+		Player0Score++;		
+	}
+	else
+	{
+		Player1Score++;		
+	}
+
+	MainHUD->UpdateSocre(0, Player0Score);
+	MainHUD->UpdateSocre(1, Player1Score);
 }

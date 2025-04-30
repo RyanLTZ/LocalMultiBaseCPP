@@ -7,6 +7,7 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "Player/LMPlayerController.h"
+#include "Components/BoxComponent.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -21,7 +22,14 @@ ALMPawnPlayer::ALMPawnPlayer()
 	if (Input1PObj.Succeeded())
 	{
 		IA_LMMove1P = Input1PObj.Object;
-	}
+	}	
+
+	BoxComponent->SetGenerateOverlapEvents(true);
+	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	BoxComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
+	BoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Block);
+	//BoxComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 }
 
 void ALMPawnPlayer::PossessedBy(AController* NewController)
