@@ -190,7 +190,7 @@ void ALMGameModeBase::OnGameFinished()
 		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex);
+	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex + 1);
 	
 }
 
