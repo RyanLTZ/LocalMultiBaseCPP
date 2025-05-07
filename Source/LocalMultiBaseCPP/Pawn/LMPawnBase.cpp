@@ -16,14 +16,14 @@ ALMPawnBase::ALMPawnBase()
     SetRootComponent(BoxComponent);
     BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 
-    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    MeshComponent->SetupAttachment(BoxComponent);
-    
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
-    if (CubeMesh.Succeeded())
-    {
-        MeshComponent->SetStaticMesh(CubeMesh.Object);
-    }
+    //MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    //MeshComponent->SetupAttachment(BoxComponent);
+    //
+    //static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
+    //if (CubeMesh.Succeeded())
+    //{
+    //    MeshComponent->SetStaticMesh(CubeMesh.Object);
+    //}
 
     //Input
     PawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMovement"));

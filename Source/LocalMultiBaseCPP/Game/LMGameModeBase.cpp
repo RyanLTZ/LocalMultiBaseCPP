@@ -78,6 +78,8 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
 		GameManager->FUNCDeleOnTimeChange.BindUFunction(this, FName("OnTimeChange"));
 		GameManager->SetRemainTime(30.f);
+		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
+		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
 	}
 	
 }
@@ -213,7 +215,23 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 
 void ALMGameModeBase::OnTimeChange(float Time)
 {
-	MainHUD->UpdateTimer(Time);
+	MainHUD->UpdateTimer(FMath::Abs(Time));
+}
+
+void ALMGameModeBase::OnDeleItemDestroy()
+{
+	if (TileGenerator)
+	{
+		TileGenerator->DestroySpawnedItemOnTile();
+	}
+}
+
+void ALMGameModeBase::OnDeleItemSpawn()
+{
+	if (TileGenerator)
+	{
+		TileGenerator->SpawnItemOnTile();
+	}
 }
 
 void ALMGameModeBase::OnAddScore(int32 PlayerIndex)

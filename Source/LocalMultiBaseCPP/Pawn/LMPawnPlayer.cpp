@@ -71,16 +71,14 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 {
-	FVector2D MoveVector = Value.Get<FVector2D>();	
-
+	FVector2D MoveVector = Value.Get<FVector2D>();
+	//UE_LOG(LogTemp, Warning, TEXT("Player2 Input From Controller : %f, %f"), MoveVector.X, MoveVector.Y);
 	FVector ForwardDirection = GetActorForwardVector() * MoveVector.Y;
 	FVector RightDirection = GetActorRightVector() * MoveVector.X;
 	FVector MoveDirection = ForwardDirection + RightDirection;
 
-	if (MoveDirection.SizeSquared() > 0.f )
+	if (MoveDirection.SizeSquared() > 0.f)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Movement : %f, %f"), MoveVector.X, MoveVector.Y);
-
 		AddMovementInput(MoveDirection.GetSafeNormal());
 	}
 }
