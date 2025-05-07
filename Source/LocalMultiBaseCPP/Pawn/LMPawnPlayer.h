@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	FORCEINLINE void SetPlayerIndex(int32 NewIndex) { PlayerIndex = NewIndex; }
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class USkeletalMeshComponent* SKComponent;
+
+
 protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

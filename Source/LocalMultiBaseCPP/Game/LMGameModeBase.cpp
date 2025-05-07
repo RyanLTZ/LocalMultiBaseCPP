@@ -161,7 +161,7 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 
-	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(), PlayerStart->GetActorRotation());
+	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, PlayerStart->GetActorLocation(),FRotator::ZeroRotator);
 	ensure(PlayerPawn);
 	PlayerPawn->SetPlayerIndex(PlayerIndex);
 	PlayerController->Possess(PlayerPawn);	

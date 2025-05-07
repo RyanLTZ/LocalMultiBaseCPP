@@ -8,6 +8,7 @@
 #include "InputAction.h"
 #include "Player/LMPlayerController.h"
 #include "Components/BoxComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -15,13 +16,13 @@ ALMPawnPlayer::ALMPawnPlayer()
 	
 	if (IMCObj.Succeeded())
 	{
-		IMC_LMPlayerInput = IMCObj.Object;
+		IMC_LMPlayerInput = IMCObj.Object;		
 	}
 
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input1PObj(TEXT("'/Game/Inputs/IA_LMMove1P.IA_LMMove1P'"));
 	if (Input1PObj.Succeeded())
 	{
-		IA_LMMove1P = Input1PObj.Object;
+		IA_LMMove1P = Input1PObj.Object;		
 	}	
 
 	BoxComponent->SetGenerateOverlapEvents(true);
@@ -72,15 +73,43 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 {
 	FVector2D MoveVector = Value.Get<FVector2D>();
-	//UE_LOG(LogTemp, Warning, TEXT("Player2 Input From Controller : %f, %f"), MoveVector.X, MoveVector.Y);
+	FVector Vector;
+	if (MoveVector.X == 1)
+	{
+		Vector.Set(0, 0, 0);
+	}
+	else if (MoveVector.X == -1)
+	{
+		Vector.Set(0, 0, 180);
+	}
+	else if (MoveVector.Y == 1)
+	{
+		Vector.Set(0, 0, 270);
+	}
+	else if (MoveVector.Y == -1)
+	{
+		Vector.Set(0, 0, 90);
+	}	
+
 	FVector ForwardDirection = GetActorForwardVector() * MoveVector.Y;
 	FVector RightDirection = GetActorRightVector() * MoveVector.X;
 	FVector MoveDirection = ForwardDirection + RightDirection;
-
+		
 	if (MoveDirection.SizeSquared() > 0.f)
 	{
-		AddMovementInput(MoveDirection.GetSafeNormal());
-	}
+		AddMovementInput(MoveDirection.GetSafeNormal());			
+		
+	}	 
+		
+
+	//FQuat CurrentQuat = FQuat(GetActorRotation());
+
+	//FQuat DeltaRotation = FQuat::MakeFromEuler(MoveDirection);
+	//FQuat NewRotation = DeltaRotation * CurrentQuat;
+
+	//SetActorRotation(NewRotation.Rotator(), ETeleportType::None);
+
+
 }
 
 void ALMPawnPlayer::HandlePlayerSpecificPossession()
