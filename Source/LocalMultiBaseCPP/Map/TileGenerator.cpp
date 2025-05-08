@@ -20,6 +20,12 @@ ATileGenerator::ATileGenerator()
 	{
 		SpawnItemBaseClass = BP_SpawnItemClass.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<ADestructableObst> BP_DestructableObs(TEXT("'/Game/Blueprints/BP_DestructableObs.BP_DestructableObs_C'"));
+	if (BP_DestructableObs.Succeeded())
+	{
+		DestructableObsClass = BP_DestructableObs.Class;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -67,53 +73,70 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 			{
 				if (FMath::RandRange(0, 10) > 9)
 				{
-					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
-					TempArray[j] = GenObstacle;
+					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+					//TempArray[j] = GenObstacle;
+					//MapTileList.Add(TileIndex, GenObstacle);
+					GenObstacle->SetIndex(TileIndex);					
 				}
 				else
 				{
 					AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
-					TempArray[j] = GenObstacle;
+					//TempArray[j] = GenObstacle;
+					//MapTileList.Add(TileIndex, GenObstacle);
+					GenObstacle->SetIndex(TileIndex);					
 				}
 			}
-			else
-			{
-				ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
-				TempArray[j] = GenTile;			
-				
-				MapTileList.Add(TileIndex, GenTile);
-				TileIndex++; 
-			}
-			
+			//else
+			//{
+			//	ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+			//	//TempArray[j] = GenTile;			
+			//	GenTile->SetIndex(TileIndex);
+			//	MapTileList.Add(TileIndex, GenTile);				
+			//}
+
+			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
+			//TempArray[j] = GenTile;			
+			GenTile->SetIndex(TileIndex);
+			MapTileList.Add(TileIndex, GenTile);
+
+			TileIndex++;
 		}
 		
-		ArrayOfTileRow[i] = TempArray;
+		//ArrayOfTileRow[i] = TempArray;
 	}	
 
 }
 
 ATileBase* ATileGenerator::GetFirstTile()
 {
-	if (ArrayOfTileRow.Num() > 0 )
+	//if (ArrayOfTileRow.Num() > 0 )
+	//{
+	//	if (ArrayOfTileRow[0].Num() > 0)
+	//	{
+	//		return ArrayOfTileRow[0][0];
+	//	}			
+	//}
+	if (MapTileList.Num() > 0 )
 	{
-		if (ArrayOfTileRow[0].Num() > 0)
-		{
-			return ArrayOfTileRow[0][0];
-		}			
+		return MapTileList[0];
 	}
 	return nullptr;
 }
 
 ATileBase* ATileGenerator::GetLastTile()
 {
-	if (ArrayOfTileRow.Num() > 0)
+	//if (ArrayOfTileRow.Num() > 0)
+	//{
+	//	int32 LastIndexOfArrayGroup = ArrayOfTileRow.Num() - 1;
+	//	if (ArrayOfTileRow[LastIndexOfArrayGroup].Num() > 0)
+	//	{			
+	//		return	ArrayOfTileRow[LastIndexOfArrayGroup].Last();		
+	//	}
+	//}
+	if (MapTileList.Num() > 0)
 	{
-		int32 LastIndexOfArrayGroup = ArrayOfTileRow.Num() - 1;
-		if (ArrayOfTileRow[LastIndexOfArrayGroup].Num() > 0)
-		{			
-			return	ArrayOfTileRow[LastIndexOfArrayGroup].Last();		
-		}
-	}
+		return MapTileList[MapTileList.Num() - 1];
+	}	
 	return nullptr;
 }
 

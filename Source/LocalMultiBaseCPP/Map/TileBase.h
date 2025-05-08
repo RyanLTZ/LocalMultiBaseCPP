@@ -32,13 +32,13 @@ protected:
 
 private:
 	FVector BoxExtentSize = FVector::ZeroVector;
+	int32 TileIndex = -1;
 	
 
 public:
 	FORCEINLINE
 	FVector GetBoxExtentSize() { return BoxExtentSize;	}
-	
-	
+		
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
 	void SetOccupiedPlayerIndex(int32 PlayerIndex) { OccupiedPlayerIndex = PlayerIndex; }
@@ -49,5 +49,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpatePlayerScore(int32 TargetPlayerIndex);
+
+	FORCEINLINE		
+		void SetIndex(int32 Index) { TileIndex = Index; }
+
+	FORCEINLINE
+		int32 GetIndex() { return TileIndex; }
 
 };

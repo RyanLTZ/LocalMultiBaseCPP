@@ -33,7 +33,7 @@ private:
 	TSubclassOf<class AObstacle> ObstacleClass;
 
 	UPROPERTY(EditAnywhere, Category = "Map")
-	TSubclassOf<class ADestructableObst> DestructableClass;
+	TSubclassOf<class ADestructableObst> DestructableObsClass;
 
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
