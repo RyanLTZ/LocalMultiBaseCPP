@@ -56,6 +56,7 @@ void AGameManager::Tick(float DeltaTime)
 
 void AGameManager::FinishGame()
 {	
+	FUNCDeleOnTimeChange.ExecuteIfBound(0);
 	FUNCDeleOnGameFinish.ExecuteIfBound();
 }
 
