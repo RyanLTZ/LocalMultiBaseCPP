@@ -22,29 +22,25 @@ protected:
 
 private:	
 	TArray<class ATileBase*> ArrayTileBaseRow;
-	TArray<TArray<class ATileBase*>> ArrayOfTileRow;	
-	TArray<class ASpawItemBase*> ArrayItem;
-	TMap<int32, ATileBase*> MapTileList;
+	TArray<TArray<class ATileBase*>> ArrayOfTileRow;
+	//TArray<class ATileBase*> ArrayTileBase;	
 
-	UPROPERTY(EditAnywhere, Category = "Map")
+	UPROPERTY(EditAnywhere, Category = "Map");
 	TSubclassOf<class ATileBase> TileBaseClass;
 
-	UPROPERTY(EditAnywhere, Category = "Map")
+	UPROPERTY(EditAnywhere, Category = "Map");
 	TSubclassOf<class AObstacle> ObstacleClass;
 
-	UPROPERTY(EditAnywhere, Category = "Item")
-	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
-
-	UPROPERTY(EditAnywhere, Category = "InputParams")
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileCountWidth = 0;
 
-	UPROPERTY(EditAnywhere, Category = "InputParams")
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileCountLength = 0;
 
-	UPROPERTY(EditAnywhere, Category = "InputParams")
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileWidth = 0;
 
-	UPROPERTY(EditAnywhere, Category = "InputParams")
+	UPROPERTY(EditAnywhere, Category = "InputParams");
 	int32 TileLength = 0;
 
 	FVector CurrentActorLocation;
@@ -63,6 +59,4 @@ public:
 	ATileBase* GetLastTile(); 
 	
 	int32 GetMuchMoreOccupiedPlayerIndex();	
-	void SpawnItemOnTile();
-	void DestroySpawnedItemOnTile();
 };

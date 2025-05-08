@@ -72,18 +72,11 @@ private:
 	UFUNCTION()
 	void OnTimeChange(float Time);
 
-	UFUNCTION()
-	void OnDeleItemDestroy();
-	
-	UFUNCTION()
-	void OnDeleItemSpawn();
 
 public:
 	UFUNCTION(BlueprintCallable)
 	void OnAddScore(int32 PlayerIndex);
 	
 	void OnSubScore(int32 PlayerIndex);
-
-	
 
 };

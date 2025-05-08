@@ -5,20 +5,13 @@
 #include "TileBase.h"
 #include "Engine/GameViewportClient.h"
 #include "Obstacle.h"
-#include "Map/SpawItemBase.h"
 
 // Sets default values
 ATileGenerator::ATileGenerator()
 {
- 	// Set this actor to call Tick() every frame.  You can tuudrn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;	
 	CurrentActorLocation = GetActorLocation();	
-
-	static ConstructorHelpers::FClassFinder<ASpawItemBase> BP_SpawnItemClass(TEXT("'/Game/Blueprints/BP_SpawnItemBase.BP_SpawnItemBase_C'"));
-	if (BP_SpawnItemClass.Succeeded())
-	{
-		SpawnItemBaseClass = BP_SpawnItemClass.Class;
-	}
 }
 
 // Called when the game starts or when spawned
@@ -38,48 +31,46 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
 
 	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
-	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 100.f));
+	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
 	ObstacleLeftBorder->SetActorLocation(FVector(0, InitPosY - TileLength * 2, 0));
 
 	ObstacleRightBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
-	ObstacleRightBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 100.f));
+	ObstacleRightBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 50.f));
 	ObstacleRightBorder->SetActorLocation(FVector(0, InitPosY + TileCountLength * TileLength * 2, 0));
 
 	ObstacleTopBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
-	ObstacleTopBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 100.f));
+	ObstacleTopBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
 	ObstacleTopBorder->SetActorLocation(FVector(InitPosX + TileCountWidth * TileWidth * 2, 0, 0));
 
 	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
-	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 100.f));
+	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 50.f));
 	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
-	
-	int32 TileIndex = 0;
+
 	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
-	{		
+	{
 		TArray<ATileBase*> TempArray;
 		TempArray.SetNum(CountWidthDir);
 		for (int j = 0; j < TempArray.Num(); j++)
 		{	
-			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;			
+			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;
 			bool bObstacle = FMath::RandRange(0, 10) > 9;
 			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
-				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0,0,50), GetActorRotation());
+				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition, GetActorRotation());
 				TempArray[j] = GenObstacle;
 			}
 			else
 			{
 				ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
-				TempArray[j] = GenTile;			
-				
-				MapTileList.Add(TileIndex, GenTile);
-				TileIndex++; 
+				TempArray[j] = GenTile;
+
 			}
 			
 		}
 		
 		ArrayOfTileRow[i] = TempArray;
 	}	
+
 
 }
 
@@ -130,50 +121,6 @@ int32 ATileGenerator::GetMuchMoreOccupiedPlayerIndex()
 	return Player0Count > Player1Count ? 0 : Player0Count == Player1Count ? -1 : 1;
 }
 
-void ATileGenerator::SpawnItemOnTile()
-{
-	//if (ArrayItem.Num() > 0)
-	//{
-	//	for (int32 i = 0; i < ArrayItem.Num(); i++)
-	//	{
-	//		ArrayItem[i]->Destroy();
-	//	}
-	//}
-	//else
-	//{
-	//	
-	//}
-	ArrayItem.SetNum(5);
-	for (int32 i = 0; i < 5; i++)
-	{
-		int32 TargetTileIndex = FMath::RandRange(0, MapTileList.Num());
-		ATileBase* TargetTile = MapTileList[TargetTileIndex];
-		if (TargetTile)
-		{
-			ASpawItemBase* SpawnItem = GetWorld()->SpawnActor<ASpawItemBase>(SpawnItemBaseClass, TargetTile->GetActorLocation(), FRotator::ZeroRotator);
-			ArrayItem.Add(SpawnItem);
-		}
-
-	}
-	
-
-}
-
-void ATileGenerator::DestroySpawnedItemOnTile()
-{	
-	UE_LOG(LogTemp, Warning, TEXT("Item Destroy"));
-	if (ArrayItem.Num() > 0)
-	{
-		for (int32 i = 0; i < ArrayItem.Num(); i++)
-		{
-			if (ArrayItem[i])
-			{
-				ArrayItem[i]->Destroy();			
-			}				
-		}
-	}
-}
-
 
 
 void ATileGenerator::ClearTileList()
@@ -187,7 +134,6 @@ void ATileGenerator::ClearTileList()
 	}
 
 	ArrayOfTileRow.Reset(0);
-	MapTileList.Reset();
 }
 
 

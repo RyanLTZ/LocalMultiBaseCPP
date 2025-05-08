@@ -29,9 +29,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	class UInputAction* IA_LMMove2P;
 
-	UPROPERTY(VisibleAnywhere, Category = "Input")
-	class UInputAction* IA_LMFire2P;
-
 public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void SetPlayer2P(class ALMPawnPlayer* const NewPlayer2P );
@@ -41,7 +38,6 @@ protected:
 
 private:
 	void OnInputMove2P(const FInputActionValue& Value);
-	void OnInputFire2P();
 
 // 0429 / Network Function
 public:

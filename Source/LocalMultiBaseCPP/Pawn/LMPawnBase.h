@@ -18,8 +18,6 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* MeshComponent;
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
-	//class USkeletalMeshComponent* SKMComponent;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

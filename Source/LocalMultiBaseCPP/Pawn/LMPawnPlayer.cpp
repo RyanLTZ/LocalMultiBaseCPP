@@ -8,11 +8,6 @@
 #include "InputAction.h"
 #include "Player/LMPlayerController.h"
 #include "Components/BoxComponent.h"
-#include "Components/SkeletalMeshComponent.h"
-#include "Components/ArrowComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "Player/ProjectileObject.h"
-#include "EngineUtils.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -20,36 +15,21 @@ ALMPawnPlayer::ALMPawnPlayer()
 	
 	if (IMCObj.Succeeded())
 	{
-		IMC_LMPlayerInput = IMCObj.Object;		
+		IMC_LMPlayerInput = IMCObj.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UInputAction> Input1PObj(TEXT("'/Game/Inputs/IA_LMMove1P.IA_LMMove1P'"));
 	if (Input1PObj.Succeeded())
 	{
-		IA_LMMove1P = Input1PObj.Object;		
+		IA_LMMove1P = Input1PObj.Object;
 	}	
 
-	static ConstructorHelpers::FClassFinder<AProjectileObject> BP_Bullet(TEXT("'/Game/Blueprints/BP_Bullet.BP_Bullet_C'"));
-	if (BP_Bullet.Succeeded())
-	{
-		ProjectileClass = BP_Bullet.Class;
-	}
-
-	
 	BoxComponent->SetGenerateOverlapEvents(true);
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
 	BoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Block);
 	//BoxComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
-		
-	//UArrowComponent* ArrowForFirePos = Cast<UArrowComponent>(UGameplayStatics::GetActorOfClass(GetWorld(), UArrowComponent::StaticClass()));
-	//if (ArrowForFirePos)
-	//{
-	//	FirePosition2 = ArrowForFirePos;
-	//}		
-	FirePosition2 = CreateDefaultSubobject<UArrowComponent>(TEXT("Fire Position2"));
-	FirePosition2->SetupAttachment(MeshComponent);
 }
 
 void ALMPawnPlayer::PossessedBy(AController* NewController)
@@ -92,44 +72,17 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 {
 	FVector2D MoveVector = Value.Get<FVector2D>();	
-	if (MoveVector.X == 1)
-	{		
-		MeshComponent->SetWorldRotation(FRotator(0, 0, 0));
-	}
-	else if (MoveVector.X == -1)
-	{		
-		MeshComponent->SetWorldRotation(FRotator(0, 180, 0));
-	}
-	else if (MoveVector.Y == 1)
-	{	
-		MeshComponent->SetWorldRotation(FRotator(0, 270, 0));
-	}
-	else if (MoveVector.Y == -1)
-	{	
-		MeshComponent->SetWorldRotation(FRotator(0, 90, 0));
-	}	
-
-	
 
 	FVector ForwardDirection = GetActorForwardVector() * MoveVector.Y;
 	FVector RightDirection = GetActorRightVector() * MoveVector.X;
 	FVector MoveDirection = ForwardDirection + RightDirection;
-		
-	if (MoveDirection.SizeSquared() > 0.f)
+
+	if (MoveDirection.SizeSquared() > 0.f )
 	{
-		AddMovementInput(MoveDirection.GetSafeNormal());			
-		
-	}	 
-		
+		//UE_LOG(LogTemp, Warning, TEXT("Movement : %f, %f"), MoveVector.X, MoveVector.Y);
 
-	//FQuat CurrentQuat = FQuat(GetActorRotation());
-
-	//FQuat DeltaRotation = FQuat::MakeFromEuler(MoveDirection);
-	//FQuat NewRotation = DeltaRotation * CurrentQuat;
-
-	//SetActorRotation(NewRotation.Rotator(), ETeleportType::None);
-
-
+		AddMovementInput(MoveDirection.GetSafeNormal());
+	}
 }
 
 void ALMPawnPlayer::HandlePlayerSpecificPossession()
@@ -144,9 +97,4 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 		}
 			
 	}
-}
-
-void ALMPawnPlayer::Fire()
-{
-	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
 }

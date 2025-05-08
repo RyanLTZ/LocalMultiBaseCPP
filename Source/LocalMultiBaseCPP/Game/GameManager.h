@@ -8,8 +8,6 @@
 
 DECLARE_DELEGATE(FDeleOnGameFinish);
 DECLARE_DELEGATE_OneParam(FDeleOnTimeChange, float);
-DECLARE_DELEGATE(FDeleOnItemSpawn);
-DECLARE_DELEGATE(FDeleOnItemDestroy);
 
 UCLASS()
 class LOCALMULTIBASECPP_API AGameManager : public AActor
@@ -34,27 +32,17 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere)
 	float RemainTime;	
-	
-	UPROPERTY(EditAnywhere, Category = "ItemSpawn");
-	float ItemLifeTime = 5;
-
-	UPROPERTY(EditAnywhere, Category = "ItemSpawn");
-	float ItemSpawnDelayAfterDisappear = 1.5f;
 
 	const float UpdateTick = 0.1f;
 	float TempElapsedTimeForTick = 0.f;
-	float TempElapsedTimeForItemDestroy = 0.f;
-	float TempElapsedDelayTimeForNextSpawn = 0.f;
 
 public:
 	FDeleOnGameFinish FUNCDeleOnGameFinish;
 	FDeleOnTimeChange FUNCDeleOnTimeChange;
-	FDeleOnItemSpawn FUNCDeleOnItemSpawn;
-	FDeleOnItemDestroy FUNCDeleOnItemDestroy;
+
 	//user Addeded Functions 
 private:
 	void FinishGame();
-	void ProcessItemLifeCycle(float DeltaTime);
 
 public:
 	int32 DetermineWinnerPlayer();
