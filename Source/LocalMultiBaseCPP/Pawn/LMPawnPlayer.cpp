@@ -72,24 +72,25 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 {
-	FVector2D MoveVector = Value.Get<FVector2D>();
-	FVector Vector;
+	FVector2D MoveVector = Value.Get<FVector2D>();	
 	if (MoveVector.X == 1)
-	{
-		Vector.Set(0, 0, 0);
+	{		
+		MeshComponent->SetWorldRotation(FRotator(0, 0, 0));
 	}
 	else if (MoveVector.X == -1)
-	{
-		Vector.Set(0, 0, 180);
+	{		
+		MeshComponent->SetWorldRotation(FRotator(0, 180, 0));
 	}
 	else if (MoveVector.Y == 1)
-	{
-		Vector.Set(0, 0, 270);
+	{	
+		MeshComponent->SetWorldRotation(FRotator(0, 270, 0));
 	}
 	else if (MoveVector.Y == -1)
-	{
-		Vector.Set(0, 0, 90);
+	{	
+		MeshComponent->SetWorldRotation(FRotator(0, 90, 0));
 	}	
+
+	
 
 	FVector ForwardDirection = GetActorForwardVector() * MoveVector.Y;
 	FVector RightDirection = GetActorRightVector() * MoveVector.X;

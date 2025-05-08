@@ -16,8 +16,11 @@ public:
 	ALMPawnBase();
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* MeshComponent;
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
-	//class UStaticMeshComponent* MeshComponent;
+	//class USkeletalMeshComponent* SKMComponent;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;

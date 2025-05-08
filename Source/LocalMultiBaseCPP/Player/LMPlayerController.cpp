@@ -45,6 +45,23 @@ void ALMPlayerController::OnInputMove2P(const FInputActionValue& Value)
 		FVector RightDirection = Player2P->GetActorRightVector() * MoveVector.X;
 		FVector MoveDirection = ForwardDirection + RightDirection;
 
+		if (MoveVector.X == 1)
+		{
+			Player2P->MeshComponent->SetWorldRotation(FRotator(0, 0, 0));
+		}
+		else if (MoveVector.X == -1)
+		{
+			Player2P->MeshComponent->SetWorldRotation(FRotator(0, 180, 0));
+		}
+		else if (MoveVector.Y == 1)
+		{
+			Player2P->MeshComponent->SetWorldRotation(FRotator(0, 270, 0));
+		}
+		else if (MoveVector.Y == -1)
+		{
+			Player2P->MeshComponent->SetWorldRotation(FRotator(0, 90, 0));
+		}
+
 		if (MoveDirection.SizeSquared() > 0.f)
 		{
 			Player2P->AddMovementInput(MoveDirection.GetSafeNormal());

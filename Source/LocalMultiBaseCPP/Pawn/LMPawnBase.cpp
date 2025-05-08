@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "EngineUtils.h"
 
 // Sets default values
 ALMPawnBase::ALMPawnBase()
@@ -16,8 +18,24 @@ ALMPawnBase::ALMPawnBase()
     SetRootComponent(BoxComponent);
     BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 
-    //MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-    //MeshComponent->SetupAttachment(BoxComponent);
+
+    //for (TActorIterator<USkeletalMeshComponent> It(GetWorld()); It; ++It)
+    //{
+    //    USkeletalMeshComponent* FoundStart = *It;
+    //    if (FoundStart)
+    //    {
+    //        SKMComponent = FoundStart;
+    //        break;
+    //    }
+    //}
+
+    //if (SKMComponent)
+    //{
+    //    UE_LOG(LogTemp, Warning, TEXT("SKM created"));
+    //}
+
+    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    MeshComponent->SetupAttachment(BoxComponent);
     //
     //static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
     //if (CubeMesh.Succeeded())
