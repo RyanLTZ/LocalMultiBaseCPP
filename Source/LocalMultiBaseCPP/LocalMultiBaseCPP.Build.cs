@@ -8,7 +8,7 @@ public class LocalMultiBaseCPP : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule",
 			"OnlineSubsystem","OnlineSubsystemUtils" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
