@@ -9,6 +9,10 @@
 #include "Player/LMPlayerController.h"
 #include "Components/BoxComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/ArrowComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/ProjectileObject.h"
+#include "EngineUtils.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -25,12 +29,27 @@ ALMPawnPlayer::ALMPawnPlayer()
 		IA_LMMove1P = Input1PObj.Object;		
 	}	
 
+	static ConstructorHelpers::FClassFinder<AProjectileObject> BP_Bullet(TEXT("'/Game/Blueprints/BP_Bullet.BP_Bullet_C'"));
+	if (BP_Bullet.Succeeded())
+	{
+		ProjectileClass = BP_Bullet.Class;
+	}
+
+	
 	BoxComponent->SetGenerateOverlapEvents(true);
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
 	BoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Block);
 	//BoxComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+		
+	//UArrowComponent* ArrowForFirePos = Cast<UArrowComponent>(UGameplayStatics::GetActorOfClass(GetWorld(), UArrowComponent::StaticClass()));
+	//if (ArrowForFirePos)
+	//{
+	//	FirePosition2 = ArrowForFirePos;
+	//}		
+	FirePosition2 = CreateDefaultSubobject<UArrowComponent>(TEXT("Fire Position2"));
+	FirePosition2->SetupAttachment(MeshComponent);
 }
 
 void ALMPawnPlayer::PossessedBy(AController* NewController)
@@ -125,4 +144,9 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 		}
 			
 	}
+}
+
+void ALMPawnPlayer::Fire()
+{
+	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
 }

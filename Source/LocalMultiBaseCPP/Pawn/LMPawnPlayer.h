@@ -37,6 +37,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Components")
 	class USkeletalMeshComponent* SKComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class UArrowComponent* FirePosition2;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AProjectileObject> ProjectileClass; //Inherited class can be assigned
+
 
 protected:
 	virtual void PossessedBy(AController* NewController) override;
@@ -46,5 +52,8 @@ private:
 	void BindInputActions(class UEnhancedInputComponent* EnhacedInputComponent);
 	void OnInputMove(const FInputActionValue& Value);
 	void HandlePlayerSpecificPossession();	
+
+public:
+	void Fire();
 	
 };

@@ -6,6 +6,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Pawn/LMPawnPlayer.h"
+#include "ProjectileObject.h"
+#include "Kismet/GameplayStatics.h"
 
 ALMPlayerController::ALMPlayerController()
 {	
@@ -14,6 +16,12 @@ ALMPlayerController::ALMPlayerController()
 	if (IAObj.Succeeded() )
 	{
 		IA_LMMove2P = IAObj.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IAFireObj(TEXT("'/Game/Inputs/IA_Fire2P.IA_Fire2P'"));
+	if (IAFireObj.Succeeded())
+	{
+		IA_LMFire2P = IAFireObj.Object;
 	}
 }
 
@@ -32,6 +40,11 @@ void ALMPlayerController::SetupInputComponent()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SetupInputComponent from Player2 COntroller"));
 		EnhancedInputComponent->BindAction(IA_LMMove2P, ETriggerEvent::Triggered, this, &ALMPlayerController::OnInputMove2P);				
+
+		if (IA_LMFire2P)
+		{
+			EnhancedInputComponent->BindAction(IA_LMFire2P, ETriggerEvent::Started, this, &ALMPlayerController::OnInputFire2P);
+		}
 	}	
 }
 
@@ -67,6 +80,13 @@ void ALMPlayerController::OnInputMove2P(const FInputActionValue& Value)
 			Player2P->AddMovementInput(MoveDirection.GetSafeNormal());
 		}
 	}
+}
+
+void ALMPlayerController::OnInputFire2P()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player2P Fire"));
+	Player2P->Fire();
+	//UGameplayStatics::PlaySound2D(GetWorld(), FireSound);
 }
 
 
