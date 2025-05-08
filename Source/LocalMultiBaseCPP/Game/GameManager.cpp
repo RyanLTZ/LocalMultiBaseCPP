@@ -41,6 +41,8 @@ void AGameManager::Tick(float DeltaTime)
 			TempElapsedTimeForTick = 0.f;
 			FUNCDeleOnTimeChange.ExecuteIfBound(RemainTime);
 		}
+
+		ProcessItemLifeCycle(DeltaTime);
 	}		
 	else
 	{
@@ -55,6 +57,44 @@ void AGameManager::Tick(float DeltaTime)
 void AGameManager::FinishGame()
 {	
 	FUNCDeleOnGameFinish.ExecuteIfBound();
+}
+
+void AGameManager::ProcessItemLifeCycle(float DeltaTime)
+{
+	if (RemainTime <= 0)
+		return;
+
+	if (TempElapsedTimeForItemDestroy == 0 && TempElapsedDelayTimeForNextSpawn == 0)
+	{
+		TempElapsedDelayTimeForNextSpawn = ItemSpawnDelayAfterDisappear;
+		return;
+	}
+	
+	if (TempElapsedTimeForItemDestroy > 0)
+	{
+		TempElapsedTimeForItemDestroy += DeltaTime;
+
+		if (TempElapsedTimeForItemDestroy >= ItemLifeTime)
+		{
+			TempElapsedTimeForItemDestroy = 0;
+			FUNCDeleOnItemDestroy.ExecuteIfBound();
+			TempElapsedDelayTimeForNextSpawn += DeltaTime;
+		}	
+	}
+
+	if (TempElapsedDelayTimeForNextSpawn > 0)
+	{
+		TempElapsedDelayTimeForNextSpawn += DeltaTime;
+
+		if (TempElapsedDelayTimeForNextSpawn >= ItemSpawnDelayAfterDisappear)
+		{
+			TempElapsedDelayTimeForNextSpawn = 0;
+			FUNCDeleOnItemSpawn.ExecuteIfBound();			
+			
+			TempElapsedTimeForItemDestroy += DeltaTime;
+		}
+	}
+	
 }
 
 int32 AGameManager::DetermineWinnerPlayer()
