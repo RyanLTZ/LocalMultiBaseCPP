@@ -51,3 +51,18 @@ ALMPawnBase::ALMPawnBase()
     PawnMovement->TurningBoost = 8.f;    
 }
 
+void ALMPawnBase::SetDamage(int32 Damage)
+{
+    Hp -= Damage;
+
+    if (Hp < 0)
+    {
+        Hp = 0;
+        DoDie();
+    }                
+}
+
+void ALMPawnBase::DoDie()
+{
+}
+

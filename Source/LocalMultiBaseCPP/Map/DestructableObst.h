@@ -14,4 +14,9 @@ class LOCALMULTIBASECPP_API ADestructableObst : public AObstacle
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	void SpawnOther();
 };

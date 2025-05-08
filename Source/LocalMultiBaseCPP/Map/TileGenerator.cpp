@@ -6,6 +6,7 @@
 #include "Engine/GameViewportClient.h"
 #include "Obstacle.h"
 #include "Map/SpawItemBase.h"
+#include "DestructableObst.h"
 
 // Sets default values
 ATileGenerator::ATileGenerator()
@@ -64,8 +65,16 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 			bool bObstacle = FMath::RandRange(0, 10) > 9;
 			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
-				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0,0,50), GetActorRotation());
-				TempArray[j] = GenObstacle;
+				if (FMath::RandRange(0, 10) > 9)
+				{
+					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+					TempArray[j] = GenObstacle;
+				}
+				else
+				{
+					AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+					TempArray[j] = GenObstacle;
+				}
 			}
 			else
 			{

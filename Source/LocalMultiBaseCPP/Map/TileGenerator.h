@@ -32,6 +32,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Map")
 	TSubclassOf<class AObstacle> ObstacleClass;
 
+	UPROPERTY(EditAnywhere, Category = "Map")
+	TSubclassOf<class ADestructableObst> DestructableClass;
+
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
 

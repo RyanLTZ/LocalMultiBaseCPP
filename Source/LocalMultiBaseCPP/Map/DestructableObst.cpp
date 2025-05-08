@@ -3,3 +3,11 @@
 
 #include "Map/DestructableObst.h"
 
+void ADestructableObst::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ADestructableObst::SpawnOther()
+{
+}

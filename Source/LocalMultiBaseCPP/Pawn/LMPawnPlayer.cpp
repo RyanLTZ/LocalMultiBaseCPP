@@ -149,3 +149,8 @@ void ALMPawnPlayer::Fire()
 {
 	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
 }
+
+void DoDie()
+{
+
+}

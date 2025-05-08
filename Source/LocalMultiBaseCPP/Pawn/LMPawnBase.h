@@ -27,4 +27,19 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UFloatingPawnMovement* PawnMovement; 
+
+private:
+	int32 Hp; 
+
+public:
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	void SetHP(int32 HP) { Hp = HP; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetDamage(int32 Damage);
+
+	UFUNCTION(BlueprintCallable)
+	void DoDie();
+
 };
