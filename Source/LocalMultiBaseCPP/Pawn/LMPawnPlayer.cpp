@@ -117,8 +117,7 @@ void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 		
 	if (MoveDirection.SizeSquared() > 0.f)
 	{
-		AddMovementInput(MoveDirection.GetSafeNormal());			
-		
+		AddMovementInput(MoveDirection.GetSafeNormal());					
 	}	 
 		
 
