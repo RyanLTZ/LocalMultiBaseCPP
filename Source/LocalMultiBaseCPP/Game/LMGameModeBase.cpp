@@ -218,6 +218,10 @@ void ALMGameModeBase::OnDestructableObstacleDestroyed(int32 TileIndex)
 	TileGenerator->SpawnItemOnTargetTile(TileIndex);
 }
 
+void ALMGameModeBase::OnConsumeItem(ASpawItemBase* TargetItem)
+{
+}
+
 void ALMGameModeBase::OnTimeChange(float Time)
 {
 	MainHUD->UpdateTimer(FMath::Abs(Time));

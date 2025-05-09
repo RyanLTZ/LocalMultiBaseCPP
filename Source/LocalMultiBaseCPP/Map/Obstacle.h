@@ -20,5 +20,6 @@ public:
 public:
 	void SetBorderSizeHorizontalAxisByTileCount(int32 CountInWidth, const FVector TileSize);
 	void SetBorderSizeVerticalAxisByTileCount(int32 CountInLength, const FVector TileSize);
+	void SetTransitable();
 	
 };

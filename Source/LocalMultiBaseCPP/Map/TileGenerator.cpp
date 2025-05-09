@@ -84,6 +84,11 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 					//TempArray[j] = GenObstacle;
 					//MapTileList.Add(TileIndex, GenObstacle);
 					GenObstacle->SetIndex(TileIndex);					
+					if (FMath::RandRange(0, 10) > 7)
+					{
+						GenObstacle->SetTransitable();
+					}
+
 				}
 			}
 			//else
@@ -178,16 +183,14 @@ void ATileGenerator::SpawnItemOnTile()
 	ArrayItem.SetNum(5);
 	for (int32 i = 0; i < 5; i++)
 	{
-		int32 TargetTileIndex = FMath::RandRange(0, MapTileList.Num());
+		int32 TargetTileIndex = FMath::RandRange(0, MapTileList.Num() - 1);
 		ATileBase* TargetTile = MapTileList[TargetTileIndex];
 		if (TargetTile)
 		{
 			ASpawItemBase* SpawnItem = GetWorld()->SpawnActor<ASpawItemBase>(SpawnItemBaseClass, TargetTile->GetActorLocation(), FRotator::ZeroRotator);
 			ArrayItem.Add(SpawnItem);
 		}
-
-	}
-	
+	}	
 
 }
 

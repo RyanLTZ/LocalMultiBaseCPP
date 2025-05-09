@@ -31,5 +31,15 @@ void AObstacle::SetBorderSizeVerticalAxisByTileCount(int32 Count, const FVector 
 
 }
 
+void AObstacle::SetTransitable()
+{
+	BoxComponent->SetGenerateOverlapEvents(false);
+	BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//BoxComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
+	//BoxComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Overlap);
+	//BoxComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+}
+
 
 

@@ -79,11 +79,16 @@ private:
 	void OnDeleItemSpawn();
 
 public:	
+	UFUNCTION(BlueprintCallable)
 	void OnAddScore(int32 PlayerIndex);
 	
+	UFUNCTION(BlueprintCallable)
 	void OnSubScore(int32 PlayerIndex);
 
-	void OnDestructableObstacleDestroyed(int32 TileIndex);
-	
+	UFUNCTION(BlueprintCallable)
+	void OnDestructableObstacleDestroyed(int32 TileIndex);	
+
+	UFUNCTION(BlueprintCallable)
+	void OnConsumeItem(class ASpawItemBase* TargetItem);
 
 };
