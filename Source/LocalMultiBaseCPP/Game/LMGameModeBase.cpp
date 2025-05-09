@@ -176,7 +176,7 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 		return nullptr;
 	}
 	
-	FVector NewLocation = PlayerStart->GetActorLocation() + FVector(0, 0, 50);
+	FVector NewLocation = PlayerStart->GetActorLocation() + FVector(0, 0, 60);
 	ALMPawnPlayer* PlayerPawn = World->SpawnActor<ALMPawnPlayer>(LMPawnPlayerClass, NewLocation, PlayerStart->GetActorRotation());
 	ensure(PlayerPawn);
 	PlayerPawn->SetPlayerIndex(PlayerIndex);		
@@ -211,6 +211,11 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 
 	MainHUD->UpdateSocre(0, Player0Score);
 	MainHUD->UpdateSocre(1, Player1Score);
+}
+
+void ALMGameModeBase::OnDestructableObstacleDestroyed(int32 TileIndex)
+{
+	TileGenerator->SpawnItemOnTargetTile(TileIndex);
 }
 
 void ALMGameModeBase::OnTimeChange(float Time)

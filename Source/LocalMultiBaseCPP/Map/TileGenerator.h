@@ -25,6 +25,7 @@ private:
 	TArray<TArray<class ATileBase*>> ArrayOfTileRow;	
 	TArray<class ASpawItemBase*> ArrayItem;
 	TMap<int32, ATileBase*> MapTileList;
+	//TMap<int32, class ASpawItemBase*> MapItemList;
 
 	UPROPERTY(EditAnywhere, Category = "Map")
 	TSubclassOf<class ATileBase> TileBaseClass;
@@ -33,7 +34,7 @@ private:
 	TSubclassOf<class AObstacle> ObstacleClass;
 
 	UPROPERTY(EditAnywhere, Category = "Map")
-	TSubclassOf<class ADestructableObst> DestructableClass;
+	TSubclassOf<class ADestructableObst> DestructableObsClass;
 
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
@@ -67,5 +68,8 @@ public:
 	
 	int32 GetMuchMoreOccupiedPlayerIndex();	
 	void SpawnItemOnTile();
+	void SpawnItemOnTargetTile(int32 TileIndex);
 	void DestroySpawnedItemOnTile();
+	void ConsumeItemOnTargetTile(int32 TileIndex);
+	
 };

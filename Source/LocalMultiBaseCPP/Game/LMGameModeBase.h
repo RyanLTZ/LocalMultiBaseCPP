@@ -78,12 +78,12 @@ private:
 	UFUNCTION()
 	void OnDeleItemSpawn();
 
-public:
-	UFUNCTION(BlueprintCallable)
+public:	
 	void OnAddScore(int32 PlayerIndex);
 	
 	void OnSubScore(int32 PlayerIndex);
 
+	void OnDestructableObstacleDestroyed(int32 TileIndex);
 	
 
 };
