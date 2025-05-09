@@ -82,10 +82,10 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		for (int j = 0; j < TempArray.Num(); j++)
 		{	
 			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;			
-			bool bObstacle = FMath::RandRange(0, 10) > 9;
+			bool bObstacle = FMath::RandRange(0, 10) > 8;
 			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
-				if (FMath::RandRange(0, 100) > 93) //Destructable Obstacle
+				if (FMath::RandRange(0, 100) > 70) //Destructable Obstacle
 				{
 					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
 					GenObstacle->SetIndex(TileIndex);					

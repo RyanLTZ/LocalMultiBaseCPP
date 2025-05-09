@@ -45,9 +45,9 @@ ALMPawnBase::ALMPawnBase()
 
     //Input
     PawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMovement"));
-    PawnMovement->MaxSpeed = 500.f; 
+    PawnMovement->MaxSpeed = 2000.f; 
     PawnMovement->Acceleration = 2048.f;
-    PawnMovement->Deceleration = 2000.f;
+    PawnMovement->Deceleration = 300.f;
     PawnMovement->TurningBoost = 8.f;    
 }
 

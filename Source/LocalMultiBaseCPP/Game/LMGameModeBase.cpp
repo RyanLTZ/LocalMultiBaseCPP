@@ -146,6 +146,18 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, 
 		UGameInstance* GameInstance = GetGameInstance();
 		ensure(GameInstance);
 		FString Error;
+
+		//if (GameInstance->GetFirstLocalPlayerController())
+		//{
+		//	ULocalPlayer* CurrentLocalPlayer = GameInstance->GetFirstLocalPlayerController()->GetLocalPlayer();
+		//	if (CurrentLocalPlayer)
+		//	{
+		//		APlayerController* PlayerController2P = CurrentLocalPlayer->GetPlayerController(World);
+		//		PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+		//		return;
+		//	}
+		//}
+		
 		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
 		ensure(NewLocalPlayer);
 		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);
