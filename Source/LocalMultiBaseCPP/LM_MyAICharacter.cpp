@@ -161,10 +161,10 @@ void ALM_MyAICharacter::NotifyHit(
     {
         // 벽이나 장애물에 닿았을 때 새 방향 계산
         ComputeMoveDirection();
-        UE_LOG(LogTemp, Log, TEXT("%s NotifyHit with %s at %s"),
-            *GetName(),
-            *OtherActor->GetName(),
-            *HitLocation.ToString());
+        //UE_LOG(LogTemp, Log, TEXT("%s NotifyHit with %s at %s"),
+        //    *GetName(),
+        //    *OtherActor->GetName(),
+        //    *HitLocation.ToString());
     }
 }
 

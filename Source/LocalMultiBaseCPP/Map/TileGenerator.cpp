@@ -6,7 +6,8 @@
 #include "Engine/GameViewportClient.h"
 #include "Obstacle.h"
 #include "Map/SpawItemBase.h"
-#include "DestructableObst.h"
+#include "Map/DestructableObst.h"
+#include "Map/RandomSpawnObject.h"
 
 // Sets default values
 ATileGenerator::ATileGenerator()
@@ -26,6 +27,19 @@ ATileGenerator::ATileGenerator()
 	{
 		DestructableObsClass = BP_DestructableObs.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<ARandomSpawnObject> BP_RandomSpawnObjectObj(TEXT("'/Game/Blueprints/BP_RandomSpawnObject.BP_RandomSpawnObject_C'"));
+	if (BP_RandomSpawnObjectObj.Succeeded())
+	{
+		RandomSpawnObjectClass = BP_RandomSpawnObjectObj.Class;
+	}	
+
+	static ConstructorHelpers::FClassFinder<ARandomSpawnObject> BP_RandomObjType2Obj(TEXT("'/Game/Blueprints/BP_RandomSpawnObjectType2.BP_RandomSpawnObjectType2_C'"));
+	if (BP_RandomSpawnObjectObj.Succeeded())
+	{
+		RandomSpawnObjectType2Class = BP_RandomObjType2Obj.Class;
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -71,33 +85,39 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 			bool bObstacle = FMath::RandRange(0, 10) > 9;
 			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
-				if (FMath::RandRange(0, 10) > 9)
+				if (FMath::RandRange(0, 100) > 93) //Destructable Obstacle
 				{
 					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
-					//TempArray[j] = GenObstacle;
-					//MapTileList.Add(TileIndex, GenObstacle);
 					GenObstacle->SetIndex(TileIndex);					
 				}
-				else
+				else //Normal Obstacle
 				{
-					AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
-					//TempArray[j] = GenObstacle;
-					//MapTileList.Add(TileIndex, GenObstacle);
-					GenObstacle->SetIndex(TileIndex);					
-					if (FMath::RandRange(0, 10) > 7)
+
+					if (FMath::RandRange(0, 10) > 5)
 					{
-						GenObstacle->SetTransitable();
+						if (FMath::RandRange(0, 10) > 5)
+						{
+							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType2Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+						}
+						else
+						{
+							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectClass, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+						}
+
+					}
+					else
+					{
+						AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+						GenObstacle->SetIndex(TileIndex);
+						if (FMath::RandRange(0, 10) > 7)
+						{
+							GenObstacle->SetTransitable();
+						}
 					}
 
 				}
 			}
-			//else
-			//{
-			//	ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
-			//	//TempArray[j] = GenTile;			
-			//	GenTile->SetIndex(TileIndex);
-			//	MapTileList.Add(TileIndex, GenTile);				
-			//}
+
 
 			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
 			//TempArray[j] = GenTile;			
