@@ -229,17 +229,30 @@ void ALMGameModeBase::OnPlayerDead(int32 TargetIdx)
 	if (TargetIdx == 0 && PawnPlayer1)
 	{
 		PawnPlayer1->Destroy();
-		SpawnPlayer(TargetIdx);
+		
+	}
+	else if (TargetIdx == 1 && PawnPlayer2)
+	{
+		PawnPlayer2->Destroy();
+	
 	}
 
-	
+	SpawnPlayer(TargetIdx);
 }
 
 void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
 {	
 	if (TileGenerator)
 	{
-		SpawnLocalPlayer(TargetIdx, TileGenerator->GetFirstTile(), GetWorld());		
+		if (TargetIdx == 0)
+		{
+			SpawnLocalPlayer(TargetIdx, TileGenerator->GetFirstTile(), GetWorld());
+		}
+		else if (TargetIdx == 1)
+		{
+			SpawnLocalPlayer(TargetIdx, TileGenerator->GetLastTile(), GetWorld());
+		}
+		
 	}
 }
 
