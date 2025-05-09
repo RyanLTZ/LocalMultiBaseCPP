@@ -191,6 +191,16 @@ void ATileGenerator::SpawnItemOnTile()
 
 }
 
+void ATileGenerator::SpawnItemOnTargetTile(int32 TileIndex)
+{
+	ATileBase* TargetTile = MapTileList[TileIndex];
+	if (TargetTile)
+	{
+		ASpawItemBase* SpawnItem = GetWorld()->SpawnActor<ASpawItemBase>(SpawnItemBaseClass, TargetTile->GetActorLocation(), FRotator::ZeroRotator);
+		ArrayItem.Add(SpawnItem);
+	}
+}
+
 void ATileGenerator::DestroySpawnedItemOnTile()
 {	
 	UE_LOG(LogTemp, Warning, TEXT("Item Destroy"));
@@ -204,6 +214,10 @@ void ATileGenerator::DestroySpawnedItemOnTile()
 			}				
 		}
 	}
+}
+
+void ATileGenerator::ConsumeItemOnTargetTile(int32 TileIndex)
+{
 }
 
 

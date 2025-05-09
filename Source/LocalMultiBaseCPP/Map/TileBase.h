@@ -29,11 +29,9 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;	
-
-private:
 	FVector BoxExtentSize = FVector::ZeroVector;
 	int32 TileIndex = -1;
-	
+
 
 public:
 	FORCEINLINE
