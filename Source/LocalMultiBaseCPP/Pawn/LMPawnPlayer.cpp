@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/ProjectileObject.h"
 #include "EngineUtils.h"
+#include "Game/LMGameModeBase.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -150,7 +151,12 @@ void ALMPawnPlayer::Fire()
 	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
 }
 
-void DoDie()
+void ALMPawnPlayer::DoDie()
 {
-
+	AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+	ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+	if (GameMode)
+	{
+		GameMode->OnPlayerDead(PlayerIndex);
+	}
 }

@@ -55,5 +55,6 @@ private:
 
 public:
 	void Fire();
+	void DoDie();
 	
 };

@@ -63,6 +63,6 @@ void ALMPawnBase::SetDamage(int32 Damage)
 }
 
 void ALMPawnBase::DoDie()
-{
+{    
 }
 

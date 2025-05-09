@@ -60,6 +60,7 @@ private:
 	int32 SpawnedPlayerIndex = 0;
 	class ATileGenerator* TileGenerator;
 	class ALMPawnPlayer* PawnPlayer1; 
+	class ALMPawnPlayer* PawnPlayer2;
 	class AGameManager* GameManager; 	
 	class UMainHUDWidget* MainHUD;
 
@@ -90,5 +91,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OnConsumeItem(class ASpawItemBase* TargetItem);
+
+	UFUNCTION(BlueprintCallable)
+	void OnPlayerDead(int32 TargetIdx);
+
+	void SpawnPlayer(int32 TargetIdx);
 
 };

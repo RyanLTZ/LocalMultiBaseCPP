@@ -139,7 +139,7 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, 
 	if (PlayerIndex == 0)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, PlayerIndex);
-		SpawnAndPossessPawn(World, PlayerController, StartTile, PlayerIndex);
+		PawnPlayer1 = SpawnAndPossessPawn(World, PlayerController, StartTile, PlayerIndex);
 	}
 	else if (PlayerIndex == 1)
 	{
@@ -149,7 +149,7 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, 
 		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
 		ensure(NewLocalPlayer);
 		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);
-		SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+		PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
 	}
 }
 
@@ -221,6 +221,28 @@ void ALMGameModeBase::OnDestructableObstacleDestroyed(int32 TileIndex)
 void ALMGameModeBase::OnConsumeItem(ASpawItemBase* TargetItem)
 {
 }
+
+void ALMGameModeBase::OnPlayerDead(int32 TargetIdx)
+{
+	UE_LOG(LogTemp, Warning, TEXT("TargetIdx : %d"), TargetIdx);
+
+	if (TargetIdx == 0 && PawnPlayer1)
+	{
+		PawnPlayer1->Destroy();
+		SpawnPlayer(TargetIdx);
+	}
+
+	
+}
+
+void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
+{	
+	if (TileGenerator)
+	{
+		SpawnLocalPlayer(TargetIdx, TileGenerator->GetFirstTile(), GetWorld());		
+	}
+}
+
 
 void ALMGameModeBase::OnTimeChange(float Time)
 {
