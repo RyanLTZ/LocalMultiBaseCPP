@@ -45,24 +45,21 @@ ALMPawnBase::ALMPawnBase()
 
     //Input
     PawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMovement"));
-    PawnMovement->MaxSpeed = 2000.f; 
-    PawnMovement->Acceleration = 2048.f;
-    PawnMovement->Deceleration = 300.f;
-    PawnMovement->TurningBoost = 8.f;    
+    PawnMovement->MaxSpeed = MaxSpeed;
+    PawnMovement->Acceleration = Acceleration;
+    PawnMovement->Deceleration = Deceleration;
+    PawnMovement->TurningBoost = TurningBoost;    
 }
 
 void ALMPawnBase::SetDamage(int32 Damage)
-{
-    Hp -= Damage;
-
-    if (Hp < 0)
-    {
-        Hp = 0;
-        DoDie();
-    }                
+{ 
 }
 
 void ALMPawnBase::DoDie()
 {    
+}
+
+void ALMPawnBase::ApplyBuffDebuff()
+{
 }
 

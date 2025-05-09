@@ -146,6 +146,18 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 	}
 }
 
+void ALMPawnPlayer::SetDamage(int32 Damage)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Set Damage"));
+	Hp -= Damage;
+
+	if (Hp < 0)
+	{
+		Hp = 0;
+		this->DoDie();
+	}
+}
+
 void ALMPawnPlayer::Fire()
 {
 	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
