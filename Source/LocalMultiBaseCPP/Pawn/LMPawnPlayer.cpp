@@ -160,7 +160,16 @@ void ALMPawnPlayer::SetDamage(int32 Damage)
 
 void ALMPawnPlayer::Fire()
 {
-	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
+	FActorSpawnParameters SpawnParams;	
+
+	AProjectileObject* Bullet = Cast<AProjectileObject>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, FirePosition2->GetComponentTransform()));
+	if (Bullet)
+	{
+		Bullet->SetPlayerIndex(PlayerIndex);
+		Bullet->SetActorRotation(FirePosition2->GetComponentRotation());
+
+		UGameplayStatics::FinishSpawningActor(Bullet, FirePosition2->GetComponentTransform());
+	}
 }
 
 void ALMPawnPlayer::DoDie()
