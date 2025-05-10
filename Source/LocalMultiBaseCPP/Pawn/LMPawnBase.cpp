@@ -18,30 +18,8 @@ ALMPawnBase::ALMPawnBase()
     SetRootComponent(BoxComponent);
     BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 
-
-    //for (TActorIterator<USkeletalMeshComponent> It(GetWorld()); It; ++It)
-    //{
-    //    USkeletalMeshComponent* FoundStart = *It;
-    //    if (FoundStart)
-    //    {
-    //        SKMComponent = FoundStart;
-    //        break;
-    //    }
-    //}
-
-    //if (SKMComponent)
-    //{
-    //    UE_LOG(LogTemp, Warning, TEXT("SKM created"));
-    //}
-
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     MeshComponent->SetupAttachment(BoxComponent);
-    //
-    //static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
-    //if (CubeMesh.Succeeded())
-    //{
-    //    MeshComponent->SetStaticMesh(CubeMesh.Object);
-    //}
 
     //Input
     PawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMovement"));
@@ -61,5 +39,24 @@ void ALMPawnBase::DoDie()
 
 void ALMPawnBase::ApplyBuffDebuff()
 {
+    PawnMovement->MaxSpeed *= 0.1f;
+    PawnMovement->Acceleration *= 0.2f;
+    float EffectDuration = 5;
+    FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
+    GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
+}
+
+void ALMPawnBase::OnFinishBuffDebuffEffect()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Item Effect End"));
+    InitLMPawnStatus();
+}
+
+void ALMPawnBase::InitLMPawnStatus()
+{
+    PawnMovement->MaxSpeed = MaxSpeed;
+    PawnMovement->Acceleration = Acceleration;
+    PawnMovement->Deceleration = Deceleration;
+    PawnMovement->TurningBoost = TurningBoost;
 }
 

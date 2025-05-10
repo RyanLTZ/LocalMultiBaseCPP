@@ -7,6 +7,7 @@
 #include "LMPawnBase.generated.h"
 
 
+
 UCLASS()
 class LOCALMULTIBASECPP_API ALMPawnBase : public APawn
 {
@@ -45,9 +46,16 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
-	void SetHP(int32 HP) { Hp = HP; }
+	void SetHP(int32 HP) { Hp = HP; }		
 
-	void SetDamage(int32 Damage);	
-	void DoDie();	
+	void SetDamage(int32 Damage);
+	void DoDie();
+
+
+	UFUNCTION(BlueprintCallable)
 	void ApplyBuffDebuff();
+	void OnFinishBuffDebuffEffect();
+
+	UFUNCTION(BlueprintCallable)
+	void InitLMPawnStatus();
 };

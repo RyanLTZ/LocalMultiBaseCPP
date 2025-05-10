@@ -14,6 +14,7 @@
 #include "Player/ProjectileObject.h"
 #include "EngineUtils.h"
 #include "Game/LMGameModeBase.h"
+#include "Map/SpawItemBase.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -180,4 +181,9 @@ void ALMPawnPlayer::DoDie()
 	{
 		GameMode->OnPlayerDead(PlayerIndex);
 	}
+}
+
+void ALMPawnPlayer::OnItemAquired(ASpawItemBase* TargetItem)
+{
+	
 }

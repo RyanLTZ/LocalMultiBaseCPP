@@ -62,5 +62,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DoDie();
+
+	void OnItemAquired(class ASpawItemBase* TargetItem);
 	
 };

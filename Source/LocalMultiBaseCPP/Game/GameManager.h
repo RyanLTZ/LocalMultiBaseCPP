@@ -6,10 +6,37 @@
 #include "GameFramework/Actor.h"
 #include "GameManager.generated.h"
 
+
+
+UENUM()
+enum class ELMBuffType : uint8
+{
+	MoveSpeed UMETA(DisplayName = "MoveSpeed"),
+};
+
+UENUM()
+enum class ELMDebuffType : uint8
+{
+	Slow UMETA(DisplayName = "Slow"),
+};
+
+UENUM()
+enum class ELMItemType : uint8
+{
+	//None UMETA(DisplayName = "None"),
+	LightningAttack UMETA(DisplayName = "LightingAttack"),
+	Fireball UMETA(DisplayName = "FireBall"),
+	ObstacleDestroyer UMETA(DisplayName = "ObstacleDestroyer"),
+	TileTaker UMETA(DisplayName = "TileTaker"),
+	BuffItem UMETA(DisplayName = "BuffItem"),
+	DebuffItem UMETA(DisplayName = "DebuffItem"),
+};
+
 DECLARE_DELEGATE(FDeleOnGameFinish);
 DECLARE_DELEGATE_OneParam(FDeleOnTimeChange, float);
 DECLARE_DELEGATE(FDeleOnItemSpawn);
 DECLARE_DELEGATE(FDeleOnItemDestroy);
+
 
 UCLASS()
 class LOCALMULTIBASECPP_API AGameManager : public AActor

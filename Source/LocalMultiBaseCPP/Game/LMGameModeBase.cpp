@@ -69,10 +69,11 @@ void ALMGameModeBase::BeginPlay()
 
 	if (MainHUD)
 	{
-		MainHUD->AddToViewport();				
+		MainHUD->AddToViewport();						
 	}
 
 	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	
 	if (GameManager)
 	{
 		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
@@ -81,6 +82,8 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
 		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
 	}
+
+	
 	
 }
 
@@ -98,33 +101,6 @@ APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& Targe
 		}
 	}
 	return nullptr;
-}
-
-void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World)
-{
-	if (PlayerStart == nullptr || World == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
-			
-		return;
-	}
-	
-	if (PlayerIndex == 0)
-	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, PlayerIndex);
-		SpawnAndPossessPawn(World, PlayerController, PlayerStart, PlayerIndex);
-	}
-	else if (PlayerIndex == 1)
-	{
-		UGameInstance* GameInstance = GetGameInstance();
-		ensure(GameInstance);
-		FString Error;
-		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
-		ensure(NewLocalPlayer);
-		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);				
-		SpawnAndPossessPawn(World, PlayerController2P, PlayerStart, PlayerIndex);		
-	}
-
 }
 
 void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, UWorld* World)
@@ -147,19 +123,20 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, 
 		ensure(GameInstance);
 		FString Error;
 
-		ULocalPlayer* CurrentLocalPlayer = GameInstance->GetLocalPlayerByIndex(1);
+		ULocalPlayer* SecondLocalPlayer = GameInstance->GetLocalPlayerByIndex(1);
 
-		if (CurrentLocalPlayer)
+		if (SecondLocalPlayer)
 		{
-			APlayerController* PlayerController2P = CurrentLocalPlayer->GetPlayerController(World);
+			APlayerController* PlayerController2P = SecondLocalPlayer->GetPlayerController(World);
 			PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
 			return;
 		}
 
-		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
-		ensure(NewLocalPlayer);
-		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);
+		SecondLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
+		ensure(SecondLocalPlayer);
+		APlayerController* PlayerController2P = SecondLocalPlayer->GetPlayerController(World);
 		PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+
 	}
 }
 

@@ -46,8 +46,6 @@ private:
 	APlayerStart* FindPlayerStart(UWorld* World, const FName& TargetTag);	
 
 	//로컬 플레이어를 스폰하는 함수
-	void SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World);
-
 	void SpawnLocalPlayer(int32 PlayerIndex, class ATileBase* StartTile,  UWorld* World);
 
 	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, APlayerStart* PlayerStart, int32 PlayerIndex);

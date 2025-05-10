@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpawItemBase.generated.h"
 
+
 UCLASS()
 class LOCALMULTIBASECPP_API ASpawItemBase : public AActor
 {
@@ -19,8 +20,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;	
 
+	UFUNCTION(BlueprintCallable)
+	void OnItemCollision(class ALMPawnPlayer* AquiredPlayer );
+
 };
+ 
