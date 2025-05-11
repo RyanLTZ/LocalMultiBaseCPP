@@ -42,7 +42,7 @@ void ATileBase::UpatePlayerScore(int32 TargetPlayerIndex)
         if (CurrentMode && GameMode)
         {            
             if (OccupiedPlayerIndex != -1)
-            {
+            { 
                 GameMode->OnSubScore(OccupiedPlayerIndex);
             }            
             GameMode->OnAddScore(TargetPlayerIndex);
@@ -50,5 +50,11 @@ void ATileBase::UpatePlayerScore(int32 TargetPlayerIndex)
         }
 
     }
+}
+
+void ATileBase::OccupyTile(int32 TargetPlayerIndex)
+{
+    MeshComponent->SetVectorParameterValueOnMaterials(TEXT("BaseColor"), FVector(0.119538, 0.665387, 0.095307));
+    UpatePlayerScore(TargetPlayerIndex);
 }
 
