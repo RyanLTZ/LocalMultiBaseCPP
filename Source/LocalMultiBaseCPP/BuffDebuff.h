@@ -15,6 +15,7 @@ enum class ELMBuffType : uint8
 	Heal UMETA(DisplayName = "Heal"),
 };
 
+
 UENUM()
 enum class ELMDebuffType : uint8
 {
@@ -22,17 +23,7 @@ enum class ELMDebuffType : uint8
 	Slow UMETA(DisplayName = "Slow"),
 };
 
-UENUM()
-enum class ELMItemType : uint8
-{
-	None UMETA(DisplayName = "None"),
-	LightningAttack UMETA(DisplayName = "LightingAttack"),
-	Fireball UMETA(DisplayName = "FireBall"),
-	ObstacleDestroyer UMETA(DisplayName = "ObstacleDestroyer"),
-	TileTaker UMETA(DisplayName = "TileTaker"),
-	BuffItem UMETA(DisplayName = "BuffItem"),
-	DebuffItem UMETA(DisplayName = "DebuffItem"),
-};
+
 /**
  * 
  */
@@ -44,7 +35,8 @@ class LOCALMULTIBASECPP_API UBuffDebuff : public UObject
 public:
 	UBuffDebuff(); //constructor 
 
-public:
-	
-	
+public:	
+private:
+	ELMDebuffType CurrentDebuff = ELMDebuffType::None;
+	ELMBuffType CurrentBuff = ELMBuffType::None;
 };

@@ -39,9 +39,19 @@ void ALMPawnBase::DoDie()
 
 void ALMPawnBase::ApplyBuffDebuff()
 {
-    PawnMovement->MaxSpeed *= 0.1f;
-    PawnMovement->Acceleration *= 0.2f;
-    float EffectDuration = 5;
+    InitLMPawnStatus();
+    if (FMath::RandRange(0, 1) > 0)
+    {
+        PawnMovement->MaxSpeed *= 2;
+        PawnMovement->Acceleration *= 1.5f;
+    }
+    else
+    {
+        PawnMovement->MaxSpeed *= 0.3f;
+        PawnMovement->Acceleration *= 0.5f;
+
+    }
+   float EffectDuration = 5;
     FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
     GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
 }
