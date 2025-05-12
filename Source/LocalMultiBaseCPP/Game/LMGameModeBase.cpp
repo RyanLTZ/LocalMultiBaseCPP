@@ -15,9 +15,9 @@
 
 ALMGameModeBase::ALMGameModeBase()
 {
-	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-	
-	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
+	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(
+		TEXT("'/Game/Blueprints/BP_LMPawnPlayer_C'")
+	);
 	if (BP_LMPawnPlayer.Succeeded())
 	{
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
@@ -37,7 +37,8 @@ ALMGameModeBase::ALMGameModeBase()
 	if (BP_MainHUD.Succeeded())
 	{
 		MainHUDWidgetClass = BP_MainHUD.Class;
-	}	
+	}
+
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -82,9 +83,6 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
 		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
 	}
-
-	
-	
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)

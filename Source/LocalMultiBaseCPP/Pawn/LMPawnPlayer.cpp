@@ -14,7 +14,6 @@
 #include "Player/ProjectileObject.h"
 #include "EngineUtils.h"
 #include "Game/LMGameModeBase.h"
-#include "Map/SpawItemBase.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -186,4 +185,88 @@ void ALMPawnPlayer::DoDie()
 void ALMPawnPlayer::OnItemAquired(ASpawItemBase* TargetItem)
 {
 	
+}
+
+// 0512 한규 추가
+void ALMPawnPlayer::RefreshUI_Implementation()
+{
+	// C++ 기본 동작 (예: 바인딩된 데이터로 텍스트 갱신)
+	// ...
+
+	// (블루프린트 오버라이드가 없으면 이 함수만 실행됩니다)
+}
+
+void ALMPawnPlayer::GetItem_Implementation(ELMItemType inputItemAttribute)
+{
+	// 기본값 할당
+	if (0 == myItemInventory.Num())
+	{
+		myItemInventory.Add(ELMItemType::None);
+		myItemInventory.Add(ELMItemType::None);
+	}
+
+	if (myItemInventory[0] == ELMItemType::None)
+	{
+		myItemInventory[0] = inputItemAttribute;
+	}
+	else if (myItemInventory[1] == ELMItemType::None)
+	{
+		myItemInventory[1] = inputItemAttribute;
+	}
+	else
+		return;
+
+	switch (inputItemAttribute)
+	{
+	case ELMItemType::LightningAttack :
+		GetItem_LightningAttack();
+		break;
+	case ELMItemType::Fireball :
+		GetItem_Fireball();
+		break;
+	case ELMItemType::ObstacleDestroyer :
+		GetItem_ObstacleDestroyer();
+		break;
+	case ELMItemType::TileTaker :
+		GetItem_TileTaker();
+		break;
+	case ELMItemType::BuffItem :
+		GetItem_BuffItem();
+		break;
+	case ELMItemType::DebuffItem :
+		GetItem_DebuffItem();
+		break;
+	}
+
+	RefreshUI();
+}
+
+void ALMPawnPlayer::GetItem_LightningAttack_Implementation()
+{
+
+}
+
+void ALMPawnPlayer::GetItem_Fireball_Implementation()
+{
+
+}
+
+void ALMPawnPlayer::GetItem_ObstacleDestroyer_Implementation()
+{
+
+}
+
+void ALMPawnPlayer::GetItem_TileTaker_Implementation()
+{
+
+}
+
+void ALMPawnPlayer::GetItem_BuffItem_Implementation()
+{
+
+}
+
+void ALMPawnPlayer::GetItem_DebuffItem_Implementation()
+{
+
 }
