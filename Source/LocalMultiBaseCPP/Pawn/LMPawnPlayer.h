@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* IA_LMMove1P; 
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_FIRE1P;
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	FORCEINLINE int32 GetPlayerIndex() const { return PlayerIndex; }

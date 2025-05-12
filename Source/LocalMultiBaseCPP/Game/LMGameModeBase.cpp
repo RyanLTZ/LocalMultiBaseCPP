@@ -17,9 +17,7 @@ ALMGameModeBase::ALMGameModeBase()
 {
 	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
 
-	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(
-		TEXT("/Game/Blueprints/BP_LMPawnPlayer")
-	);
+	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
 
 	if (BP_LMPawnPlayer.Succeeded())
 	{

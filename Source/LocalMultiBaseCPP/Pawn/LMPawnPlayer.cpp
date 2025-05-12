@@ -30,6 +30,13 @@ ALMPawnPlayer::ALMPawnPlayer()
 		IA_LMMove1P = Input1PObj.Object;		
 	}	
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> Input1PFireObj(TEXT("'/Game/Inputs/IA_Fire.IA_Fire'"));
+	if (Input1PObj.Succeeded())
+	{
+		IA_FIRE1P = Input1PFireObj.Object;
+	}
+
+
 	static ConstructorHelpers::FClassFinder<AProjectileObject> BP_Bullet(TEXT("'/Game/Blueprints/BP_Bullet.BP_Bullet_C'"));
 	if (BP_Bullet.Succeeded())
 	{
@@ -87,7 +94,13 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 	if (PlayerIndex == 0 && IA_LMMove1P)
 	{
 		EnhacedInputComponent->BindAction(IA_LMMove1P, ETriggerEvent::Triggered, this, &ALMPawnPlayer::OnInputMove);
+
 	}	
+
+	if (IA_FIRE1P)
+	{
+		EnhacedInputComponent->BindAction(IA_FIRE1P, ETriggerEvent::Started, this, &ALMPawnPlayer::Fire);
+	}
 }
 
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
