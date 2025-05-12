@@ -25,7 +25,7 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
-		DefaultPawnClass = BP_LMPawnPlayer.Class;
+		//DefaultPawnClass = BP_LMPawnPlayer.Class;
 	}
 	else
 	{
