@@ -26,7 +26,7 @@ protected:
 	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UFloatingPawnMovement* PawnMovement; 
+	class UFloatingPawnMovement* PawnMovement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
 	float MaxSpeed = 2000.f;
@@ -43,10 +43,13 @@ protected:
 protected:
 	int32 Hp = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
+	int32 MaxHp = 100;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
-	void SetHP(int32 HP) { Hp = HP; }		
+		void SetHP(int32 HP) { Hp = HP; }
 
 	void SetDamage(int32 Damage);
 	void DoDie();
@@ -58,4 +61,5 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void InitLMPawnStatus();
+
 };
