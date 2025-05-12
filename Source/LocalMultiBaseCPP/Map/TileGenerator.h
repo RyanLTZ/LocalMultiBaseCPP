@@ -36,6 +36,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Map")
 	TSubclassOf<class ADestructableObst> DestructableObsClass;
 
+	UPROPERTY(EditAnywhere, Category = "Map")
+	TSubclassOf<class ARandomSpawnObject> RandomSpawnObjectClass;
+
+	UPROPERTY(EditAnywhere, Category = "Map")
+	TSubclassOf<class ARandomSpawnObject> RandomSpawnObjectType2Class;
+
+
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
 

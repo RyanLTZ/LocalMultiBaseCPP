@@ -4,6 +4,7 @@
 #include "LM_MyAICharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/Engine.h"
+#include "Pawn/LMPawnPlayer.h"
 
 // Sets default values
 ALM_MyAICharacter::ALM_MyAICharacter()
@@ -57,7 +58,13 @@ void ALM_MyAICharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedCom
     if (OtherActor && OtherActor != this)
     {
         UE_LOG(LogTemp, Log, TEXT("%s began overlap with %s"),
-            *GetName(), *OtherActor->GetName());
+            *GetName(), *OtherActor->GetName());        
+        
+        ALMPawnPlayer* Player = Cast<ALMPawnPlayer>(OtherActor);
+        if (Player)
+        {
+            Player->DoDie();
+        }
     }
 }
 
@@ -154,10 +161,10 @@ void ALM_MyAICharacter::NotifyHit(
     {
         // 벽이나 장애물에 닿았을 때 새 방향 계산
         ComputeMoveDirection();
-        UE_LOG(LogTemp, Log, TEXT("%s NotifyHit with %s at %s"),
-            *GetName(),
-            *OtherActor->GetName(),
-            *HitLocation.ToString());
+        //UE_LOG(LogTemp, Log, TEXT("%s NotifyHit with %s at %s"),
+        //    *GetName(),
+        //    *OtherActor->GetName(),
+        //    *HitLocation.ToString());
     }
 }
 

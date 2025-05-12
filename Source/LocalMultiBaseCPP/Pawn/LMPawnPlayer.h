@@ -54,6 +54,15 @@ private:
 	void HandlePlayerSpecificPossession();	
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void SetDamage(int32 Damage);
+
+	UFUNCTION(BlueprintCallable)
 	void Fire();
+
+	UFUNCTION(BlueprintCallable)
+	void DoDie();
+
+	void OnItemAquired(class ASpawItemBase* TargetItem);
 	
 };

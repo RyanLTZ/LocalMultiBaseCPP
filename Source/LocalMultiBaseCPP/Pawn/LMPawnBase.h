@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "LMPawnBase.generated.h"
 
+
+
 UCLASS()
 class LOCALMULTIBASECPP_API ALMPawnBase : public APawn
 {
@@ -18,28 +20,46 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* MeshComponent;
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
-	//class USkeletalMeshComponent* SKMComponent;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	class UFloatingPawnMovement* PawnMovement; 
+	class UFloatingPawnMovement* PawnMovement;
 
-private:
-	int32 Hp; 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
+	float MaxSpeed = 2000.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
+	float Acceleration = 2000.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
+	float Deceleration = 500.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
+	float TurningBoost = 8.f;
+
+protected:
+	int32 Hp = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
+	int32 MaxHp = 100;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
-	void SetHP(int32 HP) { Hp = HP; }
+		void SetHP(int32 HP) { Hp = HP; }
 
-	UFUNCTION(BlueprintCallable)
 	void SetDamage(int32 Damage);
+	void DoDie();
+
 
 	UFUNCTION(BlueprintCallable)
-	void DoDie();
+	void ApplyBuffDebuff();
+	void OnFinishBuffDebuffEffect();
+
+	UFUNCTION(BlueprintCallable)
+	void InitLMPawnStatus();
 
 };

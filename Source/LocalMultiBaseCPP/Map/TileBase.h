@@ -54,4 +54,7 @@ public:
 	FORCEINLINE
 		int32 GetIndex() { return TileIndex; }
 
+	UFUNCTION(BlueprintCallable)
+	void OccupyTile(int32 TargetPlayerIndex);
+
 };

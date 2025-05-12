@@ -46,8 +46,6 @@ private:
 	APlayerStart* FindPlayerStart(UWorld* World, const FName& TargetTag);	
 
 	//로컬 플레이어를 스폰하는 함수
-	void SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World);
-
 	void SpawnLocalPlayer(int32 PlayerIndex, class ATileBase* StartTile,  UWorld* World);
 
 	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, APlayerStart* PlayerStart, int32 PlayerIndex);
@@ -60,6 +58,7 @@ private:
 	int32 SpawnedPlayerIndex = 0;
 	class ATileGenerator* TileGenerator;
 	class ALMPawnPlayer* PawnPlayer1; 
+	class ALMPawnPlayer* PawnPlayer2;
 	class AGameManager* GameManager; 	
 	class UMainHUDWidget* MainHUD;
 
@@ -79,11 +78,21 @@ private:
 	void OnDeleItemSpawn();
 
 public:	
+	UFUNCTION(BlueprintCallable)
 	void OnAddScore(int32 PlayerIndex);
 	
+	UFUNCTION(BlueprintCallable)
 	void OnSubScore(int32 PlayerIndex);
 
-	void OnDestructableObstacleDestroyed(int32 TileIndex);
-	
+	UFUNCTION(BlueprintCallable)
+	void OnDestructableObstacleDestroyed(int32 TileIndex);	
+
+	UFUNCTION(BlueprintCallable)
+	void OnConsumeItem(class ASpawItemBase* TargetItem);
+
+	UFUNCTION(BlueprintCallable)
+	void OnPlayerDead(int32 TargetIdx);
+
+	void SpawnPlayer(int32 TargetIdx);
 
 };

@@ -69,10 +69,11 @@ void ALMGameModeBase::BeginPlay()
 
 	if (MainHUD)
 	{
-		MainHUD->AddToViewport();				
+		MainHUD->AddToViewport();						
 	}
 
 	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	
 	if (GameManager)
 	{
 		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
@@ -81,6 +82,8 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
 		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
 	}
+
+	
 	
 }
 
@@ -100,33 +103,6 @@ APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& Targe
 	return nullptr;
 }
 
-void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, APlayerStart* PlayerStart, UWorld* World)
-{
-	if (PlayerStart == nullptr || World == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Null on PlayerStart or World"), PlayerIndex);
-			
-		return;
-	}
-	
-	if (PlayerIndex == 0)
-	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, PlayerIndex);
-		SpawnAndPossessPawn(World, PlayerController, PlayerStart, PlayerIndex);
-	}
-	else if (PlayerIndex == 1)
-	{
-		UGameInstance* GameInstance = GetGameInstance();
-		ensure(GameInstance);
-		FString Error;
-		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
-		ensure(NewLocalPlayer);
-		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);				
-		SpawnAndPossessPawn(World, PlayerController2P, PlayerStart, PlayerIndex);		
-	}
-
-}
-
 void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, UWorld* World)
 {
 	if (StartTile == nullptr || World == nullptr)
@@ -139,17 +115,28 @@ void ALMGameModeBase::SpawnLocalPlayer(int32 PlayerIndex, ATileBase* StartTile, 
 	if (PlayerIndex == 0)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, PlayerIndex);
-		SpawnAndPossessPawn(World, PlayerController, StartTile, PlayerIndex);
+		PawnPlayer1 = SpawnAndPossessPawn(World, PlayerController, StartTile, PlayerIndex);
 	}
 	else if (PlayerIndex == 1)
 	{
 		UGameInstance* GameInstance = GetGameInstance();
 		ensure(GameInstance);
 		FString Error;
-		ULocalPlayer* NewLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
-		ensure(NewLocalPlayer);
-		APlayerController* PlayerController2P = NewLocalPlayer->GetPlayerController(World);
-		SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+
+		ULocalPlayer* SecondLocalPlayer = GameInstance->GetLocalPlayerByIndex(1);
+
+		if (SecondLocalPlayer)
+		{
+			APlayerController* PlayerController2P = SecondLocalPlayer->GetPlayerController(World);
+			PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+			return;
+		}
+
+		SecondLocalPlayer = GameInstance->CreateLocalPlayer(-1, Error, true);
+		ensure(SecondLocalPlayer);
+		APlayerController* PlayerController2P = SecondLocalPlayer->GetPlayerController(World);
+		PawnPlayer2 = SpawnAndPossessPawn(World, PlayerController2P, StartTile, PlayerIndex);
+
 	}
 }
 
@@ -217,6 +204,45 @@ void ALMGameModeBase::OnDestructableObstacleDestroyed(int32 TileIndex)
 {
 	TileGenerator->SpawnItemOnTargetTile(TileIndex);
 }
+
+void ALMGameModeBase::OnConsumeItem(ASpawItemBase* TargetItem)
+{
+}
+
+void ALMGameModeBase::OnPlayerDead(int32 TargetIdx)
+{
+	UE_LOG(LogTemp, Warning, TEXT("TargetIdx : %d"), TargetIdx);
+
+	if (TargetIdx == 0 && PawnPlayer1)
+	{
+		PawnPlayer1->Destroy();
+		
+	}
+	else if (TargetIdx == 1 && PawnPlayer2)
+	{
+		PawnPlayer2->Destroy();
+	
+	}
+
+	SpawnPlayer(TargetIdx);
+}
+
+void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
+{	
+	if (TileGenerator)
+	{
+		if (TargetIdx == 0)
+		{
+			SpawnLocalPlayer(TargetIdx, TileGenerator->GetFirstTile(), GetWorld());
+		}
+		else if (TargetIdx == 1)
+		{
+			SpawnLocalPlayer(TargetIdx, TileGenerator->GetLastTile(), GetWorld());
+		}
+		
+	}
+}
+
 
 void ALMGameModeBase::OnTimeChange(float Time)
 {
