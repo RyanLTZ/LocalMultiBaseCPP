@@ -9,13 +9,14 @@
 UENUM(BlueprintType)
 enum class ELMItemType : uint8
 {
-	None UMETA(DisplayName = "None"),
+	None,
 	LightningAttack UMETA(DisplayName = "LightingAttack"),
 	Fireball UMETA(DisplayName = "FireBall"),
 	ObstacleDestroyer UMETA(DisplayName = "ObstacleDestroyer"),
 	TileTaker UMETA(DisplayName = "TileTaker"),
 	BuffItem UMETA(DisplayName = "BuffItem"),
 	DebuffItem UMETA(DisplayName = "DebuffItem"),
+	MaxBoundary, 
 };
 
 UCLASS()
@@ -32,7 +33,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	
+	ELMItemType ItemType = ELMItemType::None;
+	class UBuffDebuff* BuffDebuffData;
 
 public:	
 	// Called every frame
@@ -40,6 +42,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OnItemCollision(class ALMPawnPlayer* AquiredPlayer );
+	
+	void GenerateItemData();
 
 };
  

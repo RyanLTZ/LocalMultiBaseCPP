@@ -3,6 +3,7 @@
 #include "Map/SpawItemBase.h"
 #include "Pawn/LMPawnPlayer.h"
 #include "Game/GameManager.h"
+#include "BuffDebuff.h"
 
 // Sets default values
 ASpawItemBase::ASpawItemBase()
@@ -30,5 +31,39 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 	{
 		AquiredPlayer->ApplyBuffDebuff();
 	}
+}
+
+void ASpawItemBase::GenerateItemData()
+{
+	int32 RandomResult = FMath::RandRange((int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
+	ItemType = (ELMItemType)RandomResult;
+
+	switch (ItemType)
+	{
+	case ELMItemType::None:
+		break;
+	case ELMItemType::LightningAttack:
+		break;
+	case ELMItemType::Fireball:
+		break;
+	case ELMItemType::ObstacleDestroyer:
+		break;
+	case ELMItemType::TileTaker:
+		break;
+	case ELMItemType::BuffItem:
+		BuffDebuffData = NewObject<UBuffDebuff>();
+		BuffDebuffData->GenerateBuff();
+		break;
+	case ELMItemType::DebuffItem:
+		BuffDebuffData = NewObject<UBuffDebuff>();
+		BuffDebuffData->GenerateDebuff();
+		break;
+	case ELMItemType::MaxBoundary:
+		break;
+	default:
+		break;
+	}
+
+
 }
 
