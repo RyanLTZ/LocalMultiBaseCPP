@@ -15,15 +15,24 @@
 
 ALMGameModeBase::ALMGameModeBase()
 {
-	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(
-		TEXT("'/Game/Blueprints/BP_LMPawnPlayer_C'")
+	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
+
+	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(
+		TEXT("/Game/Blueprints/BP_LMPawnPlayer")
 	);
+
 	if (BP_LMPawnPlayer.Succeeded())
 	{
+		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
+		DefaultPawnClass = BP_LMPawnPlayer.Class;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_LMPawnPlayer을 찾지 못했습니다! 경로를 확인하세요."));
 	}
 
-	PlayerControllerClass = ALMPlayerController::StaticClass();	
+	PlayerControllerClass = ALMPlayerController::StaticClass();
 
 	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
 	if (BP_LMTileGenerator.Succeeded())
@@ -38,7 +47,6 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		MainHUDWidgetClass = BP_MainHUD.Class;
 	}
-
 }
 
 void ALMGameModeBase::BeginPlay()
