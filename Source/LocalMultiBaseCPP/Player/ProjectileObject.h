@@ -38,4 +38,11 @@ public:
 	UFUNCTION()
 	void OnObjectOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE
+	void SetPlayerIndex(int32 OwerIndex) { OwnerPlayerIndex = OwerIndex; }
+
+private:
+	int32 OwnerPlayerIndex = -1; 
+
 };

@@ -18,51 +18,55 @@ ALMPawnBase::ALMPawnBase()
     SetRootComponent(BoxComponent);
     BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 
-
-    //for (TActorIterator<USkeletalMeshComponent> It(GetWorld()); It; ++It)
-    //{
-    //    USkeletalMeshComponent* FoundStart = *It;
-    //    if (FoundStart)
-    //    {
-    //        SKMComponent = FoundStart;
-    //        break;
-    //    }
-    //}
-
-    //if (SKMComponent)
-    //{
-    //    UE_LOG(LogTemp, Warning, TEXT("SKM created"));
-    //}
-
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     MeshComponent->SetupAttachment(BoxComponent);
-    //
-    //static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("'/Engine/BasicShapes/Cube.Cube'"));    
-    //if (CubeMesh.Succeeded())
-    //{
-    //    MeshComponent->SetStaticMesh(CubeMesh.Object);
-    //}
 
     //Input
     PawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMovement"));
-    PawnMovement->MaxSpeed = 500.f; 
-    PawnMovement->Acceleration = 2048.f;
-    PawnMovement->Deceleration = 2000.f;
-    PawnMovement->TurningBoost = 8.f;    
+    PawnMovement->MaxSpeed = MaxSpeed;
+    PawnMovement->Acceleration = Acceleration;
+    PawnMovement->Deceleration = Deceleration;
+    PawnMovement->TurningBoost = TurningBoost;    
 }
 
 void ALMPawnBase::SetDamage(int32 Damage)
-{
-    Hp -= Damage;
-
-    if (Hp < 0)
-    {
-        Hp = 0;
-        DoDie();
-    }                
+{ 
 }
 
 void ALMPawnBase::DoDie()
+{    
+}
+
+void ALMPawnBase::ApplyBuffDebuff()
 {
+    InitLMPawnStatus();
+    if (FMath::RandRange(0, 1) > 0)
+    {
+        PawnMovement->MaxSpeed *= 2;
+        PawnMovement->Acceleration *= 1.5f;
+    }
+    else
+    {
+        PawnMovement->MaxSpeed *= 0.3f;
+        PawnMovement->Acceleration *= 0.5f;
+
+    }
+   float EffectDuration = 5;
+    FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
+    GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
+}
+
+void ALMPawnBase::OnFinishBuffDebuffEffect()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Item Effect End"));
+    InitLMPawnStatus();
+}
+
+void ALMPawnBase::InitLMPawnStatus()
+{
+    PawnMovement->MaxSpeed = MaxSpeed;
+    PawnMovement->Acceleration = Acceleration;
+    PawnMovement->Deceleration = Deceleration;
+    PawnMovement->TurningBoost = TurningBoost;
 }
 

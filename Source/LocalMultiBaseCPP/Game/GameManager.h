@@ -6,10 +6,13 @@
 #include "GameFramework/Actor.h"
 #include "GameManager.generated.h"
 
+
+
 DECLARE_DELEGATE(FDeleOnGameFinish);
 DECLARE_DELEGATE_OneParam(FDeleOnTimeChange, float);
 DECLARE_DELEGATE(FDeleOnItemSpawn);
 DECLARE_DELEGATE(FDeleOnItemDestroy);
+
 
 UCLASS()
 class LOCALMULTIBASECPP_API AGameManager : public AActor

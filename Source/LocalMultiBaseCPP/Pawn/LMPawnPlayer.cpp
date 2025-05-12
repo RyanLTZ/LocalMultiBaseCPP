@@ -13,6 +13,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/ProjectileObject.h"
 #include "EngineUtils.h"
+#include "Game/LMGameModeBase.h"
+#include "Map/SpawItemBase.h"
 
 ALMPawnPlayer::ALMPawnPlayer()
 {
@@ -145,12 +147,43 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 	}
 }
 
-void ALMPawnPlayer::Fire()
+void ALMPawnPlayer::SetDamage(int32 Damage)
 {
-	AProjectileObject* Bullet = GetWorld()->SpawnActor<AProjectileObject>(ProjectileClass, FirePosition2->GetComponentLocation(), FirePosition2->GetComponentRotation());
+	UE_LOG(LogTemp, Warning, TEXT("Set Damage"));
+	Hp -= Damage;
+
+	if (Hp < 0)
+	{
+		Hp = 0;
+		this->DoDie();
+	}
 }
 
-void DoDie()
+void ALMPawnPlayer::Fire()
 {
+	FActorSpawnParameters SpawnParams;	
 
+	AProjectileObject* Bullet = Cast<AProjectileObject>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, FirePosition2->GetComponentTransform()));
+	if (Bullet)
+	{
+		Bullet->SetPlayerIndex(PlayerIndex);
+		Bullet->SetActorRotation(FirePosition2->GetComponentRotation());
+
+		UGameplayStatics::FinishSpawningActor(Bullet, FirePosition2->GetComponentTransform());
+	}
+}
+
+void ALMPawnPlayer::DoDie()
+{
+	AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+	ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+	if (GameMode)
+	{
+		GameMode->OnPlayerDead(PlayerIndex);
+	}
+}
+
+void ALMPawnPlayer::OnItemAquired(ASpawItemBase* TargetItem)
+{
+	
 }

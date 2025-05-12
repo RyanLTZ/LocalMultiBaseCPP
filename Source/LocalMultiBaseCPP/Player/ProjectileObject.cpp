@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Game/LMGameModeBase.h"
+#include "Pawn/LMPawnPlayer.h"
 
 
 // Sets default values
@@ -46,7 +47,15 @@ void AProjectileObject::Tick(float DeltaTime)
 
 void AProjectileObject::OnObjectOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//AEnemyActor* Enemy = Cast<AEnemyActor>(OtherActor);
+	UE_LOG(LogTemp, Warning, TEXT("Bullet From Player %d"), OwnerPlayerIndex);
+	ALMPawnPlayer* Player = Cast<ALMPawnPlayer>(OtherActor);
+	if (Player)
+	{
+		if (Player->GetPlayerIndex() != this->OwnerPlayerIndex)
+		{
+			Player->SetDamage(30);
+		}
+	}
 	//if (Enemy != nullptr)
 	//{
 	//	Enemy->Destroy();
