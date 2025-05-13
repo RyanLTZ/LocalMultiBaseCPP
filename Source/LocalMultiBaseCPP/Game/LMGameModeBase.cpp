@@ -16,14 +16,21 @@
 ALMGameModeBase::ALMGameModeBase()
 {
 	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-	
-	static ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
+
+	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
+
 	if (BP_LMPawnPlayer.Succeeded())
 	{
+		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
+		//DefaultPawnClass = BP_LMPawnPlayer.Class;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_LMPawnPlayer을 찾지 못했습니다! 경로를 확인하세요."));
 	}
 
-	PlayerControllerClass = ALMPlayerController::StaticClass();	
+	PlayerControllerClass = ALMPlayerController::StaticClass();
 
 	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
 	if (BP_LMTileGenerator.Succeeded())
@@ -37,7 +44,7 @@ ALMGameModeBase::ALMGameModeBase()
 	if (BP_MainHUD.Succeeded())
 	{
 		MainHUDWidgetClass = BP_MainHUD.Class;
-	}	
+	}
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -82,9 +89,6 @@ void ALMGameModeBase::BeginPlay()
 		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
 		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
 	}
-
-	
-	
 }
 
 APlayerStart* ALMGameModeBase::FindPlayerStart(UWorld* World, const FName& TargetTag)
