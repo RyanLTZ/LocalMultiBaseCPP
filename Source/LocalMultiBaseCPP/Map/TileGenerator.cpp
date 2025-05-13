@@ -40,6 +40,11 @@ ATileGenerator::ATileGenerator()
 		RandomSpawnObjectType2Class = BP_RandomObjType2Obj.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<AObstacle> BP_BorderObstacle(TEXT("'/Game/Blueprints/BP_BorderObstacle.BP_BorderObstacle_C'"));
+	if (BP_BorderObstacle.Succeeded())
+	{
+		ObstacleType2Class = BP_BorderObstacle.Class;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -58,19 +63,19 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	float InitPosX = (0 - (CountWidthDir - 1) * TileWidth);
 	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
 
-	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleLeftBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleType2Class, FVector::ZeroVector, GetActorRotation());
 	ObstacleLeftBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 100.f));
 	ObstacleLeftBorder->SetActorLocation(FVector(0, InitPosY - TileLength * 2, 0));
 
-	ObstacleRightBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleRightBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleType2Class, FVector::ZeroVector, GetActorRotation());
 	ObstacleRightBorder->SetBorderSizeVerticalAxisByTileCount(CountWidthDir, FVector(TileWidth, TileLength, 100.f));
 	ObstacleRightBorder->SetActorLocation(FVector(0, InitPosY + TileCountLength * TileLength * 2, 0));
 
-	ObstacleTopBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleTopBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleType2Class, FVector::ZeroVector, GetActorRotation());
 	ObstacleTopBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 100.f));
 	ObstacleTopBorder->SetActorLocation(FVector(InitPosX + TileCountWidth * TileWidth * 2, 0, 0));
 
-	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, FVector::ZeroVector, GetActorRotation());
+	ObstacleBottomBorder = GetWorld()->SpawnActor<AObstacle>(ObstacleType2Class, FVector::ZeroVector, GetActorRotation());
 	ObstacleBottomBorder->SetBorderSizeHorizontalAxisByTileCount(CountLengthDir, FVector(TileWidth, TileLength, 100.f));
 	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
 	

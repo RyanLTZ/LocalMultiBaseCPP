@@ -42,6 +42,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Map")
 	TSubclassOf<class ARandomSpawnObject> RandomSpawnObjectType2Class;
 
+	UPROPERTY(EditAnywhere, Category = "Map")
+	TSubclassOf<class AObstacle> ObstacleType2Class;
 
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TSubclassOf<class ASpawItemBase> SpawnItemBaseClass;
