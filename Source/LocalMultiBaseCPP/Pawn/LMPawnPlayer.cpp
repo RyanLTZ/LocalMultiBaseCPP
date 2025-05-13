@@ -94,17 +94,20 @@ void ALMPawnPlayer::BindInputActions(UEnhancedInputComponent* EnhacedInputCompon
 	if (PlayerIndex == 0 && IA_LMMove1P)
 	{
 		EnhacedInputComponent->BindAction(IA_LMMove1P, ETriggerEvent::Triggered, this, &ALMPawnPlayer::OnInputMove);
-
 	}	
 
-	if (IA_FIRE1P)
+	if (PlayerIndex == 0 && IA_FIRE1P)
 	{
 		EnhacedInputComponent->BindAction(IA_FIRE1P, ETriggerEvent::Started, this, &ALMPawnPlayer::Fire);
-	}
+	}	
 }
+
 
 void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 {
+	if (CurrentDebuffStatus == ELMDebuffType::Stun)
+		return;
+
 	FVector2D MoveVector = Value.Get<FVector2D>();	
 	if (MoveVector.X == 1)
 	{		
@@ -133,16 +136,6 @@ void ALMPawnPlayer::OnInputMove(const FInputActionValue& Value)
 	{
 		AddMovementInput(MoveDirection.GetSafeNormal());					
 	}	 
-		
-
-	//FQuat CurrentQuat = FQuat(GetActorRotation());
-
-	//FQuat DeltaRotation = FQuat::MakeFromEuler(MoveDirection);
-	//FQuat NewRotation = DeltaRotation * CurrentQuat;
-
-	//SetActorRotation(NewRotation.Rotator(), ETeleportType::None);
-
-
 }
 
 void ALMPawnPlayer::HandlePlayerSpecificPossession()
@@ -182,7 +175,7 @@ void ALMPawnPlayer::Fire()
 		Bullet->SetActorRotation(FirePosition2->GetComponentRotation());
 
 		UGameplayStatics::FinishSpawningActor(Bullet, FirePosition2->GetComponentTransform());
-	}
+	}	
 }
 
 void ALMPawnPlayer::DoDie()
@@ -195,9 +188,44 @@ void ALMPawnPlayer::DoDie()
 	}
 }
 
+void ALMPawnPlayer::DoLightningAttack()
+{
+	UpdateInventory();
+	if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
+	{
+		AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+		ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+		if (GameMode)
+		{
+			GameMode->DoLightningAttack(PlayerIndex);
+		}
+	}
+}
+
+void ALMPawnPlayer::DoStunAttack()
+{
+	UpdateInventory();
+}
+
+void ALMPawnPlayer::DoTileTake()
+{
+	UpdateInventory();
+}
+
 void ALMPawnPlayer::OnItemAquired(ASpawItemBase* TargetItem)
 {
+	UpdateInventory();
+
+}
+
+void ALMPawnPlayer::UpdateInventory()
+{
 	
+}
+
+void ALMPawnPlayer::MoveInputFromOutside(const FInputActionValue& Value)
+{
+	OnInputMove(Value);
 }
 
 // 0512 한규 추가
@@ -256,30 +284,30 @@ void ALMPawnPlayer::GetItem_Implementation(ELMItemType inputItemAttribute)
 
 void ALMPawnPlayer::GetItem_LightningAttack_Implementation()
 {
-
+	//myItemInventory.Add(ELMItemType::LightningAttack);
 }
 
 void ALMPawnPlayer::GetItem_Fireball_Implementation()
 {
-
+	//myItemInventory.Add(ELMItemType::Fireball);
 }
 
 void ALMPawnPlayer::GetItem_ObstacleDestroyer_Implementation()
 {
-
+	//myItemInventory.Add(ELMItemType::ObstacleDestroyer);
 }
 
 void ALMPawnPlayer::GetItem_TileTaker_Implementation()
 {
-
+	//myItemInventory.Add(ELMItemType::TileTaker);
 }
 
 void ALMPawnPlayer::GetItem_BuffItem_Implementation()
 {
-
+	
 }
 
 void ALMPawnPlayer::GetItem_DebuffItem_Implementation()
 {
-
+	
 }

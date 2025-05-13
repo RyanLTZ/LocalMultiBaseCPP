@@ -36,7 +36,9 @@ public:
 
 	TSubclassOf<class AGameManager> GameManagerClass;	
 
+	TSubclassOf<class ASkillLightningAttack> LightningAtkClass;
 
+	TSubclassOf<class ASkillStunAttack> StunAttackClass; 
 
 protected:
 	virtual void BeginPlay() override;
@@ -95,7 +97,14 @@ public:
 
 	void SpawnPlayer(int32 TargetIdx);
 
+	UFUNCTION(BlueprintCallable)
+	void DoLightningAttack(int32 OwnerIndex);
 
+	UFUNCTION(BlueprintCallable)
+	void DoStunAttack(int32 OwnerIndex);
+
+	FORCEINLINE
+		ALMPawnPlayer* GetPlayerByIndex(int32 TargetIndex) { ALMPawnPlayer* ReturnValue;  TargetIndex == 0 ? ReturnValue = PawnPlayer1 : ReturnValue = PawnPlayer2; return ReturnValue; }
 public :
 
 	// 0512 한규 추가

@@ -12,6 +12,8 @@
 #include "Game/GameManager.h"
 #include "Wigets/MainHUDWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "Player/SkillLightningAttack.h"
+#include "Player/SkillStunAttack.h"
 
 ALMGameModeBase::ALMGameModeBase()
 {
@@ -45,6 +47,19 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		MainHUDWidgetClass = BP_MainHUD.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<ASkillLightningAttack> BP_LightningAtk(TEXT("'/Game/Blueprints/Skill/BP_LightingAttack.BP_LightingAttack_C'"));
+	if (BP_LightningAtk.Succeeded())
+	{
+		LightningAtkClass = BP_LightningAtk.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<ASkillStunAttack> BP_StunAtk(TEXT("'/Game/Blueprints/Skill/BP_StunAttack.BP_StunAttack_C'"));
+	if (BP_StunAtk.Succeeded())
+	{
+		StunAttackClass = BP_StunAtk.Class;
+	}
+	
 }
 
 void ALMGameModeBase::BeginPlay()
@@ -246,6 +261,40 @@ void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
 		
 	}
 }
+
+void ALMGameModeBase::DoLightningAttack(int32 OwnerIndex)
+{
+	FActorSpawnParameters SpawnParams;
+	ALMPawnPlayer* TargetPlayer;
+	OwnerIndex == 0 ? TargetPlayer = PawnPlayer2 : TargetPlayer = PawnPlayer1;
+	
+	ASkillLightningAttack* LightingAtk = Cast<ASkillLightningAttack>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), LightningAtkClass, TargetPlayer->GetActorTransform()));
+	if (LightingAtk)
+	{
+		LightingAtk->SetOnwerPlayer(OwnerIndex);		
+		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
+		UGameplayStatics::FinishSpawningActor(LightingAtk, TargetPlayer->GetActorTransform());
+	}	
+}
+
+void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
+{
+	FActorSpawnParameters SpawnParams;
+	ALMPawnPlayer* TargetPlayer;
+	OwnerIndex == 0 ? TargetPlayer = PawnPlayer2 : TargetPlayer = PawnPlayer1;
+
+	ASkillStunAttack* StunAtk = Cast<ASkillStunAttack>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), StunAttackClass, TargetPlayer->GetActorTransform()));
+	if (StunAtk)
+	{
+		StunAtk->SetOnwerPlayer(OwnerIndex);
+		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
+		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
+		FBuffDebuffData Data;
+		Data.Init();		
+		TargetPlayer->SetDebuff(ELMDebuffType::Stun, Data);			
+	}
+}
+
 
 
 void ALMGameModeBase::OnTimeChange(float Time)
