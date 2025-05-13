@@ -26,7 +26,7 @@ ALMPawnBase::ALMPawnBase()
     PawnMovement->MaxSpeed = MaxSpeed;
     PawnMovement->Acceleration = Acceleration;
     PawnMovement->Deceleration = Deceleration;
-    PawnMovement->TurningBoost = TurningBoost;    
+    PawnMovement->TurningBoost = TurningBoost;        
 }
 
 void ALMPawnBase::SetDamage(int32 Damage)
@@ -68,5 +68,24 @@ void ALMPawnBase::InitLMPawnStatus()
     PawnMovement->Acceleration = Acceleration;
     PawnMovement->Deceleration = Deceleration;
     PawnMovement->TurningBoost = TurningBoost;
+    bIsVulnaerable = false; 
+    CurrentBuffStatus = ELMBuffType::None;
+    CurrentDebuffStatus = ELMDebuffType::None;
+}
+
+void ALMPawnBase::SetBuff(ELMBuffType Buff, FBuffDebuffData& BuffDebuffData)
+{
+    InitLMPawnStatus();
+    bIsVulnaerable = BuffDebuffData.bIsVulnaerable;
+    PawnMovement->MaxSpeed *= BuffDebuffData.MoveSpeedBuffFacor;
+    Hp += BuffDebuffData.HealHPValue >= MaxHp ? MaxHp : Hp + BuffDebuffData.HealHPValue;
+}
+
+void ALMPawnBase::SetDebuff(ELMDebuffType Buff, FBuffDebuffData& BuffDebuffData)
+{
+    InitLMPawnStatus();    
+    Hp -= BuffDebuffData.DecreaseHPValue;
+    PawnMovement->MaxSpeed *= BuffDebuffData.MoveSpeedDebuffFactor;    
+    CurrentDebuffStatus = Buff;
 }
 

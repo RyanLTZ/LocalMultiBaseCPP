@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "BuffDebuff.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ELMBuffType : uint8
 {
 	None UMETA(DisplayName = "None"),
@@ -17,17 +17,18 @@ enum class ELMBuffType : uint8
 };
 
 
-UENUM()
+UENUM(BlueprintType)
 enum class ELMDebuffType : uint8
 {
 	None UMETA(DisplayName = "None"),
 	Slow UMETA(DisplayName = "Slow"),
 	HPDecrease UMETA(DisplayName = "HP Decrease"),
+	Stun UMETA(DisplayName = "Stun"),
 	MaxBoundary,
 };
 
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FBuffDebuffData 
 {	
 	GENERATED_BODY()

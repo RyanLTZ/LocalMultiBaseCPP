@@ -67,8 +67,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoDie();
 
-	void OnItemAquired(class ASpawItemBase* TargetItem);
+	UFUNCTION(BlueprintCallable)
+	void DoLightningAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void DoStunAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void DoTileTake();
+
+	void OnItemAquired(class ASpawItemBase* TargetItem);			
+	void UpdateInventory();
+	void MoveInputFromOutside(const FInputActionValue& Value);
 // 0512 한규 추가
 private :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory",

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "BuffDebuff.h"
 #include "LMPawnBase.generated.h"
 
 
@@ -44,7 +45,8 @@ protected:
 	int32 Hp = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
-	int32 MaxHp = 100;
+	int32 MaxHp = 100;	
+		
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -54,7 +56,6 @@ public:
 	void SetDamage(int32 Damage);
 	void DoDie();
 
-
 	UFUNCTION(BlueprintCallable)
 	void ApplyBuffDebuff();
 	void OnFinishBuffDebuffEffect();
@@ -62,4 +63,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitLMPawnStatus();
 
+	UFUNCTION(BlueprintCallable)
+	void SetBuff(ELMBuffType Buff, FBuffDebuffData& BuffDebuffData);
+
+	UFUNCTION(BlueprintCallable)
+	void SetDebuff(ELMDebuffType Buff, FBuffDebuffData& BuffDebuffData);
+
+protected:
+	ELMDebuffType CurrentDebuffStatus;
+	ELMBuffType CurrentBuffStatus;
+	bool bIsVulnaerable = false; 
 };
