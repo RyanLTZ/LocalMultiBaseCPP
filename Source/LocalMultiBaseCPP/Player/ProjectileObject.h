@@ -45,4 +45,8 @@ public:
 private:
 	int32 OwnerPlayerIndex = -1; 
 
+protected:
+	UPROPERTY(EditAnywhere, Category = "Property")
+	int32 DamageOnPlayer = 30;
+
 };
