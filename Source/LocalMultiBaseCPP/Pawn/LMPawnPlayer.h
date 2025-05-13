@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Pawn/LMPawnBase.h"
 #include "InputActionValue.h"
+#include "../Map/SpawItemBase.h"
 #include "LMPawnPlayer.generated.h"
 
 /**
@@ -26,6 +27,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* IA_LMMove1P; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_FIRE1P;
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Player")
@@ -64,5 +68,49 @@ public:
 	void DoDie();
 
 	void OnItemAquired(class ASpawItemBase* TargetItem);
-	
+
+// 0512 한규 추가
+private :
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory",
+		meta = (AllowPrivateAccess = "true"))
+	TArray<ELMItemType> myItemInventory;
+public:
+
+	// Get Item
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem(ELMItemType inputItemAttribute);
+	virtual void GetItem_Implementation(ELMItemType inputItemAttribute);
+
+	// Sub Function
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_LightningAttack();
+	virtual void GetItem_LightningAttack_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_Fireball();
+	virtual void GetItem_Fireball_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_ObstacleDestroyer();
+	virtual void GetItem_ObstacleDestroyer_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_TileTaker();
+	virtual void GetItem_TileTaker_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_BuffItem();
+	virtual void GetItem_BuffItem_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void GetItem_DebuffItem();
+	virtual void GetItem_DebuffItem_Implementation();
+
+	// UI
+
+	/** Blueprint에서도 오버라이드 가능한 RefreshUI */
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "UI")
+	void RefreshUI();
+	virtual void RefreshUI_Implementation();
 };

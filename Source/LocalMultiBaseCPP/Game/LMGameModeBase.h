@@ -36,7 +36,7 @@ public:
 
 	TSubclassOf<class AGameManager> GameManagerClass;	
 
-	TSubclassOf<class UMainHUDWidget> MainHUDWidgetClass; 
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -59,8 +59,8 @@ private:
 	class ATileGenerator* TileGenerator;
 	class ALMPawnPlayer* PawnPlayer1; 
 	class ALMPawnPlayer* PawnPlayer2;
-	class AGameManager* GameManager; 	
-	class UMainHUDWidget* MainHUD;
+	class AGameManager* GameManager; 
+
 
 	int32 Player0Score = 0;
 	int32 Player1Score = 0; 
@@ -95,4 +95,19 @@ public:
 
 	void SpawnPlayer(int32 TargetIdx);
 
+
+public :
+
+	// 0512 한규 추가
+  // BeginPlay 등에서 CreateWidget 으로 만든 인스턴스를 그대로 돌려주는 함수
+	UFUNCTION(BlueprintPure, Category = "UI")
+	UMainHUDWidget* GetMainHUD() const { return MainHUD; }
+
+protected:
+	// BeginPlay() 에서 실제로 생성한 MainHUD
+	UPROPERTY(BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	UMainHUDWidget* MainHUD;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UMainHUDWidget> MainHUDWidgetClass;
 };

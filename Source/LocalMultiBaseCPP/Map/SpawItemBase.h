@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "SpawItemBase.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ELMItemType : uint8
 {
 	None,

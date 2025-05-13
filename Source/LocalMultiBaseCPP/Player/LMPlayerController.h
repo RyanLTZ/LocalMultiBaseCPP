@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 //Network
-#include "Interfaces/OnlineSessionInterface.h"     // IOnlineSubsystem µî
-#include "FindSessionsCallbackProxy.h"             // FBlueprintSessionResult
 //
 #include "InputActionValue.h"
 #include "LMPlayerController.generated.h"
@@ -42,9 +40,4 @@ protected:
 private:
 	void OnInputMove2P(const FInputActionValue& Value);
 	void OnInputFire2P();
-
-// 0429 / Network Function
-public:
-	UFUNCTION(BlueprintCallable, Category = "Session")
-	void BP_JoinWithSearchResult(const FBlueprintSessionResult& SearchResult);
 };
