@@ -97,7 +97,7 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		for (int j = 0; j < TempArray.Num(); j++)
 		{	
 			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;						
-			bool bDeployObstacles = FMath::RandRange(0, 100) > 85;						
+			bool bDeployObstacles = FMath::RandRange(0, 100) > 90;						
 			if (bDeployObstacles && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
 				//CreateAndDeployObstacles(TileIndex, NewPosition);
