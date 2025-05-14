@@ -7,6 +7,21 @@
 #include "TileGenerator.generated.h"
 
 
+//UENUM()
+//enum class ELMDeployObjectType : uint8 
+//{	
+//	BaseTile,
+//	BorderObstacle, 
+//	Obstacle,
+//	RandomSpawnObject,
+//	RandomSpawnType2Object,
+//	RandomSpawnType3Object,
+//	RandomSpawnType4Object,
+//	DestructableObstacle, 	
+//	SkillItem,
+//	BuffDebuffItem, 
+//};
+
 UCLASS()
 class LOCALMULTIBASECPP_API ATileGenerator : public AActor
 {
@@ -56,25 +71,55 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "InputParams")
 	int32 TileCountLength = 0;
-
+	
 	UPROPERTY(EditAnywhere, Category = "InputParams")
 	int32 TileWidth = 0;
 
 	UPROPERTY(EditAnywhere, Category = "InputParams")
 	int32 TileLength = 0;
 
-	FVector CurrentActorLocation;
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxDefaultObstacleCount = 10;	
+	int32 DefaultObstaceCount = 0; 
+
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxRandomSpawnObjectCount = 5;	
+	int32 RandomSpawnDefaultObjCount = 0; 
+
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxRandomSpawnType2Count = 5;
+	int32 RandomSpawnType2ObjCount = 0;
+
+	//UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxRandomSpawnType3Count = 5;
+	int32 RandomSpawnType3ObjCount = 0;
+
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxRandomSpawnType4Count = 5;
+	int32 RandomSpawnType4ObjCount = 0; 
+
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxDestructableObstacleCount = 5; 
+	int32 DestructableObstacleCount = 0; 
+
+	UPROPERTY(EditAnywhere, Category = "InputParams")
+	int32 MaxItemCount = 5; 
+	
+	FVector CurrentActorLocation = FVector::Zero();
 
 	class AObstacle* ObstacleTopBorder;
 	class AObstacle* ObstacleBottomBorder;
 	class AObstacle* ObstacleRightBorder;
 	class AObstacle* ObstacleLeftBorder;
 
+
+
 public:
 	void ClearTileList();
 
 	UFUNCTION(BlueprintCallable, Category = "Map")
 	void GenerateMap(int32 CountWidthDir,  int32 CountLengthDir);
+	void CreateAndDeployObstacles(int32 TargetIndex, FVector TargetLocation);
 	ATileBase* GetFirstTile();
 	ATileBase* GetLastTile(); 
 	
