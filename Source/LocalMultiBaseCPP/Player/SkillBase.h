@@ -14,6 +14,7 @@ enum class SkillType : uint8
 	Fireball UMETA(DisplayName = "FireBall"),
 	ObstacleDestroyer UMETA(DisplayName = "ObstacleDestroyer"),
 	TileTaker UMETA(DisplayName = "TileTaker"),
+	StunAttack UMETA(DisplayName = "StunAttack")
 };
 
 UCLASS()
