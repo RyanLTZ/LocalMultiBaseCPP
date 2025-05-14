@@ -154,7 +154,7 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 
 void ALMPawnPlayer::SetDamage(int32 Damage)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Set Damage"));
+	UE_LOG(LogTemp, Warning, TEXT("Taking Damage %d"), Damage);
 
 	Hp -= Damage;
 
@@ -190,6 +190,8 @@ void ALMPawnPlayer::Fire()
 			GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
 		}
 
+		RefreshUI();
+
 	}	
 }
 
@@ -211,8 +213,9 @@ void ALMPawnPlayer::DoDie()
 
 void ALMPawnPlayer::DoLightningAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("%d"), PlayerIndex);
 	UpdateInventory();
-	if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
+	//if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
 	{
 		AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
 		ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
@@ -225,7 +228,7 @@ void ALMPawnPlayer::DoLightningAttack()
 
 void ALMPawnPlayer::DoStunAttack()
 {
-	if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
+	//if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
 	{
 		AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
 		ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
