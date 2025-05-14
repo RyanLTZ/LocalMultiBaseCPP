@@ -42,7 +42,6 @@ protected:
 	float TurningBoost = 8.f;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
 	int32 Hp = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
@@ -52,7 +51,7 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
-		void SetHP(int32 inputHp) { Hp = inputHp; }
+		void SetHP(int32 HP) { Hp = HP; }
 
 	void SetDamage(int32 Damage);
 	void DoDie();

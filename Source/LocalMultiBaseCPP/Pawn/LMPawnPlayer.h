@@ -79,14 +79,6 @@ public:
 	void OnItemAquired(class ASpawItemBase* TargetItem);			
 	void UpdateInventory();
 	void MoveInputFromOutside(const FInputActionValue& Value);
-
-// 0514 한규 추가
-public :
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Hp")
-	void Refresh_HpState();
-	virtual void Refresh_HpState_Implementation();
-
-
 // 0512 한규 추가
 private :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory",
