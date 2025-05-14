@@ -10,7 +10,22 @@
  * 
  */
 
+USTRUCT(BlueprintType)
+struct FGameSatus
+{
+	GENERATED_BODY()
+	int32 KillCount;
+	int32 OccupiedTile;
+	int32 RespawnCount;	
 
+	FORCEINLINE
+	void Init()
+	{
+		KillCount = 0;
+		OccupiedTile = 0;
+		RespawnCount = 0;
+	}
+};
 
 UCLASS()
 class LOCALMULTIBASECPP_API ALMGameModeBase : public AGameModeBase
@@ -71,6 +86,14 @@ private:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Player1Score = 0; 
+
+	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
+	FGameSatus StatusP1;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
+	FGameSatus StatusP2;
+	
+private:
 	
 	UFUNCTION()
 	void OnGameFinished();
@@ -98,7 +121,7 @@ public:
 	void OnConsumeItem(class ASpawItemBase* TargetItem);
 
 	UFUNCTION(BlueprintCallable)
-	void OnPlayerDead(int32 TargetIdx);
+	void OnPlayerDead(int32 TargetIdx, int32 KillerIndex = -1);
 
 	void SpawnPlayer(int32 TargetIdx);
 
