@@ -162,6 +162,8 @@ void ALMPawnPlayer::SetDamage(int32 Damage)
 		Hp = 0;
 		this->DoDie();
 	}
+
+	Refresh_HpState();
 }
 
 void ALMPawnPlayer::Fire()
@@ -226,6 +228,10 @@ void ALMPawnPlayer::UpdateInventory()
 void ALMPawnPlayer::MoveInputFromOutside(const FInputActionValue& Value)
 {
 	OnInputMove(Value);
+}
+
+void ALMPawnPlayer::Refresh_HpState_Implementation()
+{
 }
 
 // 0512 한규 추가
