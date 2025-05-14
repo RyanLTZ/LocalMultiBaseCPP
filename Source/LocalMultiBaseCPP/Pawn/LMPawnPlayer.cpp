@@ -207,7 +207,8 @@ void ALMPawnPlayer::DoDie()
 	ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
 	if (GameMode)
 	{
-		GameMode->OnPlayerDead(PlayerIndex);
+		GameMode->OnPlayerDead(PlayerIndex, AttackPlayer);
+		AttackPlayer = -1;
 	}
 }
 

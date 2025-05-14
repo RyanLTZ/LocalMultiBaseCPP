@@ -82,6 +82,9 @@ public:
 	void UpdateInventory();
 	void MoveInputFromOutside(const FInputActionValue& Value);
 	
+	FORCEINLINE
+	void SetHitPlayer(int32 AttackPlayerIndex) { AttackPlayer = AttackPlayerIndex; }
+	
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
@@ -94,6 +97,9 @@ protected:
 	int32 ConsumeEnergyForAttack = 1; 		
 	
 	int32 CurrentEnergy = MaxChargedEnergy;
+
+	int32 AttackPlayer = -1;
+
 
 
 
