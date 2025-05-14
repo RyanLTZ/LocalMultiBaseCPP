@@ -52,9 +52,12 @@ private:
 
 	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, APlayerStart* PlayerStart, int32 PlayerIndex);
 
-	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, class ATileBase* PlayerStart, int32 PlayerIndex);
-
+	class ALMPawnPlayer* SpawnAndPossessPawn(UWorld* World, APlayerController* PlayerController, class ATileBase* PlayerStart, int32 PlayerIndex);	
 	
+	//GameRule
+public:
+	UPROPERTY(EditAnywhere, Category = "GameRule")
+	float GameDuration = 240.f;
 
 private:
 	int32 SpawnedPlayerIndex = 0;
@@ -62,7 +65,7 @@ private:
 	class ALMPawnPlayer* PawnPlayer1; 
 	class ALMPawnPlayer* PawnPlayer2;
 	class AGameManager* GameManager; 
-
+	
 
 	int32 Player0Score = 0;
 	int32 Player1Score = 0; 

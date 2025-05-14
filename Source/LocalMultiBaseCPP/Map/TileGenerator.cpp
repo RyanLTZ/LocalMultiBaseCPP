@@ -89,20 +89,22 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	ObstacleBottomBorder->SetActorLocation(FVector(InitPosX - TileWidth * 2, 0, 0));
 	
 	int32 TileIndex = 0;
+	FMath::SRandInit(2455);
 	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
 	{		
 		TArray<ATileBase*> TempArray;
 		TempArray.SetNum(CountWidthDir);
 		for (int j = 0; j < TempArray.Num(); j++)
 		{	
-			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;			
-			bool bObstacle = FMath::RandRange(0, 10) > 9;
-			if (bObstacle && i > 0 && i < ArrayOfTileRow.Num() - 1)
+			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;						
+			bool bDeployObstacles = FMath::RandRange(0, 100) > 90;						
+			if (bDeployObstacles && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
+				//CreateAndDeployObstacles(TileIndex, NewPosition);
 				if (FMath::RandRange(0, 100) > 70) //Destructable Obstacle
 				{
 					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
-					GenObstacle->SetIndex(TileIndex);					
+					GenObstacle->SetIndex(TileIndex);
 				}
 				else //Normal Obstacle
 				{
@@ -110,11 +112,11 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 					if (FMath::RandRange(0, 10) > 5)
 					{
 						int32 Random = FMath::RandRange(0, 10) > 3;
-						if ( Random >= 3 )
+						if (Random >= 3)
 						{
 							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType2Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
 						}
-						else if(Random >= 6)
+						else if (Random >= 6)
 						{
 							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectClass, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
 						}
@@ -137,7 +139,6 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 				}
 			}
 
-
 			ATileBase* GenTile = GetWorld()->SpawnActor<ATileBase>(TileBaseClass, NewPosition, GetActorRotation());
 			//TempArray[j] = GenTile;			
 			GenTile->SetIndex(TileIndex);
@@ -149,6 +150,61 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		//ArrayOfTileRow[i] = TempArray;
 	}	
 
+}
+
+void ATileGenerator::CreateAndDeployObstacles(int32 TileIndex, FVector NewPosition)
+{
+	int32 RandomDice = FMath::RandRange(0, 100);
+	
+	if (RandomDice > 70 && DestructableObstacleCount < MaxDestructableObstacleCount) //Destructable Obstacle
+	{
+		ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+		GenObstacle->SetIndex(TileIndex);
+		DestructableObstacleCount++;
+	}
+	else //Normal Obstacle
+	{
+
+		if (FMath::RandRange(0, 10) < 6)
+		{
+			int32 Random = FMath::RandRange(0, 10);
+			if (Random >= 3 && RandomSpawnType2ObjCount < MaxRandomSpawnObjectCount)
+			{
+				ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType2Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+				RandomSpawnType2ObjCount++;
+			}
+			else if (Random >= 6 && RandomSpawnDefaultObjCount < MaxRandomSpawnObjectCount)
+			{
+				ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectClass, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+				RandomSpawnDefaultObjCount++;
+			}
+			else 
+			{
+				if (RandomSpawnType4ObjCount < MaxRandomSpawnType4Count)
+				{
+					ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType4Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+					RandomSpawnType4ObjCount++;
+				}
+				
+			}
+
+		}
+		else 
+		{
+			if (DefaultObstaceCount < MaxDefaultObstacleCount)
+			{
+				AObstacle* GenObstacle = GetWorld()->SpawnActor<AObstacle>(ObstacleClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
+				GenObstacle->SetIndex(TileIndex);
+				if (FMath::RandRange(0, 10) > 7)
+				{
+					GenObstacle->SetTransitable();
+				}
+
+				DefaultObstaceCount++;
+			}
+		}
+
+	}
 }
 
 ATileBase* ATileGenerator::GetFirstTile()
