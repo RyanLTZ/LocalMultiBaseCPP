@@ -112,6 +112,11 @@ public:
 		ALMPawnPlayer* GetPlayerByIndex(int32 TargetIndex) { ALMPawnPlayer* ReturnValue;  TargetIndex == 0 ? ReturnValue = PawnPlayer1 : ReturnValue = PawnPlayer2; return ReturnValue; }
 // 0514 한규 추가
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void Event_OnPlayerDied(int inputIndex);
+	virtual void Event_OnPlayerDied_Implementation(int inputIndex);
+
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
 	void AdditionalEvent_OnGameEnded();
 	virtual void AdditionalEvent_OnGameEnded_Implementation();
 

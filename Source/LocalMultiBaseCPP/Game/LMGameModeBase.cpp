@@ -246,6 +246,7 @@ void ALMGameModeBase::OnPlayerDead(int32 TargetIdx)
 	
 	}
 
+	Event_OnPlayerDied(TargetIdx);
 	SpawnPlayer(TargetIdx);
 }
 
@@ -296,6 +297,10 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 		Data.Init();		
 		TargetPlayer->SetDebuff(ELMDebuffType::Stun, Data);			
 	}
+}
+
+void ALMGameModeBase::Event_OnPlayerDied_Implementation(int inputIndex)
+{
 }
 
 void ALMGameModeBase::AdditionalEvent_OnGameEnded_Implementation()
