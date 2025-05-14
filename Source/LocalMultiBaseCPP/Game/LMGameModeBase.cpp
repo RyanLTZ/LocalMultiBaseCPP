@@ -97,12 +97,12 @@ void ALMGameModeBase::BeginPlay()
 	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	
 	if (GameManager)
-	{
+	{		
 		GameManager->FUNCDeleOnGameFinish.BindUFunction(this, FName("OnGameFinished"));
-		GameManager->FUNCDeleOnTimeChange.BindUFunction(this, FName("OnTimeChange"));
-		GameManager->SetRemainTime(30.f);
+		GameManager->FUNCDeleOnTimeChange.BindUFunction(this, FName("OnTimeChange"));		
 		GameManager->FUNCDeleOnItemDestroy.BindUFunction(this, FName("OnDeleItemDestroy"));
 		GameManager->FUNCDeleOnItemSpawn.BindUFunction(this, FName("OnDeleItemSpawn"));
+		GameManager->SetRemainTime(GameDuration);
 	}
 }
 

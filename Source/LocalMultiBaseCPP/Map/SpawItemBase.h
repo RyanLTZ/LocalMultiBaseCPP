@@ -12,6 +12,7 @@ enum class ELMItemType : uint8
 	None,
 	LightningAttack UMETA(DisplayName = "LightingAttack"),
 	Fireball UMETA(DisplayName = "FireBall"),
+	StunAttack UMETA(DisplayName = "StunAttack"),
 	ObstacleDestroyer UMETA(DisplayName = "ObstacleDestroyer"),
 	TileTaker UMETA(DisplayName = "TileTaker"),
 	BuffItem UMETA(DisplayName = "BuffItem"),
