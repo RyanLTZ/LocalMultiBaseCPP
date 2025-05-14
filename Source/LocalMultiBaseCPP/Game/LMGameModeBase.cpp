@@ -193,6 +193,9 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 void ALMGameModeBase::OnGameFinished()
 {
 	int32 WinPlayerIndex = TileGenerator->GetMuchMoreOccupiedPlayerIndex();	
+
+	AdditionalEvent_OnGameEnded();
+
 	if (WinPlayerIndex < 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
@@ -295,6 +298,10 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 	}
 }
 
+void ALMGameModeBase::AdditionalEvent_OnGameEnded_Implementation()
+{
+}
+
 
 
 void ALMGameModeBase::OnTimeChange(float Time)
@@ -328,6 +335,7 @@ void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
 	{
 		Player1Score++;		
 	}
+
 
 	MainHUD->UpdateSocre(0, Player0Score);
 	MainHUD->UpdateSocre(1, Player1Score);

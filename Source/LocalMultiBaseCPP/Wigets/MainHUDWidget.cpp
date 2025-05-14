@@ -23,5 +23,6 @@ void UMainHUDWidget::UpdateTimer(float Time)
 {	
 	FString FormattedString = FString::Printf(TEXT("%.1f"), Time);
 	FText DisplayText = FText::FromString(FormattedString);
+	if(nullptr != RemainTime)
 	RemainTime->SetText(DisplayText);
 }

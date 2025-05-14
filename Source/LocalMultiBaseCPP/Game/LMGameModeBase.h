@@ -66,8 +66,10 @@ private:
 	class ALMPawnPlayer* PawnPlayer2;
 	class AGameManager* GameManager; 
 	
-
+	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Player0Score = 0;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Player1Score = 0; 
 	
 	UFUNCTION()
@@ -108,7 +110,14 @@ public:
 
 	FORCEINLINE
 		ALMPawnPlayer* GetPlayerByIndex(int32 TargetIndex) { ALMPawnPlayer* ReturnValue;  TargetIndex == 0 ? ReturnValue = PawnPlayer1 : ReturnValue = PawnPlayer2; return ReturnValue; }
+// 0514 한규 추가
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void AdditionalEvent_OnGameEnded();
+	virtual void AdditionalEvent_OnGameEnded_Implementation();
+
+
 public :
+
 
 	// 0512 한규 추가
   // BeginPlay 등에서 CreateWidget 으로 만든 인스턴스를 그대로 돌려주는 함수
