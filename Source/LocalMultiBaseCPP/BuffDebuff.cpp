@@ -7,7 +7,7 @@ UBuffDebuff::UBuffDebuff()
 {
 }
 
-FBuffDebuffData* UBuffDebuff::GetBuffDebuffData()
+FBuffDebuffData& UBuffDebuff::GetBuffDebuffData()
 {	
 	//ReturnData.Init();
 	//switch (CurrentBuff)
@@ -40,12 +40,12 @@ FBuffDebuffData* UBuffDebuff::GetBuffDebuffData()
 	//	break;
 	//}
 
-	return &ReturnData;	
+	return ReturnData;	
 }
 
 void UBuffDebuff::GenerateBuff()
 {
-	int32 RandomResult = FMath::RandRange((int32)ELMBuffType::None + 1, (int32)ELMBuffType::MaxBoundary - 1);
+	int32 RandomResult = FMath::RandRange(1, 3);
 	ReturnData.Init();
 
 	switch ((ELMBuffType)RandomResult)
@@ -53,12 +53,25 @@ void UBuffDebuff::GenerateBuff()
 	case ELMBuffType::None:
 		break;
 	case ELMBuffType::MoveSpeed:
-		ReturnData.MoveSpeedBuffFacor = MoveSpeedBuffFacor;
-		break;
+		CurrentBuff = ELMBuffType::MoveSpeed;
+		if (FMath::RandRange(0, 1) > 0)
+		{
+			ReturnData.MoveSpeedBuffFacor = MoveSpeedBuffFacor; 
+			ReturnData.Duration = 10.f;
+		}
+		else
+		{
+			ReturnData.MoveSpeedBuffFacor = MoveSpeedBuff2Factor;
+			ReturnData.Duration = 5.f;
+		}
+		break;		
 	case ELMBuffType::Invulnerable:
+		CurrentBuff = ELMBuffType::Invulnerable;
 		ReturnData.bIsVulnaerable = true;
+		ReturnData.Duration = 10.f;
 		break;
 	case ELMBuffType::Heal:
+		CurrentBuff = ELMBuffType::Heal;
 		ReturnData.HealHPValue = HealHPValue;
 		break;
 	default:
@@ -69,7 +82,7 @@ void UBuffDebuff::GenerateBuff()
 
 void UBuffDebuff::GenerateDebuff()
 {
-	int32 RandomResult = FMath::RandRange((int32)ELMDebuffType::None + 1, (int32)ELMDebuffType::MaxBoundary - 1);
+	int32 RandomResult = FMath::RandRange(1,2);
 	ReturnData.Init();
 
 	switch ((ELMDebuffType)RandomResult)
@@ -77,9 +90,20 @@ void UBuffDebuff::GenerateDebuff()
 	case ELMDebuffType::None:
 		break;
 	case ELMDebuffType::Slow:
-		ReturnData.MoveSpeedDebuffFactor = MoveSpeedDebuffFactor;
+		CurrentDebuff = ELMDebuffType::Slow;
+		if (FMath::RandRange(0, 1) > 0)
+		{
+			ReturnData.MoveSpeedDebuffFactor = MoveSpeedDebuffFactor;
+			ReturnData.Duration = 10.f;
+		}
+		else
+		{
+			ReturnData.MoveSpeedDebuffFactor = MoveSpeedDebuff2Factor;
+			ReturnData.Duration = 5.f;
+		}		
 		break;
 	case ELMDebuffType::HPDecrease:
+		CurrentDebuff = ELMDebuffType::HPDecrease;
 		ReturnData.DecreaseHPValue = DecreaseHPValue;
 		break;
 	default:

@@ -17,6 +17,7 @@ ASpawItemBase::ASpawItemBase()
 void ASpawItemBase::BeginPlay()
 {
 	Super::BeginPlay();
+	//GenerateItemData();
 }
 
 // Called every frame
@@ -30,6 +31,18 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 	if (AquiredPlayer)
 	{
 		AquiredPlayer->ApplyBuffDebuff();
+		switch (ItemType)
+		{
+		case ELMItemType::BuffItem:
+			AquiredPlayer->SetBuff(BuffDebuffData->GetBuffType(), BuffDebuffData);			
+			break;
+		case ELMItemType::DebuffItem:
+			AquiredPlayer->SetBuff(BuffDebuffData->GetBuffType(), BuffDebuffData);			
+			break;
+		default:
+			break;
+		}
+
 	}
 }
 

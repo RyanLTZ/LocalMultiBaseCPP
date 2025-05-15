@@ -293,9 +293,9 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 		StunAtk->SetOnwerPlayer(OwnerIndex);
 		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
 		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
-		FBuffDebuffData Data;
-		Data.Init();		
-		TargetPlayer->SetDebuff(ELMDebuffType::Stun, Data);			
+		UBuffDebuff* BuffData = NewObject<UBuffDebuff>();
+		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);		
+		BuffData->MarkAsGarbage();
 	}
 }
 
