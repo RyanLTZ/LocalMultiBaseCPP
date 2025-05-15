@@ -51,7 +51,8 @@ void ALMPawnBase::ApplyBuffDebuff()
         PawnMovement->Acceleration *= 0.5f;
 
     }
-   float EffectDuration = 5;
+   
+    float EffectDuration = 5;
     FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
     GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
 }
