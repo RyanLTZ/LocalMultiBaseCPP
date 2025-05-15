@@ -154,6 +154,9 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 
 void ALMPawnPlayer::SetDamage(int32 Damage)
 {
+	if (bIsVulnaerable)
+		return;
+
 	UE_LOG(LogTemp, Warning, TEXT("Taking Damage %d"), Damage);
 
 	Hp -= Damage;
@@ -186,8 +189,8 @@ void ALMPawnPlayer::Fire()
 		CurrentEnergy--;
 		if (CurrentEnergy == 0)
 		{
-			FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);
-			GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
+			FTimerHandle Handle = GetWorldTimerManager().GenerateHandle(0);
+			GetWorldTimerManager().SetTimer(Handle, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
 		}
 
 		RefreshUI();
@@ -203,6 +206,9 @@ void ALMPawnPlayer::OnChargedEnerge()
 
 void ALMPawnPlayer::DoDie()
 {
+	if (bIsVulnaerable)
+		return;
+
 	AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
 	ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
 	if (GameMode)

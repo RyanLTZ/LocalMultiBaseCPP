@@ -38,6 +38,7 @@ struct FBuffDebuffData
 	int32 HealHPValue = 0;
 	int32 DecreaseHPValue = 0;
 	bool bIsVulnaerable = false; 
+	float Duration = 0.f;
 
 	FORCEINLINE
 	void Init()
@@ -47,6 +48,7 @@ struct FBuffDebuffData
 		HealHPValue = 0;
 		DecreaseHPValue = 0;
 		bIsVulnaerable = false;
+		Duration = 0.f;
 	};
 };
 /**
@@ -66,19 +68,32 @@ private:
 	FBuffDebuffData ReturnData;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")	
-	float MoveSpeedBuffFacor = 2.f;
+	float MoveSpeedBuffFacor = 1.2f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
-	float MoveSpeedDebuffFactor = 0.5f;
+	float MoveSpeedBuff2Factor = 2.f; 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MoveSpeedDebuffFactor = 0.8f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MoveSpeedDebuff2Factor = 0.4f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
-	int32 HealHPValue = 30; 
+	int32 HealHPValue = 1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Status")
-	int32 DecreaseHPValue = 30; 
+	int32 DecreaseHPValue = 1;
 
 public:
-	FBuffDebuffData* GetBuffDebuffData();
+	FBuffDebuffData& GetBuffDebuffData();
 	void GenerateBuff();
 	void GenerateDebuff();
+	
+	FORCEINLINE
+	ELMDebuffType GetDebuffType() { return CurrentDebuff; }
+
+	FORCEINLINE
+		ELMBuffType GetBuffType() { return CurrentBuff; }
+
 };

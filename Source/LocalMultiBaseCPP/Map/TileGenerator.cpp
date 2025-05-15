@@ -308,7 +308,7 @@ void ATileGenerator::DestroySpawnedItemOnTile()
 		{
 			if (ArrayItem[i])
 			{
-				ArrayItem[i]->Destroy();			
+				ArrayItem[i]->Destroy();							
 			}				
 		}
 	}

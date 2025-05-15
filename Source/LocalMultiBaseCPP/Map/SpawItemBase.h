@@ -33,8 +33,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item");	
 	ELMItemType ItemType = ELMItemType::None;
+
+	UPROPERTY(EditAnywhere, Category = "Item");
 	class UBuffDebuff* BuffDebuffData;
 
 public:	
@@ -44,6 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnItemCollision(class ALMPawnPlayer* AquiredPlayer );
 	
+	UFUNCTION(BlueprintCallable)
 	void GenerateItemData();
 
 };
