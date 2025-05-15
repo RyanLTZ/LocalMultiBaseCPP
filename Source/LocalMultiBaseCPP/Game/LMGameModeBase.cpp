@@ -231,17 +231,27 @@ void ALMGameModeBase::OnConsumeItem(ASpawItemBase* TargetItem)
 {
 }
 
-void ALMGameModeBase::OnPlayerDead(int32 TargetIdx)
+void ALMGameModeBase::OnPlayerDead(int32 TargetIdx, int32 KillerIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("TargetIdx : %d"), TargetIdx);
 
 	if (TargetIdx == 0 && PawnPlayer1)
 	{
+		if (KillerIndex == 1)
+		{
+			StatusP1.KillCount++;
+		}
+
 		PawnPlayer1->Destroy();
-		
+				
 	}
 	else if (TargetIdx == 1 && PawnPlayer2)
 	{
+		if (KillerIndex == 0)
+		{
+			StatusP2.KillCount++;
+		}
+
 		PawnPlayer2->Destroy();
 	
 	}
@@ -256,10 +266,12 @@ void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
 	{
 		if (TargetIdx == 0)
 		{
+			StatusP1.RespawnCount++;
 			SpawnLocalPlayer(TargetIdx, TileGenerator->GetFirstTile(), GetWorld());
 		}
 		else if (TargetIdx == 1)
 		{
+			StatusP2.RespawnCount++;
 			SpawnLocalPlayer(TargetIdx, TileGenerator->GetLastTile(), GetWorld());
 		}
 		
@@ -293,9 +305,9 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 		StunAtk->SetOnwerPlayer(OwnerIndex);
 		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
 		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
-		FBuffDebuffData Data;
-		Data.Init();		
-		TargetPlayer->SetDebuff(ELMDebuffType::Stun, Data);			
+		UBuffDebuff* BuffData = NewObject<UBuffDebuff>();
+		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);		
+		BuffData->MarkAsGarbage();
 	}
 }
 
