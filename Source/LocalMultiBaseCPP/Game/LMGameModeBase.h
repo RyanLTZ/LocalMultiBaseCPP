@@ -11,20 +11,21 @@
  */
 
 USTRUCT(BlueprintType)
-struct FGameSatus
+struct LOCALMULTIBASECPP_API  FGameSatus
 {
 	GENERATED_BODY()
-	int32 KillCount;
-	int32 OccupiedTile;
-	int32 RespawnCount;	
 
-	FORCEINLINE
-	void Init()
-	{
-		KillCount = 0;
-		OccupiedTile = 0;
-		RespawnCount = 0;
-	}
+	/** 킬 수 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Status")
+	int32 KillCount = 0;
+
+	/** 점령 타일 수 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Status")
+	int32 OccupiedTile = 0;
+
+	/** 리스폰 횟수 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Status")
+	int32 RespawnCount = 0;
 };
 
 UCLASS()
@@ -87,10 +88,10 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Player1Score = 0; 
 
-	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	FGameSatus StatusP1;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	FGameSatus StatusP2;
 	
 private:
