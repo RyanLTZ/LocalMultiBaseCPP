@@ -47,6 +47,6 @@ private:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Property")
-	int32 DamageOnPlayer = 1;
+	int32 DamageOnPlayer = 30;
 
 };

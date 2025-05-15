@@ -43,10 +43,10 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
-	int32 Hp = 2;
+	int32 Hp = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
-	int32 MaxHp = 2;	
+	int32 MaxHp = 100;	
 		
 
 public:

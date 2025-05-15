@@ -54,7 +54,6 @@ void AProjectileObject::OnObjectOverlap(UPrimitiveComponent* OverlappedComponent
 		if (Player->GetPlayerIndex() != this->OwnerPlayerIndex)
 		{
 			Player->SetDamage(DamageOnPlayer);
-			Player->SetHitPlayer(OwnerPlayerIndex);
 		}
 	}
 	//if (Enemy != nullptr)

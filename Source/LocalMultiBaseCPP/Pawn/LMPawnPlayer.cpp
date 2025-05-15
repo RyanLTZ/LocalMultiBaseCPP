@@ -154,25 +154,20 @@ void ALMPawnPlayer::HandlePlayerSpecificPossession()
 
 void ALMPawnPlayer::SetDamage(int32 Damage)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Taking Damage %d"), Damage);
-
+	UE_LOG(LogTemp, Warning, TEXT("Set Damage"));
 	Hp -= Damage;
 
 	if (Hp < 0)
 	{
 		Hp = 0;
 		this->DoDie();
-	}	
+	}
 
 	Refresh_HpState();
 }
 
 void ALMPawnPlayer::Fire()
 {
-	
-	if (CurrentEnergy == 0)
-		return;
-
 	FActorSpawnParameters SpawnParams;	
 
 	AProjectileObject* Bullet = Cast<AProjectileObject>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, FirePosition2->GetComponentTransform()));
@@ -182,23 +177,7 @@ void ALMPawnPlayer::Fire()
 		Bullet->SetActorRotation(FirePosition2->GetComponentRotation());
 
 		UGameplayStatics::FinishSpawningActor(Bullet, FirePosition2->GetComponentTransform());
-
-		CurrentEnergy--;
-		if (CurrentEnergy == 0)
-		{
-			FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);
-			GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
-		}
-
-		RefreshUI();
-
 	}	
-}
-
-void ALMPawnPlayer::OnChargedEnerge()
-{	
-	CurrentEnergy = FMath::Min(++CurrentEnergy, MaxChargedEnergy);
-	RefreshUI();
 }
 
 void ALMPawnPlayer::DoDie()
@@ -207,16 +186,14 @@ void ALMPawnPlayer::DoDie()
 	ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
 	if (GameMode)
 	{
-		GameMode->OnPlayerDead(PlayerIndex, AttackPlayer);
-		AttackPlayer = -1;
+		GameMode->OnPlayerDead(PlayerIndex);
 	}
 }
 
 void ALMPawnPlayer::DoLightningAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%d"), PlayerIndex);
 	UpdateInventory();
-	//if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
+	if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
 	{
 		AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
 		ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
@@ -229,15 +206,6 @@ void ALMPawnPlayer::DoLightningAttack()
 
 void ALMPawnPlayer::DoStunAttack()
 {
-	//if (myItemInventory.Num() > 0 && myItemInventory.Contains(ELMItemType::LightningAttack))
-	{
-		AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
-		ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
-		if (GameMode)
-		{
-			GameMode->DoStunAttack(PlayerIndex);
-		}
-	}
 	UpdateInventory();
 }
 

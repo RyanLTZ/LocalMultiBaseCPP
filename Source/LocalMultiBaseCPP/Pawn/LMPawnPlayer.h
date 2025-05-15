@@ -63,8 +63,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Fire();
-		
-	void OnChargedEnerge();
 
 	UFUNCTION(BlueprintCallable)
 	void DoDie();
@@ -81,27 +79,6 @@ public:
 	void OnItemAquired(class ASpawItemBase* TargetItem);			
 	void UpdateInventory();
 	void MoveInputFromOutside(const FInputActionValue& Value);
-	
-	FORCEINLINE
-	void SetHitPlayer(int32 AttackPlayerIndex) { AttackPlayer = AttackPlayerIndex; }
-	
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
-	float RechargeTime = 10.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
-	int32 MaxChargedEnergy = 3; 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
-	int32 ConsumeEnergyForAttack = 1; 		
-	
-	int32 CurrentEnergy = MaxChargedEnergy;
-
-	int32 AttackPlayer = -1;
-
-
-
 
 // 0514 한규 추가
 public :
