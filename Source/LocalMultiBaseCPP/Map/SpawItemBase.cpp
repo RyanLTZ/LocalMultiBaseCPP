@@ -48,8 +48,8 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 
 void ASpawItemBase::GenerateItemData()
 {
-	int32 RandomResult = FMath::RandRange((int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
-	ItemType = (ELMItemType)RandomResult;
+	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
+	ItemType = ELMItemType::LightningAttack;// (ELMItemType)RandomResult;
 
 	switch (ItemType)
 	{
@@ -58,6 +58,8 @@ void ASpawItemBase::GenerateItemData()
 	case ELMItemType::LightningAttack:
 		break;
 	case ELMItemType::Fireball:
+		break;
+	case ELMItemType::StunAttack:
 		break;
 	case ELMItemType::ObstacleDestroyer:
 		break;
