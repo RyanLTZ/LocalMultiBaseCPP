@@ -26,8 +26,13 @@ ALMPawnBase::ALMPawnBase()
     PawnMovement->MaxSpeed = MaxSpeed;
     PawnMovement->Acceleration = Acceleration;
     PawnMovement->Deceleration = Deceleration;
-    PawnMovement->TurningBoost = TurningBoost;        
+    PawnMovement->TurningBoost = TurningBoost;            
 }
+
+//void ALMPawnBase::BeginPlay()
+//{
+//    CurrentHandle = GetWorldTimerManager().GenerateHandle(0);
+//}
 
 void ALMPawnBase::SetDamage(int32 Damage)
 { 
@@ -51,8 +56,9 @@ void ALMPawnBase::ApplyBuffDebuff()
         PawnMovement->Acceleration *= 0.5f;
 
     }
-   float EffectDuration = 5;
-    FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
+   
+    float EffectDuration = 5;
+    //FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
     GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
 }
 
@@ -70,22 +76,55 @@ void ALMPawnBase::InitLMPawnStatus()
     PawnMovement->TurningBoost = TurningBoost;
     bIsVulnaerable = false; 
     CurrentBuffStatus = ELMBuffType::None;
-    CurrentDebuffStatus = ELMDebuffType::None;
+    CurrentDebuffStatus = ELMDebuffType::None;    
+    GetWorldTimerManager().ClearTimer(CurrentHandle);
+
+    Refresh_BuffState(false);
 }
 
-void ALMPawnBase::SetBuff(ELMBuffType Buff, FBuffDebuffData& BuffDebuffData)
-{
+void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
+{    
+    UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, BuffEffect : %f"), Buff, BuffDebuffData->GetBuffDebuffData().MoveSpeedBuffFacor);
+    UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, BuffEffect : %d"), Buff, BuffDebuffData->GetBuffDebuffData().bIsVulnaerable);
+    UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, BuffEffect : %d"), Buff, BuffDebuffData->GetBuffDebuffData().HealHPValue);
     InitLMPawnStatus();
-    bIsVulnaerable = BuffDebuffData.bIsVulnaerable;
-    PawnMovement->MaxSpeed *= BuffDebuffData.MoveSpeedBuffFacor;
-    Hp += BuffDebuffData.HealHPValue >= MaxHp ? MaxHp : Hp + BuffDebuffData.HealHPValue;
+    bIsVulnaerable = BuffDebuffData->GetBuffDebuffData().bIsVulnaerable;
+    PawnMovement->MaxSpeed *= BuffDebuffData->GetBuffDebuffData().MoveSpeedBuffFacor;
+    Hp += BuffDebuffData->GetBuffDebuffData().HealHPValue >= MaxHp ? MaxHp : Hp + BuffDebuffData->GetBuffDebuffData().HealHPValue;
+    CurrentBuffStatus = Buff;
+
+    if (BuffDebuffData->GetBuffDebuffData().Duration > 0)
+    {        
+        GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
+    } 
+
+    BuffDebuffData->MarkAsGarbage();
+
+    Refresh_BuffState(true);
 }
 
-void ALMPawnBase::SetDebuff(ELMDebuffType Buff, FBuffDebuffData& BuffDebuffData)
+void ALMPawnBase::SetDebuff(ELMDebuffType Buff, UBuffDebuff* BuffDebuffData)
 {
+    //UE_LOG(LogTemp, Warning, TEXT("Debuff Type : %d"), Buff);
+    //UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, DEbuffEffect : %f"), Buff, BuffDebuffData.MoveSpeedDebuffFactor);
+    //UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, BuffEffect : %d"), Buff, BuffDebuffData.DecreaseHPValue);
+
     InitLMPawnStatus();    
-    Hp -= BuffDebuffData.DecreaseHPValue;
-    PawnMovement->MaxSpeed *= BuffDebuffData.MoveSpeedDebuffFactor;    
+    Hp -= BuffDebuffData->GetBuffDebuffData().DecreaseHPValue;
+    PawnMovement->MaxSpeed *= BuffDebuffData->GetBuffDebuffData().MoveSpeedDebuffFactor;
     CurrentDebuffStatus = Buff;
+
+    if (BuffDebuffData->GetBuffDebuffData().Duration > 0)
+    {     
+        GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
+    }      
+
+    BuffDebuffData->MarkAsGarbage();
+
+    Refresh_BuffState(true);
+}
+
+void ALMPawnBase::Refresh_BuffState_Implementation(bool isShow)
+{
 }
 

@@ -12,11 +12,13 @@
 UCLASS()
 class LOCALMULTIBASECPP_API ALMPawnBase : public APawn
 {
-	GENERATED_BODY()
-
+	GENERATED_BODY()	
 public:
 	// Sets default values for this pawn's properties
 	ALMPawnBase();
+
+protected:
+	//virtual void BeginPlay() override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
@@ -30,23 +32,23 @@ protected:
 	class UFloatingPawnMovement* PawnMovement;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
-	float MaxSpeed = 2000.f;
+	float MaxSpeed = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
-	float Acceleration = 2000.f;
+	float Acceleration = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
-	float Deceleration = 500.f;
+	float Deceleration = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Move Property")
 	float TurningBoost = 8.f;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
-	int32 Hp = 100;
+	int32 Hp = 2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Property")
-	int32 MaxHp = 100;	
+	int32 MaxHp = 2;	
 		
 
 public:
@@ -65,13 +67,26 @@ public:
 	void InitLMPawnStatus();
 
 	UFUNCTION(BlueprintCallable)
-	void SetBuff(ELMBuffType Buff, FBuffDebuffData& BuffDebuffData);
+	void SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData);
 
 	UFUNCTION(BlueprintCallable)
-	void SetDebuff(ELMDebuffType Buff, FBuffDebuffData& BuffDebuffData);
+	void SetDebuff(ELMDebuffType Buff, UBuffDebuff* BuffDebuffData);
+
+	//void InitTimer();
+//
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Hp")
+	void Refresh_BuffState(bool isShow);
+	virtual void Refresh_BuffState_Implementation(bool isShow);
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BuffDebuff");
 	ELMDebuffType CurrentDebuffStatus;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BuffDebuff");
 	ELMBuffType CurrentBuffStatus;
+
 	bool bIsVulnaerable = false; 
+
+private:
+	FTimerHandle CurrentHandle; 
 };
