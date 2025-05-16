@@ -288,7 +288,7 @@ void ALMGameModeBase::DoLightningAttack(int32 OwnerIndex)
 	if (LightingAtk)
 	{
 		LightingAtk->SetOnwerPlayer(OwnerIndex);		
-		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
+		UE_LOG(LogTemp, Warning, TEXT("Lightning Attack TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
 		UGameplayStatics::FinishSpawningActor(LightingAtk, TargetPlayer->GetActorTransform());
 	}	
 }
@@ -303,11 +303,10 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 	if (StunAtk)
 	{
 		StunAtk->SetOnwerPlayer(OwnerIndex);
-		UE_LOG(LogTemp, Warning, TEXT("TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
+		UE_LOG(LogTemp, Warning, TEXT("Stun Attack TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
 		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
 		UBuffDebuff* BuffData = NewObject<UBuffDebuff>();
-		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);		
-		BuffData->MarkAsGarbage();
+		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);				
 	}
 }
 
