@@ -97,9 +97,9 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 void ASpawItemBase::GenerateItemData()
 {
 	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
-	//ItemType = (ELMItemType)RandomResult;
+	myItemType = (ELMItemType)RandomResult;
 
-	myItemType = ELMItemType::BuffItem;
+	//myItemType = ELMItemType::BuffItem;
 
 	switch (myItemType)
 	{
@@ -108,15 +108,15 @@ void ASpawItemBase::GenerateItemData()
 	case ELMItemType::LightningAttack:
 		break;
 	case ELMItemType::Fireball:
-		ItemType = ELMItemType::LightningAttack;
+		myItemType = ELMItemType::LightningAttack;
 		break;
 	case ELMItemType::StunAttack:
 		break;
 	case ELMItemType::ObstacleDestroyer:
-		ItemType = ELMItemType::StunAttack;
+		myItemType = ELMItemType::StunAttack;
 		break;
 	case ELMItemType::TileTaker:
-		ItemType = ELMItemType::LightningAttack;
+		myItemType = ELMItemType::LightningAttack;
 		break;
 	case ELMItemType::BuffItem:
 		BuffDebuffData = NewObject<UBuffDebuff>();
