@@ -45,7 +45,7 @@ void ATileBase::UpatePlayerScore(int32 TargetPlayerIndex)
             { 
                 GameMode->OnSubScore(OccupiedPlayerIndex);
             }            
-            GameMode->OnAddScore(TargetPlayerIndex);
+            GameMode->OnAddScore(TargetPlayerIndex);            
             OccupiedPlayerIndex = TargetPlayerIndex;
         }
 
