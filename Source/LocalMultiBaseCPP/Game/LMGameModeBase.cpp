@@ -209,13 +209,13 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 {
 	if (PlayerIndex == 0)
 	{
-		Player0Score--;
-		Player0Score = FMath::Max(0, Player0Score);	
+		StatusP1.OccupiedTile--;		
+		StatusP1.OccupiedTile = FMath::Max(0, StatusP1.OccupiedTile);
 	}
 	else
 	{
-		Player1Score--;
-		Player1Score = FMath::Max(0, Player1Score);
+		StatusP2.OccupiedTile--;
+		StatusP2.OccupiedTile = FMath::Max(0, StatusP2.OccupiedTile);
 	}
 
 	MainHUD->UpdateSocre(0, Player0Score);
@@ -345,11 +345,11 @@ void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
 {
 	if (PlayerIndex == 0)
 	{
-		Player0Score++;		
+		StatusP1.OccupiedTile++;
 	}
 	else
 	{
-		Player1Score++;		
+		StatusP2.OccupiedTile++;		
 	}
 
 
