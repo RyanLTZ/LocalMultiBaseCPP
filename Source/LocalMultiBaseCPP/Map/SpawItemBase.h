@@ -34,13 +34,12 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item");	
-	ELMItemType ItemType = ELMItemType::None;
 
 	UPROPERTY(EditAnywhere, Category = "Item");
 	class UBuffDebuff* BuffDebuffData;
 
 public:	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;	
 
@@ -50,5 +49,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GenerateItemData();
 
+	// 0516 한규 추가
+	UFUNCTION()
+	void OnSphereOverlap(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
+
+protected :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item");
+	ELMItemType myItemType;
 };
  

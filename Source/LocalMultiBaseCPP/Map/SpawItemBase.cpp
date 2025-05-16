@@ -4,6 +4,7 @@
 #include "Pawn/LMPawnPlayer.h"
 #include "Game/GameManager.h"
 #include "BuffDebuff.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ASpawItemBase::ASpawItemBase()
@@ -18,6 +19,17 @@ void ASpawItemBase::BeginPlay()
 {
 	Super::BeginPlay();
 	//GenerateItemData();
+
+	UE_LOG(LogTemp, Warning, TEXT("ASpawItemBase::BeginPlay() called"));
+
+	auto* SphereComp = FindComponentByClass<USphereComponent>();
+	if (!SphereComp)
+	{
+		UE_LOG(LogTemp, Error, TEXT("¢º SphereComponent NOT FOUND!"));
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("¢º SphereComponent FOUND, binding overlap"));
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASpawItemBase::OnSphereOverlap);
 }
 
 // Called every frame
@@ -26,12 +38,48 @@ void ASpawItemBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASpawItemBase::OnSphereOverlap(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult
+)
+{
+	if (auto Player = Cast<ALMPawnPlayer>(OtherActor))
+	{
+		switch (myItemType)
+		{
+		case ELMItemType::None:
+			break;
+		case ELMItemType::LightningAttack:
+		case ELMItemType::Fireball:
+		case ELMItemType::StunAttack:
+		case ELMItemType::ObstacleDestroyer:
+		case ELMItemType::TileTaker:
+		case ELMItemType::MaxBoundary:
+			Player->GetItem(myItemType);
+			break;
+		case ELMItemType::BuffItem:
+		case ELMItemType::DebuffItem:
+			OnItemCollision(Player);
+			break;
+		}
+
+		Destroy();
+	}
+}
+
+
 void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 {
-	if (AquiredPlayer)
+	UE_LOG(LogTemp, Warning, TEXT("Test Message"));
+
+	if (nullptr != AquiredPlayer)
 	{
 		AquiredPlayer->ApplyBuffDebuff();
-		switch (ItemType)
+		switch (myItemType)
 		{
 		case ELMItemType::BuffItem:
 			AquiredPlayer->SetBuff(BuffDebuffData->GetBuffType(), BuffDebuffData);			
@@ -49,9 +97,11 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 void ASpawItemBase::GenerateItemData()
 {
 	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
-	ItemType = (ELMItemType)RandomResult;
+	//ItemType = (ELMItemType)RandomResult;
 
-	switch (ItemType)
+	myItemType = ELMItemType::BuffItem;
+
+	switch (myItemType)
 	{
 	case ELMItemType::None:
 		break;
