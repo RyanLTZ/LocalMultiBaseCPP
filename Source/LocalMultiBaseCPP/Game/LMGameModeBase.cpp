@@ -306,8 +306,7 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 		UE_LOG(LogTemp, Warning, TEXT("Stun Attack TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
 		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
 		UBuffDebuff* BuffData = NewObject<UBuffDebuff>();
-		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);		
-		//BuffData->MarkAsGarbage();
+		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);				
 	}
 }
 
