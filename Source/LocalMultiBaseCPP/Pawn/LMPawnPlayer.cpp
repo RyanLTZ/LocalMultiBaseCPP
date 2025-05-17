@@ -216,6 +216,8 @@ void ALMPawnPlayer::DoDie()
 		GameMode->OnPlayerDead(PlayerIndex, AttackPlayer);
 		AttackPlayer = -1;
 	}
+
+	RefreshUI();
 }
 
 void ALMPawnPlayer::DoLightningAttack()
@@ -231,6 +233,7 @@ void ALMPawnPlayer::DoLightningAttack()
 			GameMode->DoLightningAttack(PlayerIndex);
 		}
 	}
+	
 }
 
 void ALMPawnPlayer::DoStunAttack()
@@ -244,18 +247,18 @@ void ALMPawnPlayer::DoStunAttack()
 			GameMode->DoStunAttack(PlayerIndex);
 		}
 	}
-	UpdateInventory();
+
+	RefreshUI();
 }
 
 void ALMPawnPlayer::DoTileTake()
 {
-	UpdateInventory();
+	
 }
 
 void ALMPawnPlayer::OnItemAquired(ASpawItemBase* TargetItem)
 {
-	UpdateInventory();
-
+	
 }
 
 void ALMPawnPlayer::UpdateInventory()

@@ -192,7 +192,26 @@ ALMPawnPlayer* ALMGameModeBase::SpawnAndPossessPawn(UWorld* World, APlayerContro
 
 void ALMGameModeBase::OnGameFinished()
 {
-	int32 WinPlayerIndex = TileGenerator->GetMuchMoreOccupiedPlayerIndex();	
+	int32 WinPlayerIndex = -1; 
+	if (StatusP1.OccupiedTile > StatusP2.OccupiedTile)
+	{
+		WinPlayerIndex = 0; 
+	}
+	else if (StatusP1.OccupiedTile > StatusP2.OccupiedTile)
+	{
+		WinPlayerIndex = 1;
+	}
+	else
+	{
+		if (StatusP1.KillCount > StatusP2.KillCount)
+		{
+			WinPlayerIndex = 0;
+		}
+		else if (StatusP1.KillCount > StatusP2.KillCount)
+		{
+			WinPlayerIndex = 1; 
+		}
+	}		
 
 	AdditionalEvent_OnGameEnded();
 
@@ -200,9 +219,7 @@ void ALMGameModeBase::OnGameFinished()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
 		return;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("Player %d is Winner"), WinPlayerIndex + 1);
-	
+	}	
 }
 
 void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
@@ -234,6 +251,7 @@ void ALMGameModeBase::OnConsumeItem(ASpawItemBase* TargetItem)
 void ALMGameModeBase::OnPlayerDead(int32 TargetIdx, int32 KillerIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("TargetIdx : %d"), TargetIdx);
+	UE_LOG(LogTemp, Warning, TEXT("KillerIndex : %d"), KillerIndex);
 
 	if (TargetIdx == 0 && PawnPlayer1)
 	{

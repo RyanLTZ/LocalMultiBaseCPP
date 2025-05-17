@@ -82,6 +82,7 @@ public:
 	void UpdateInventory();
 	void MoveInputFromOutside(const FInputActionValue& Value);
 	
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE
 	void SetHitPlayer(int32 AttackPlayerIndex) { AttackPlayer = AttackPlayerIndex; }
 	
