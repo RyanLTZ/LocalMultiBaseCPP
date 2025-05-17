@@ -101,6 +101,7 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 			if (bDeployObstacles && i > 0 && i < ArrayOfTileRow.Num() - 1)
 			{
 				//CreateAndDeployObstacles(TileIndex, NewPosition);
+				int32 RandomRotationFactor = FMath::RandRange(-180, 180);
 				if (FMath::RandRange(0, 100) > 70) //Destructable Obstacle
 				{
 					ADestructableObst* GenObstacle = GetWorld()->SpawnActor<ADestructableObst>(DestructableObsClass, NewPosition + FVector(0, 0, 50), GetActorRotation());
@@ -110,19 +111,19 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 				{
 
 					if (FMath::RandRange(0, 10) > 5)
-					{
-						int32 Random = FMath::RandRange(0, 10) > 3;
-						if (Random >= 3)
+					{						
+						int32 Random = FMath::RandRange(0, 10);
+						if (Random <= 3)
 						{
-							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType2Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType2Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90 + RandomRotationFactor, 0));
 						}
-						else if (Random >= 6)
+						else if (Random <= 6)
 						{
-							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectClass, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectClass, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90 + RandomRotationFactor, 0));
 						}
 						else
 						{
-							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType4Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90, 0));
+							ARandomSpawnObject* GenRandomObj = GetWorld()->SpawnActor<ARandomSpawnObject>(RandomSpawnObjectType4Class, NewPosition + FVector(0, 0, 50), GetActorRotation() + FRotator(0, 90 + RandomRotationFactor, 0));
 						}
 
 					}
