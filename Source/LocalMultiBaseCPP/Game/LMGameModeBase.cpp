@@ -17,15 +17,13 @@
 
 ALMGameModeBase::ALMGameModeBase()
 {
-	DefaultPawnClass = nullptr; // ALMPawnPlayer::StaticClass();
-
 	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
 
 	if (BP_LMPawnPlayer.Succeeded())
 	{
 		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
-		//DefaultPawnClass = BP_LMPawnPlayer.Class;
+		DefaultPawnClass = BP_LMPawnPlayer.Class;
 	}
 	else
 	{

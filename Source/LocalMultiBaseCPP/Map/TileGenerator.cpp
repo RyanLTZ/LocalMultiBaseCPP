@@ -44,10 +44,7 @@ ATileGenerator::ATileGenerator()
 	if (BP_RandomObjType4Obj.Succeeded())
 	{
 		RandomSpawnObjectType4Class = BP_RandomObjType4Obj.Class;
-	}
-
-
-	/// Script / Engine.Blueprint'/Game/Blueprints/BP_RandomSpawnObjectType4.BP_RandomSpawnObjectType4'
+	}	
 
 	static ConstructorHelpers::FClassFinder<AObstacle> BP_BorderObstacle(TEXT("'/Game/Blueprints/BP_BorderObstacle.BP_BorderObstacle_C'"));
 	if (BP_BorderObstacle.Succeeded())
@@ -67,8 +64,7 @@ void ATileGenerator::BeginPlay()
 void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 {	
 	UE_LOG(LogTemp, Warning, TEXT("Current Location : %f, %f, %f"), CurrentActorLocation.X, CurrentActorLocation.Y, CurrentActorLocation.Z);
-	
-	ArrayOfTileRow.SetNum(CountLengthDir);
+		
 	float InitPosX = (0 - (CountWidthDir - 1) * TileWidth);
 	float InitPosY = (0 - (CountLengthDir - 1) * TileLength);
 
@@ -90,11 +86,9 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 	
 	int32 TileIndex = 0;
 	FMath::SRandInit(2455);
-	for (int32 i = 0; i < ArrayOfTileRow.Num(); i++)
+	for (int32 i = 0; i < CountLengthDir; i++)
 	{		
-		TArray<ATileBase*> TempArray;
-		TempArray.SetNum(CountWidthDir);
-		for (int j = 0; j < TempArray.Num(); j++)
+		for (int j = 0; j < CountWidthDir; j++)
 		{	
 			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;						
 			bool bDeployObstacles = FMath::RandRange(0, 100) > 90;						
@@ -210,13 +204,6 @@ void ATileGenerator::CreateAndDeployObstacles(int32 TileIndex, FVector NewPositi
 
 ATileBase* ATileGenerator::GetFirstTile()
 {
-	//if (ArrayOfTileRow.Num() > 0 )
-	//{
-	//	if (ArrayOfTileRow[0].Num() > 0)
-	//	{
-	//		return ArrayOfTileRow[0][0];
-	//	}			
-	//}
 	if (MapTileList.Num() > 0 )
 	{
 		return MapTileList[0];
@@ -226,14 +213,6 @@ ATileBase* ATileGenerator::GetFirstTile()
 
 ATileBase* ATileGenerator::GetLastTile()
 {
-	//if (ArrayOfTileRow.Num() > 0)
-	//{
-	//	int32 LastIndexOfArrayGroup = ArrayOfTileRow.Num() - 1;
-	//	if (ArrayOfTileRow[LastIndexOfArrayGroup].Num() > 0)
-	//	{			
-	//		return	ArrayOfTileRow[LastIndexOfArrayGroup].Last();		
-	//	}
-	//}
 	if (MapTileList.Num() > 0)
 	{
 		return MapTileList[MapTileList.Num() - 1];
@@ -265,17 +244,6 @@ int32 ATileGenerator::GetMuchMoreOccupiedPlayerIndex()
 
 void ATileGenerator::SpawnItemOnTile()
 {
-	//if (ArrayItem.Num() > 0)
-	//{
-	//	for (int32 i = 0; i < ArrayItem.Num(); i++)
-	//	{
-	//		ArrayItem[i]->Destroy();
-	//	}
-	//}
-	//else
-	//{
-	//	
-	//}
 	ArrayItem.SetNum(5);
 	for (int32 i = 0; i < 5; i++)
 	{
