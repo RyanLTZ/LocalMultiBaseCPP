@@ -92,7 +92,7 @@ void ATileGenerator::GenerateMap(int32 CountWidthDir, int32 CountLengthDir)
 		{	
 			FVector NewPosition = FVector(j * TileWidth * 2 + InitPosX, i * TileLength * 2 + InitPosY, CurrentActorLocation.Z);// +CurrentActorLocation;						
 			bool bDeployObstacles = FMath::RandRange(0, 100) > 90;						
-			if (bDeployObstacles && i > 0 && i < ArrayOfTileRow.Num() - 1)
+			if (bDeployObstacles && i > 0 && i < CountLengthDir - 1)
 			{
 				//CreateAndDeployObstacles(TileIndex, NewPosition);
 				int32 RandomRotationFactor = FMath::RandRange(-180, 180);
