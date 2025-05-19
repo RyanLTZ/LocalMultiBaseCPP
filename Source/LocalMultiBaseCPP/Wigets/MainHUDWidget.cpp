@@ -19,6 +19,15 @@ void UMainHUDWidget::UpdateSocre(int32 PlayerIndex, int32 Score)
 	}
 }
 
+void UMainHUDWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	// 여기서 Player1Score 가 nullptr 아닌지 확인해 볼 수 있습니다.
+	if (!Player1Score)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player1Score is nullptr!"));
+	}
+}
 void UMainHUDWidget::UpdateTimer(float Time)
 {	
 	FString FormattedString = FString::Printf(TEXT("%.1f"), Time);

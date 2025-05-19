@@ -97,6 +97,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
 	int32 ConsumeEnergyForAttack = 1; 		
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Normal Attack")
 	int32 CurrentEnergy = MaxChargedEnergy;
 
 	int32 AttackPlayer = -1;

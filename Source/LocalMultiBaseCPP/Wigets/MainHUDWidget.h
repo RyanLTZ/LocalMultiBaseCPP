@@ -24,6 +24,7 @@ private:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* RemainTime; 
 
+	virtual void NativeConstruct() override;
 
 public:
 	void UpdateSocre(int32 PlayerIndex, int32 Score);

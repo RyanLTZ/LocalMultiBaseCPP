@@ -223,8 +223,8 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 
 	if (MainHUD)
 	{
-		MainHUD->UpdateSocre(0, Player0Score);
-		MainHUD->UpdateSocre(1, Player1Score);
+		MainHUD->UpdateSocre(0, StatusP1.OccupiedTile);
+		MainHUD->UpdateSocre(1, StatusP2.OccupiedTile);
 	}
 }
 
@@ -391,7 +391,7 @@ void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
 
 	if (MainHUD)
 	{
-		MainHUD->UpdateSocre(0, Player0Score);
-		MainHUD->UpdateSocre(1, Player1Score);
+		MainHUD->UpdateSocre(0, StatusP1.OccupiedTile);
+		MainHUD->UpdateSocre(1, StatusP2.OccupiedTile);
 	}
 }

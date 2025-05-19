@@ -85,21 +85,22 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 			AquiredPlayer->SetBuff(BuffDebuffData->GetBuffType(), BuffDebuffData);			
 			break;
 		case ELMItemType::DebuffItem:
-			AquiredPlayer->SetBuff(BuffDebuffData->GetBuffType(), BuffDebuffData);			
+			AquiredPlayer->SetDebuff(BuffDebuffData->GetDebuffType(), BuffDebuffData);			
 			break;
 		default:
 			break;
 		}
-
 	}
 }
 
 void ASpawItemBase::GenerateItemData()
 {
 	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
-	myItemType = (ELMItemType)RandomResult;
+	//myItemType = (ELMItemType)RandomResult;
 
-	//myItemType = ELMItemType::BuffItem;
+	myItemType = FMath::RandBool()
+		? ELMItemType::BuffItem
+		: ELMItemType::DebuffItem;
 
 	switch (myItemType)
 	{
