@@ -200,12 +200,6 @@ void ALMGameModeBase::OnGameFinished()
 	}		
 
 	AdditionalEvent_OnGameEnded();
-
-	if (WinPlayerIndex < 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tie Game"));
-		return;
-	}	
 }
 
 void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
