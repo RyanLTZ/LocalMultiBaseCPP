@@ -144,6 +144,8 @@ public:
 	void AdditionalEvent_OnGameEnded();
 	virtual void AdditionalEvent_OnGameEnded_Implementation();
 
+	UFUNCTION(BlueprintCallable)
+	void ShowOrCreateMainHUD(bool bShow);
 
 public :
 

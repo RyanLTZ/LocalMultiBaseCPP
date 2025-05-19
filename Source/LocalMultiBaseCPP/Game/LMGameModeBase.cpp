@@ -79,18 +79,6 @@ void ALMGameModeBase::BeginPlay()
 		SpawnLocalPlayer(0, TileGenerator->GetFirstTile(), World);
 		SpawnLocalPlayer(1, TileGenerator->GetLastTile(), World);
 	}		
-	
-
-	if (MainHUDWidgetClass)
-	{
-		MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
-	}
-	
-
-	if (MainHUD)
-	{
-		MainHUD->AddToViewport();						
-	}
 
 	GameManager = GetWorld()->SpawnActor<AGameManager>(GameManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	
@@ -233,8 +221,11 @@ void ALMGameModeBase::OnSubScore(int32 PlayerIndex)
 		StatusP2.OccupiedTile = FMath::Max(0, StatusP2.OccupiedTile);
 	}
 
-	MainHUD->UpdateSocre(0, Player0Score);
-	MainHUD->UpdateSocre(1, Player1Score);
+	if (MainHUD)
+	{
+		MainHUD->UpdateSocre(0, Player0Score);
+		MainHUD->UpdateSocre(1, Player1Score);
+	}
 }
 
 void ALMGameModeBase::OnDestructableObstacleDestroyed(int32 TileIndex)
@@ -334,11 +325,41 @@ void ALMGameModeBase::AdditionalEvent_OnGameEnded_Implementation()
 {
 }
 
+void ALMGameModeBase::ShowOrCreateMainHUD( bool bShow )
+{
+	if (bShow)
+	{
+		if (MainHUDWidgetClass)
+		{
+			if (MainHUD == nullptr)
+			{
+				MainHUD = CreateWidget<UMainHUDWidget>(GetWorld(), MainHUDWidgetClass);
+			}
+
+			if (MainHUD)
+			{
+				MainHUD->AddToViewport();
+			}
+		}
+
+	}
+	else
+	{
+		if (MainHUD)
+		{
+			MainHUD->RemoveFromViewport();
+		}
+	}
+
+}
 
 
 void ALMGameModeBase::OnTimeChange(float Time)
 {
-	MainHUD->UpdateTimer(FMath::Abs(Time));
+	if (MainHUD)
+	{
+		MainHUD->UpdateTimer(FMath::Abs(Time));
+	}	
 }
 
 void ALMGameModeBase::OnDeleItemDestroy()
@@ -368,7 +389,9 @@ void ALMGameModeBase::OnAddScore(int32 PlayerIndex)
 		StatusP2.OccupiedTile++;		
 	}
 
-
-	MainHUD->UpdateSocre(0, Player0Score);
-	MainHUD->UpdateSocre(1, Player1Score);
+	if (MainHUD)
+	{
+		MainHUD->UpdateSocre(0, Player0Score);
+		MainHUD->UpdateSocre(1, Player1Score);
+	}
 }
