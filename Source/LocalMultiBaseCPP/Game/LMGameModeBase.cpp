@@ -257,8 +257,8 @@ void ALMGameModeBase::OnPlayerDead(int32 TargetIdx, int32 KillerIndex)
 	
 	}
 
-	Event_OnPlayerDied(TargetIdx);
 	SpawnPlayer(TargetIdx);
+	Event_OnPlayerDied(TargetIdx);
 }
 
 void ALMGameModeBase::SpawnPlayer(int32 TargetIdx)
