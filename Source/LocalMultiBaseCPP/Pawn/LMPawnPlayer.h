@@ -123,6 +123,8 @@ private :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory",
 		meta = (AllowPrivateAccess = "true"))
 	TArray<ELMItemType> myItemInventory;
+
+	FTimerHandle HandleForEnergeyCharge;
 public:
 	// Get Item
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")

@@ -187,10 +187,10 @@ void ALMPawnPlayer::Fire()
 		UGameplayStatics::FinishSpawningActor(Bullet, FirePosition2->GetComponentTransform());
 
 		CurrentEnergy--;
-		if (CurrentEnergy == 0)
+		if (CurrentEnergy < MaxChargedEnergy)
 		{
-			FTimerHandle Handle = GetWorldTimerManager().GenerateHandle(0);
-			GetWorldTimerManager().SetTimer(Handle, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
+			//FTimerHandle Handle = GetWorldTimerManager().GenerateHandle(0);
+			GetWorldTimerManager().SetTimer(HandleForEnergeyCharge, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
 		}
 
 		RefreshUI();
@@ -201,8 +201,15 @@ void ALMPawnPlayer::Fire()
 
 void ALMPawnPlayer::OnChargedEnerge()
 {	
+	//FTimerHandle Handle = GetWorldTimerManager().GenerateHandle(0);
+	GetWorldTimerManager().ClearTimer(HandleForEnergeyCharge);
 	CurrentEnergy = FMath::Min(++CurrentEnergy, MaxChargedEnergy);
 	RefreshUI();
+
+	if (CurrentEnergy < MaxChargedEnergy)
+	{		
+		GetWorldTimerManager().SetTimer(HandleForEnergeyCharge, this, &ALMPawnPlayer::OnChargedEnerge, RechargeTime, false, -1);
+	}
 }
 
 void ALMPawnPlayer::DoDie()
