@@ -55,6 +55,7 @@ public:
 	TSubclassOf<class ASkillLightningAttack> LightningAtkClass;
 
 	TSubclassOf<class ASkillStunAttack> StunAttackClass; 
+	TSubclassOf<class ALMPlayerController> PlayerControllerClass;
 
 protected:
 	virtual void BeginPlay() override;
