@@ -195,6 +195,7 @@ void ALMPawnPlayer::Fire()
 
 		RefreshUI();
 
+		AfterEvent_OnFire();
 	}	
 }
 
@@ -271,6 +272,10 @@ void ALMPawnPlayer::MoveInputFromOutside(const FInputActionValue& Value)
 	OnInputMove(Value);
 }
 
+void ALMPawnPlayer::AfterEvent_OnFire_Implementation()
+{
+}
+
 void ALMPawnPlayer::Refresh_HpState_Implementation()
 {
 }
@@ -282,6 +287,11 @@ void ALMPawnPlayer::RefreshUI_Implementation()
 	// ...
 
 	// (블루프린트 오버라이드가 없으면 이 함수만 실행됩니다)
+}
+
+
+void ALMPawnPlayer::PlayGetItemSound_Implementation()
+{
 }
 
 void ALMPawnPlayer::GetItem_Implementation(ELMItemType inputItemAttribute)

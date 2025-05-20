@@ -64,6 +64,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 		
+
 	void OnChargedEnerge();
 
 	UFUNCTION(BlueprintCallable)
@@ -102,8 +103,12 @@ protected:
 
 	int32 AttackPlayer = -1;
 
+public :
 
-
+// 0520 한규 추가
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Hp")
+	void AfterEvent_OnFire();
+	virtual void AfterEvent_OnFire_Implementation();
 
 // 0514 한규 추가
 public :
@@ -112,12 +117,19 @@ public :
 	virtual void Refresh_HpState_Implementation();
 
 
+
 // 0512 한규 추가
 private :
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Inventory",
 		meta = (AllowPrivateAccess = "true"))
 	TArray<ELMItemType> myItemInventory;
 public:
+	// Get Item
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
+	void PlayGetItemSound();
+	virtual void PlayGetItemSound_Implementation();
+
+
 
 	// Get Item
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")

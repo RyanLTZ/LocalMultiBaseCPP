@@ -67,6 +67,8 @@ void ASpawItemBase::OnSphereOverlap(
 			break;
 		}
 
+		Player->PlayGetItemSound();
+
 		Destroy();
 	}
 }
@@ -98,11 +100,11 @@ void ASpawItemBase::GenerateItemData()
 	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
 	myItemType = (ELMItemType)RandomResult;
 
-	//myItemType = ELMItemType::BuffItem;
+	myItemType = ELMItemType::BuffItem;
 
-	myItemType = FMath::RandBool()
-		? ELMItemType::BuffItem
-		: ELMItemType::DebuffItem;
+	//myItemType = FMath::RandBool()
+	//	? ELMItemType::BuffItem
+	//	: ELMItemType::DebuffItem;
 
 	switch (myItemType)
 	{
