@@ -55,6 +55,7 @@ void AProjectileObject::OnObjectOverlap(UPrimitiveComponent* OverlappedComponent
 		{
 			Player->SetHitPlayer(OwnerPlayerIndex);
 			Player->SetDamage(DamageOnPlayer);
+			this->Destroy();
 		}
 	}
 	//if (Enemy != nullptr)
@@ -69,8 +70,6 @@ void AProjectileObject::OnObjectOverlap(UPrimitiveComponent* OverlappedComponent
 	//	{
 	//		GameMode->AddScore(1);
 	//	}
-	//}
-
-	//Destroy();
+	//}	
 }
 
