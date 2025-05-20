@@ -23,14 +23,18 @@ ALMGameModeBase::ALMGameModeBase()
 	{
 		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
 		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
-		DefaultPawnClass = BP_LMPawnPlayer.Class;
+		//DefaultPawnClass = BP_LMPawnPlayer.Class;
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("BP_LMPawnPlayer을 찾지 못했습니다! 경로를 확인하세요."));
 	}
-
-	PlayerControllerClass = ALMPlayerController::StaticClass();
+	static ConstructorHelpers::FClassFinder<ALMPlayerController> BP_PlayerController(TEXT("'/Game/Blueprints/BP_LMPlayerController.BP_LMPlayerController_C'"));
+	if (BP_PlayerController.Succeeded())
+	{
+		PlayerControllerClass = BP_PlayerController.Class;
+	}
+	
 
 	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
 	if (BP_LMTileGenerator.Succeeded())
@@ -236,21 +240,21 @@ void ALMGameModeBase::OnPlayerDead(int32 TargetIdx, int32 KillerIndex)
 	UE_LOG(LogTemp, Warning, TEXT("TargetIdx : %d"), TargetIdx);
 	UE_LOG(LogTemp, Warning, TEXT("KillerIndex : %d"), KillerIndex);
 
-	if (TargetIdx == 0 && PawnPlayer1)
+	if (TargetIdx == 0 && PawnPlayer1) //1P died
 	{
 		if (KillerIndex == 1)
 		{
-			StatusP1.KillCount++;
+			StatusP2.KillCount++;
 		}
 
 		PawnPlayer1->Destroy();
 				
 	}
-	else if (TargetIdx == 1 && PawnPlayer2)
+	else if (TargetIdx == 1 && PawnPlayer2)  //2p died
 	{
 		if (KillerIndex == 0)
 		{
-			StatusP2.KillCount++;
+			StatusP1.KillCount++;
 		}
 
 		PawnPlayer2->Destroy();
