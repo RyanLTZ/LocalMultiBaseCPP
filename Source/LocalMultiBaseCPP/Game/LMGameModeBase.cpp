@@ -17,52 +17,89 @@
 
 ALMGameModeBase::ALMGameModeBase()
 {
-	ConstructorHelpers::FClassFinder<ALMPawnPlayer> BP_LMPawnPlayer(TEXT("'/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C'"));
 
-	if (BP_LMPawnPlayer.Succeeded())
+}
+
+UClass* ALMGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
+{
+
+	// --- Pawn BP ---
+	static const FSoftClassPath PawnRef(TEXT("/Game/Blueprints/BP_LMPawnPlayer.BP_LMPawnPlayer_C"));
+	UClass* PawnBP = PawnRef.TryLoadClass<APawn>();
+	if (PawnBP)
 	{
-		// 3. LMPawnPlayerClass 도 세팅하고, DefaultPawnClass 도 세팅
-		LMPawnPlayerClass = BP_LMPawnPlayer.Class;
-		//DefaultPawnClass = BP_LMPawnPlayer.Class;
+		LMPawnPlayerClass = PawnBP;
+		DefaultPawnClass = PawnBP;
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("BP_LMPawnPlayer을 찾지 못했습니다! 경로를 확인하세요."));
-	}
-	static ConstructorHelpers::FClassFinder<ALMPlayerController> BP_PlayerController(TEXT("'/Game/Blueprints/BP_LMPlayerController.BP_LMPlayerController_C'"));
-	if (BP_PlayerController.Succeeded())
-	{
-		PlayerControllerClass = BP_PlayerController.Class;
-	}
-	
-
-	static ConstructorHelpers::FClassFinder<ATileGenerator> BP_LMTileGenerator(TEXT("'/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C'"));
-	if (BP_LMTileGenerator.Succeeded())
-	{
-		TileGeneratorClass = BP_LMTileGenerator.Class;
+		UE_LOG(LogTemp, Error, TEXT("BP_LMPawnPlayer 로드 실패: %s"), *PawnRef.ToString());
 	}
 
+	// --- PlayerController BP ---
+	static const FSoftClassPath PCRef(TEXT("/Game/Blueprints/BP_LMPlayerController.BP_LMPlayerController_C"));
+	if (UClass* PCBP = PCRef.TryLoadClass<APlayerController>())
+	{
+		PlayerControllerClass = PCBP;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_LMPlayerController 로드 실패: %s"), *PCRef.ToString());
+	}
+
+	// --- TileGenerator BP ---
+	static const FSoftClassPath TileRef(TEXT("/Game/Blueprints/BP_TileGenerator.BP_TileGenerator_C"));
+	if (UClass* TileBP = TileRef.TryLoadClass<ATileGenerator>())
+	{
+		TileGeneratorClass = TileBP;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_TileGenerator 로드 실패: %s"), *TileRef.ToString());
+	}
+
+	// --- GameManager(C++) ---
 	GameManagerClass = AGameManager::StaticClass();
 
-	static ConstructorHelpers::FClassFinder<UMainHUDWidget> BP_MainHUD(TEXT("'/Game/Widget/BP_MainHudWidget.BP_MainHudWidget_C'"));
-	if (BP_MainHUD.Succeeded())
+	// --- MainHUDWidget BP ---
+	static const FSoftClassPath HUDRef(TEXT("/Game/Widget/BP_MainHudWidget.BP_MainHudWidget_C"));
+	if (UClass* HUDBP = HUDRef.TryLoadClass<UUserWidget>())
 	{
-		MainHUDWidgetClass = BP_MainHUD.Class;
+		MainHUDWidgetClass = HUDBP;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_MainHudWidget 로드 실패: %s"), *HUDRef.ToString());
 	}
 
-	static ConstructorHelpers::FClassFinder<ASkillLightningAttack> BP_LightningAtk(TEXT("'/Game/Blueprints/Skill/BP_LightingAttack.BP_LightingAttack_C'"));
-	if (BP_LightningAtk.Succeeded())
+	// --- Skill: Lightning ---
+	static const FSoftClassPath LightningRef(TEXT("/Game/Blueprints/Skill/BP_LightingAttack.BP_LightingAttack_C"));
+	if (UClass* LightningBP = LightningRef.TryLoadClass<ASkillLightningAttack>())
 	{
-		LightningAtkClass = BP_LightningAtk.Class;
+		LightningAtkClass = LightningBP;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_LightingAttack 로드 실패: %s"), *LightningRef.ToString());
 	}
 
-	static ConstructorHelpers::FClassFinder<ASkillStunAttack> BP_StunAtk(TEXT("'/Game/Blueprints/Skill/BP_StunAttack.BP_StunAttack_C'"));
-	if (BP_StunAtk.Succeeded())
+	// --- Skill: Stun ---
+	static const FSoftClassPath StunRef(TEXT("/Game/Blueprints/Skill/BP_StunAttack.BP_StunAttack_C"));
+	if (UClass* StunBP = StunRef.TryLoadClass<ASkillStunAttack>())
 	{
-		StunAttackClass = BP_StunAtk.Class;
+		StunAttackClass = StunBP;
 	}
-	
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("BP_StunAttack 로드 실패: %s"), *StunRef.ToString());
+	}
+
+	// --- 최종적으로 Pawn만 반환 ---
+	return PawnBP
+		? PawnBP
+		: Super::GetDefaultPawnClassForController_Implementation(InController);
 }
+
 
 void ALMGameModeBase::BeginPlay()
 {

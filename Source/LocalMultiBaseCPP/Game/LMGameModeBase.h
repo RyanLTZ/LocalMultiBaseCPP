@@ -37,17 +37,17 @@ public:
 	ALMGameModeBase();
 
 public:
-	UPROPERTY(EditAnywhere, Category = "Player")
+	UPROPERTY(Transient)
 	//TSubclassOf<class ALMPawnBase> LMPawnBaseClass; 
 	TSubclassOf<class ALMPawnPlayer> LMPawnPlayerClass;
 
-	UPROPERTY(EditAnywhere, Category = "Player")
+	UPROPERTY(Transient)
 	class APlayerStart* PlayerStart1P; 
 
-	UPROPERTY(EditAnywhere, Category = "Player")
+	UPROPERTY(Transient)
 	class APlayerStart* PlayerStart2P;
 
-	UPROPERTY(EditAnywhere, Category = "Map")
+	UPROPERTY(Transient)
 	TSubclassOf<class ATileGenerator> TileGeneratorClass; 
 
 	TSubclassOf<class AGameManager> GameManagerClass;	
@@ -156,6 +156,9 @@ public :
 	UFUNCTION(BlueprintPure, Category = "UI")
 	UMainHUDWidget* GetMainHUD() const { return MainHUD; }
 
+	// CDO가 완전히 만들어진 뒤(=블루프린트 기본값 로딩 완료 후)에 호출됩니다.
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
 protected:
 	// BeginPlay() 에서 실제로 생성한 MainHUD
 	UPROPERTY(BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
@@ -163,4 +166,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UMainHUDWidget> MainHUDWidgetClass;
+
+	protected :
 };
