@@ -48,7 +48,7 @@ void ASpawItemBase::OnSphereOverlap(
 )
 {
 	if (auto Player = Cast<ALMPawnPlayer>(OtherActor))
-	{
+	{		
 		switch (myItemType)
 		{
 		case ELMItemType::None:
@@ -77,6 +77,8 @@ void ASpawItemBase::OnSphereOverlap(
 void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Test Message"));
+	if (BuffDebuffData == nullptr)
+		return;
 
 	if (nullptr != AquiredPlayer)
 	{
@@ -97,7 +99,7 @@ void ASpawItemBase::OnItemCollision(ALMPawnPlayer* AquiredPlayer)
 
 void ASpawItemBase::GenerateItemData()
 {
-	int32 RandomResult = FMath::RandRange(1, 5);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
+	int32 RandomResult = FMath::RandRange(1, 7);//(int32)ELMItemType::None + 1, (int32)ELMItemType::MaxBoundary - 1);
 	myItemType = (ELMItemType)RandomResult;
 
 	//myItemType = ELMItemType::BuffItem;

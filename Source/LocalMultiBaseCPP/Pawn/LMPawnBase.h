@@ -88,5 +88,5 @@ protected:
 	bool bIsVulnaerable = false; 
 
 private:
-	FTimerHandle CurrentHandle; 
+	FTimerHandle CurrentHandleForBuffDebuff;
 };

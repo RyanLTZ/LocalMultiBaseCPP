@@ -58,8 +58,8 @@ void ALMPawnBase::ApplyBuffDebuff()
     }
    
     float EffectDuration = 5;
-    //FTimerHandle CurrentHandle = GetWorldTimerManager().GenerateHandle(0);    
-    GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
+    GetWorldTimerManager().ClearTimer(CurrentHandleForBuffDebuff);
+    GetWorldTimerManager().SetTimer(CurrentHandleForBuffDebuff, this, &ALMPawnBase::OnFinishBuffDebuffEffect, EffectDuration, false, -1);
 }
 
 void ALMPawnBase::OnFinishBuffDebuffEffect()
@@ -77,9 +77,9 @@ void ALMPawnBase::InitLMPawnStatus()
     bIsVulnaerable = false; 
     CurrentBuffStatus = ELMBuffType::None;
     CurrentDebuffStatus = ELMDebuffType::None;    
-    GetWorldTimerManager().ClearTimer(CurrentHandle);
+    GetWorldTimerManager().ClearTimer(CurrentHandleForBuffDebuff);
 
-    Refresh_BuffState(false);
+    Refresh_BuffState(false);    
 }
 
 void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
@@ -93,9 +93,10 @@ void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
     Hp += BuffDebuffData->GetBuffDebuffData().HealHPValue >= MaxHp ? MaxHp : Hp + BuffDebuffData->GetBuffDebuffData().HealHPValue;
     CurrentBuffStatus = Buff;
 
+    
     if (BuffDebuffData->GetBuffDebuffData().Duration > 0)
-    {        
-        GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
+    {   
+        GetWorldTimerManager().SetTimer(CurrentHandleForBuffDebuff, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
     } 
 
     BuffDebuffData->MarkAsGarbage();
@@ -113,14 +114,12 @@ void ALMPawnBase::SetDebuff(ELMDebuffType Buff, UBuffDebuff* BuffDebuffData)
     Hp -= BuffDebuffData->GetBuffDebuffData().DecreaseHPValue;
     PawnMovement->MaxSpeed *= BuffDebuffData->GetBuffDebuffData().MoveSpeedDebuffFactor;
     CurrentDebuffStatus = Buff;
-
+        
     if (BuffDebuffData->GetBuffDebuffData().Duration > 0)
-    {     
-        GetWorldTimerManager().SetTimer(CurrentHandle, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
-    }      
-
+    {   
+        GetWorldTimerManager().SetTimer(CurrentHandleForBuffDebuff, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
+    }          
     BuffDebuffData->MarkAsGarbage();
-
     Refresh_BuffState(true);
 }
 
