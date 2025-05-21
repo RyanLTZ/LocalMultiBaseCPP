@@ -159,6 +159,8 @@ public :
 	// CDO가 완전히 만들어진 뒤(=블루프린트 기본값 로딩 완료 후)에 호출됩니다.
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
+	void UpdatePlayerStatus();
+
 protected:
 	// BeginPlay() 에서 실제로 생성한 MainHUD
 	UPROPERTY(BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))

@@ -285,6 +285,11 @@ void ALMPawnPlayer::AfterEvent_OnFire_Implementation()
 
 void ALMPawnPlayer::Refresh_HpState_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Hp : %d"), Hp);
+	if (Hp <= 0)
+	{
+		this->DoDie();
+	}
 }
 
 // 0512 한규 추가

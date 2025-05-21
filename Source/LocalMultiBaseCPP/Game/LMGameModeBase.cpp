@@ -100,6 +100,12 @@ UClass* ALMGameModeBase::GetDefaultPawnClassForController_Implementation(AContro
 		: Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
+void ALMGameModeBase::UpdatePlayerStatus()
+{	
+	PawnPlayer1->Refresh_HpState();
+	PawnPlayer2->Refresh_HpState();	
+}
+
 
 void ALMGameModeBase::BeginPlay()
 {

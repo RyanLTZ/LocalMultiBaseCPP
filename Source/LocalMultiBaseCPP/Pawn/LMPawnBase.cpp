@@ -8,6 +8,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "EngineUtils.h"
+#include "Game/LMGameModeBase.h"
 
 // Sets default values
 ALMPawnBase::ALMPawnBase()
@@ -79,7 +80,7 @@ void ALMPawnBase::InitLMPawnStatus()
     CurrentDebuffStatus = ELMDebuffType::None;    
     GetWorldTimerManager().ClearTimer(CurrentHandleForBuffDebuff);
 
-    Refresh_BuffState(false);    
+    Refresh_BuffState(false);        
 }
 
 void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
@@ -102,25 +103,36 @@ void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
     BuffDebuffData->MarkAsGarbage();
 
     Refresh_BuffState(true);
+
+    AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+    ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+    if (CurrentMode && GameMode)
+    {
+        GameMode->UpdatePlayerStatus();
+    }
+    
 }
 
 void ALMPawnBase::SetDebuff(ELMDebuffType Buff, UBuffDebuff* BuffDebuffData)
 {
-    //UE_LOG(LogTemp, Warning, TEXT("Debuff Type : %d"), Buff);
-    //UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, DEbuffEffect : %f"), Buff, BuffDebuffData.MoveSpeedDebuffFactor);
-    //UE_LOG(LogTemp, Warning, TEXT("Buff Type : %d, BuffEffect : %d"), Buff, BuffDebuffData.DecreaseHPValue);
-
     InitLMPawnStatus();    
-    Hp -= BuffDebuffData->GetBuffDebuffData().DecreaseHPValue;
+    Hp -= BuffDebuffData->GetBuffDebuffData().DecreaseHPValue;    
     PawnMovement->MaxSpeed *= BuffDebuffData->GetBuffDebuffData().MoveSpeedDebuffFactor;
-    CurrentDebuffStatus = Buff;
+    CurrentDebuffStatus = Buff;     
         
     if (BuffDebuffData->GetBuffDebuffData().Duration > 0)
     {   
         GetWorldTimerManager().SetTimer(CurrentHandleForBuffDebuff, this, &ALMPawnBase::OnFinishBuffDebuffEffect, BuffDebuffData->GetBuffDebuffData().Duration, false, -1);
     }          
     BuffDebuffData->MarkAsGarbage();
-    Refresh_BuffState(true);
+    Refresh_BuffState(true);        
+
+    AGameModeBase* CurrentMode = GetWorld()->GetAuthGameMode();
+    ALMGameModeBase* GameMode = Cast<ALMGameModeBase>(CurrentMode);
+    if (CurrentMode && GameMode)
+    {
+        GameMode->UpdatePlayerStatus();
+    }
 }
 
 void ALMPawnBase::Refresh_BuffState_Implementation(bool isShow)
