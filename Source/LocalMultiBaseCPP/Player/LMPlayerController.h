@@ -21,6 +21,9 @@ public:
 	ALMPlayerController();
 
 protected:
+	virtual void Destroyed() override;
+
+protected:
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	class ALMPawnPlayer* Player2P;
 

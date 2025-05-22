@@ -17,5 +17,8 @@ class LOCALMULTIBASECPP_API ASkillStunAttack : public ASkillBase
 public:
 	ASkillStunAttack();
 
+protected:
+	virtual void BeginPlay() override;
+
 	
 };

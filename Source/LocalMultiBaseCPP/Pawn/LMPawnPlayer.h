@@ -16,7 +16,10 @@ class LOCALMULTIBASECPP_API ALMPawnPlayer : public ALMPawnBase
 {
 	GENERATED_BODY()
 public:
-	ALMPawnPlayer();
+	ALMPawnPlayer();	
+
+protected:
+	virtual void Destroyed() override; 
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")

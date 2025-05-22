@@ -25,6 +25,11 @@ ALMPlayerController::ALMPlayerController()
 	}
 }
 
+void ALMPlayerController::Destroyed()
+{
+	InputComponent->ClearActionBindings();
+}
+
 void ALMPlayerController::SetPlayer2P(ALMPawnPlayer* const NewPlayer2P)
 {
 	ensure(NewPlayer2P);

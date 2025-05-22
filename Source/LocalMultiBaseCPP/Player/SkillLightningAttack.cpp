@@ -5,6 +5,7 @@
 
 ASkillLightningAttack::ASkillLightningAttack()
 {
+	
 }
 
 void ASkillLightningAttack::BeginPlay()

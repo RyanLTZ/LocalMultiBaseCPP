@@ -48,7 +48,8 @@ ALMPawnPlayer::ALMPawnPlayer()
 	BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	BoxComponent->SetCollisionObjectType(ECC_GameTraceChannel1);
 	BoxComponent->SetCollisionResponseToAllChannels(ECR_Block);
-	BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Block);
+	BoxComponent->SetCollisionResponseToChannel(ECC_GameTraceChannel3, 
+		ECR_Block);
 	//BoxComponent->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 		
 	//UArrowComponent* ArrowForFirePos = Cast<UArrowComponent>(UGameplayStatics::GetActorOfClass(GetWorld(), UArrowComponent::StaticClass()));
@@ -58,6 +59,10 @@ ALMPawnPlayer::ALMPawnPlayer()
 	//}		
 	FirePosition2 = CreateDefaultSubobject<UArrowComponent>(TEXT("Fire Position2"));
 	FirePosition2->SetupAttachment(MeshComponent);
+}
+
+void ALMPawnPlayer::Destroyed()
+{
 }
 
 void ALMPawnPlayer::PossessedBy(AController* NewController)

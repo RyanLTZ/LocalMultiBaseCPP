@@ -5,4 +5,11 @@
 
 ASkillStunAttack::ASkillStunAttack()
 {
+	
+}
+
+void ASkillStunAttack::BeginPlay()
+{
+	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Stun, C++ BeginPlay"));
 }

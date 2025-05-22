@@ -332,6 +332,12 @@ void ALMGameModeBase::DoLightningAttack(int32 OwnerIndex)
 	ALMPawnPlayer* TargetPlayer;
 	OwnerIndex == 0 ? TargetPlayer = PawnPlayer2 : TargetPlayer = PawnPlayer1;
 	
+	if (TargetPlayer == nullptr || GetWorld() == nullptr || LightningAtkClass == nullptr)
+	{
+		return;
+	}
+		
+
 	ASkillLightningAttack* LightingAtk = Cast<ASkillLightningAttack>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), LightningAtkClass, TargetPlayer->GetActorTransform()));
 	if (LightingAtk)
 	{
@@ -346,13 +352,17 @@ void ALMGameModeBase::DoStunAttack(int32 OwnerIndex)
 	FActorSpawnParameters SpawnParams;
 	ALMPawnPlayer* TargetPlayer;
 	OwnerIndex == 0 ? TargetPlayer = PawnPlayer2 : TargetPlayer = PawnPlayer1;
+	if (TargetPlayer == nullptr || GetWorld() == nullptr || StunAttackClass == nullptr)
+	{
+		return;
+	}
 
 	ASkillStunAttack* StunAtk = Cast<ASkillStunAttack>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), StunAttackClass, TargetPlayer->GetActorTransform()));
 	if (StunAtk)
 	{
 		StunAtk->SetOnwerPlayer(OwnerIndex);
 		UE_LOG(LogTemp, Warning, TEXT("Stun Attack TargetIndex %d, Owner Index %d"), TargetPlayer->GetPlayerIndex(), OwnerIndex);
-		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());
+		UGameplayStatics::FinishSpawningActor(StunAtk, TargetPlayer->GetActorTransform());				
 		UBuffDebuff* BuffData = NewObject<UBuffDebuff>();
 		TargetPlayer->SetDebuff(ELMDebuffType::Stun, BuffData);				
 	}

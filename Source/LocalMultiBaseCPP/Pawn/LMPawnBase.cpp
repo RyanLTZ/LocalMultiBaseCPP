@@ -91,7 +91,11 @@ void ALMPawnBase::SetBuff(ELMBuffType Buff, UBuffDebuff* BuffDebuffData)
     InitLMPawnStatus();
     bIsVulnaerable = BuffDebuffData->GetBuffDebuffData().bIsVulnaerable;
     PawnMovement->MaxSpeed *= BuffDebuffData->GetBuffDebuffData().MoveSpeedBuffFacor;
-    Hp += BuffDebuffData->GetBuffDebuffData().HealHPValue >= MaxHp ? MaxHp : Hp + BuffDebuffData->GetBuffDebuffData().HealHPValue;
+    if (Hp < MaxHp)
+    {
+        Hp += BuffDebuffData->GetBuffDebuffData().HealHPValue;
+    }
+     
     CurrentBuffStatus = Buff;
 
     
