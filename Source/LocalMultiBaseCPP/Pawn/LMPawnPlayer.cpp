@@ -177,9 +177,9 @@ void ALMPawnPlayer::SetDamage(int32 Damage)
 
 void ALMPawnPlayer::Fire()
 {
-	
 	if (CurrentEnergy == 0)
 		return;
+
 
 	FActorSpawnParameters SpawnParams;	
 
